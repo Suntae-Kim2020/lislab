@@ -96,10 +96,8 @@ class PostViewSet(viewsets.ModelViewSet):
         instance.is_deleted = True
         instance.save()
 
-        return Response(
-            {"detail": "게시글이 삭제되었습니다."},
-            status=status.HTTP_204_NO_CONTENT
-        )
+        # 204 No Content should not have a response body
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
     def reply(self, request, pk=None):

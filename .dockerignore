@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# Django
+*.log
+db.sqlite3
+db.sqlite3-journal
+/media
+local_settings.py
+
+# Environment
+.env
+.env.local
+.env.production
+*.env
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Documentation
+*.md
+DEPLOYMENT.md
+MAILING_SETUP.md
+
+# Scripts
+*.sh
+setup-secrets.sh
+deploy-env-vars.sh
+
+# Frontend
+frontend/
+node_modules/
+
+# Misc
+.DS_Store
+logs/
+*.backup
+backup/
