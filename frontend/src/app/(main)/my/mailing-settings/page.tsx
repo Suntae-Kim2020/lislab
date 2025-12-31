@@ -59,16 +59,29 @@ export default function MailingSettingsPage() {
       setLoading(true);
       setError(null);
 
-      // Fetch categories (no auth required)
-      const categoriesRes = await fetch(`${API_BASE_URL}/api/contents/categories/`);
+      // Fetch all categories (handle pagination)
+      let allCategories: Category[] = [];
+      let nextUrl: string | null = `${API_BASE_URL}/api/contents/categories/?page_size=100`;
 
-      if (!categoriesRes.ok) {
-        throw new Error(`카테고리 조회 실패 (${categoriesRes.status})`);
+      while (nextUrl) {
+        const categoriesRes = await fetch(nextUrl);
+
+        if (!categoriesRes.ok) {
+          throw new Error(`카테고리 조회 실패 (${categoriesRes.status})`);
+        }
+
+        const categoriesData = await categoriesRes.json();
+
+        if (Array.isArray(categoriesData)) {
+          allCategories = categoriesData;
+          break;
+        } else {
+          allCategories = [...allCategories, ...(categoriesData.results || [])];
+          nextUrl = categoriesData.next;
+        }
       }
 
-      const categoriesData = await categoriesRes.json();
-      // Handle if categories are paginated
-      setCategories(Array.isArray(categoriesData) ? categoriesData : categoriesData.results || []);
+      setCategories(allCategories);
 
       // Fetch mailing preferences
       const prefsRes = await fetch(`${API_BASE_URL}/api/accounts/mailing-preferences/`, {
@@ -251,9 +264,9 @@ export default function MailingSettingsPage() {
         {preferences.enabled && (
           <Card>
             <CardHeader>
-              <CardTitle>구독 카테고리</CardTitle>
+              <CardTitle>상위 카테고리</CardTitle>
               <CardDescription>
-                관심 있는 카테고리를 선택하세요
+                관심 있는 상위 카테고리를 선택하세요
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -267,24 +280,26 @@ export default function MailingSettingsPage() {
                   })}
                 />
                 <Label htmlFor="all-categories" className="cursor-pointer font-semibold">
-                  전체 카테고리 구독
+                  전체 상위 카테고리 구독
                 </Label>
               </div>
 
               {!preferences.all_categories && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {categories.map((category) => (
-                    <div key={category.id} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`cat-${category.id}`}
-                        checked={preferences.selected_categories.some(c => c.id === category.id)}
-                        onCheckedChange={() => toggleCategory(category)}
-                      />
-                      <Label htmlFor={`cat-${category.id}`} className="cursor-pointer">
-                        {category.name}
-                      </Label>
-                    </div>
-                  ))}
+                  {categories
+                    .filter(category => category.parent === category.id)
+                    .map((category) => (
+                      <div key={category.id} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={`cat-${category.id}`}
+                          checked={preferences.selected_categories.some(c => c.id === category.id)}
+                          onCheckedChange={() => toggleCategory(category)}
+                        />
+                        <Label htmlFor={`cat-${category.id}`} className="cursor-pointer">
+                          {category.name}
+                        </Label>
+                      </div>
+                    ))}
                 </div>
               )}
 
