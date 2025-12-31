@@ -41,9 +41,9 @@ export function ContentSidebar() {
     'overview'
   ];
 
-  // 최상위 카테고리만 필터링하고 순서대로 정렬
+  // 최상위 카테고리만 필터링하고 순서대로 정렬 (parent === id인 카테고리)
   const topLevelCategories = categoryOrder
-    .map(slug => categories?.find(cat => cat.slug === slug && cat.parent === null))
+    .map(slug => categories?.find(cat => cat.slug === slug && cat.parent === cat.id))
     .filter(Boolean) as Category[];
 
   return (

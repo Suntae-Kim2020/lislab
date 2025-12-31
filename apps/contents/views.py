@@ -21,6 +21,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Category.objects.filter(is_active=True)
     serializer_class = CategorySerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = None  # 카테고리는 페이지네이션 비활성화 (전체 목록 반환)
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):

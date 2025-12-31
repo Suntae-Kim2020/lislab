@@ -35,9 +35,9 @@ function ContentsPageContent() {
   const { data: categories } = useCategories();
   const toggleFavoriteMutation = useToggleFavorite();
 
-  // 상위 카테고리 (parent가 null인 카테고리)
+  // 상위 카테고리 (parent가 자기 자신인 카테고리)
   const parentCategories = Array.isArray(categories)
-    ? categories.filter(cat => cat.parent === null)
+    ? categories.filter(cat => cat.parent === cat.id)
     : [];
 
   // 선택된 카테고리의 하위 카테고리
