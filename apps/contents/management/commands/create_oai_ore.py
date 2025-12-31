@@ -342,3 +342,39 @@ ResourceMap (RDF 문서)
         self.stdout.write(self.style.SUCCESS(f"태그: {', '.join([tag.name for tag in tags])}"))
         self.stdout.write(self.style.SUCCESS(f"난이도: {content.get_difficulty_display()}"))
         self.stdout.write(self.style.SUCCESS(f"예상 소요 시간: {content.estimated_time}분"))
+
+        # 이메일 알림 발송
+        self.stdout.write(self.style.WARNING("📧 이메일 알림 발송 중..."))
+        from apps.accounts.email_utils import send_immediate_content_notification
+
+        users = User.objects.filter(
+            is_active=True,
+            mailing_preference__enabled=True,
+            mailing_preference__frequency='IMMEDIATE'
+        ).select_related('mailing_preference')
+
+        email_count = 0
+        for user in users:
+            try:
+                pref = user.mailing_preference
+
+                # 전체 카테고리 구독 또는 해당 카테고리 구독 확인
+                if pref.all_categories:
+                    should_send = True
+                else:
+                    selected_category_ids = list(pref.selected_categories.values_list('id', flat=True))
+                    should_send = content.category_id in selected_category_ids
+
+                if should_send:
+                    send_immediate_content_notification(user, content)
+                    email_count += 1
+                    self.stdout.write(self.style.SUCCESS(f"  ✓ {user.username} ({user.email})"))
+
+            except Exception as e:
+                self.stdout.write(self.style.ERROR(f"  ✗ {user.username}: {str(e)}"))
+                continue
+
+        if email_count > 0:
+            self.stdout.write(self.style.SUCCESS(f"📧 총 {email_count}명에게 이메일 발송 완료"))
+        else:
+            self.stdout.write(self.style.WARNING("📧 이메일을 받을 사용자가 없습니다"))
