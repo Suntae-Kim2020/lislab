@@ -64,7 +64,7 @@ export default function MailingSettingsPage() {
       let nextUrl: string | null = `${API_BASE_URL}/api/contents/categories/?page_size=100`;
 
       while (nextUrl) {
-        const categoriesRes = await fetch(nextUrl);
+        const categoriesRes: Response = await fetch(nextUrl);
 
         if (!categoriesRes.ok) {
           throw new Error(`카테고리 조회 실패 (${categoriesRes.status})`);
