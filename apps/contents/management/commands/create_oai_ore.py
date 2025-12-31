@@ -321,7 +321,7 @@ ResourceMap (RDF 문서)
                 'category': data_model_category,
                 'author': admin_user,
                 'status': Content.Status.PUBLISHED,
-                'difficulty': Content.Difficulty.INTERMEDIATE,
+                'difficulty': 'INTERMEDIATE',
                 'estimated_time': 30,
                 'prerequisites': 'RDF와 메타데이터에 대한 기초 지식이 있으면 좋습니다.',
                 'learning_objectives': 'OAI-ORE의 정확한 분류 이해, Aggregation과 ResourceMap 개념 파악, 실제 RDF 예제 분석',
