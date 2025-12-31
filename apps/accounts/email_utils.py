@@ -180,10 +180,15 @@ LIS Lab에 새로운 콘텐츠가 발행되었습니다.
 
     # 이메일 발송
     from django.core.mail import send_mail
-    send_mail(
-        subject=subject,
-        message=text_content,
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=[user.email],
-        fail_silently=True,
-    )
+    try:
+        send_mail(
+            subject=subject,
+            message=text_content,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[user.email],
+            fail_silently=False,
+        )
+        print(f"[Email] Successfully sent to {user.email}")
+    except Exception as e:
+        print(f"[Email] Failed to send to {user.email}: {str(e)}")
+        raise
