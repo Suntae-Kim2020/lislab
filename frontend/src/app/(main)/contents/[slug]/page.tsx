@@ -10,6 +10,8 @@ import { useContent, useToggleFavorite } from '@/lib/hooks/useContents';
 import { useAuthStore } from '@/store/authStore';
 import { CommentList } from '@/components/features/CommentList';
 import { TagSearchModal } from '@/components/content/TagSearchModal';
+import { QRCodeButton } from '@/components/content/QRCodeButton';
+import { PDFSaveButton } from '@/components/content/PDFSaveButton';
 import { Heart, Clock, Eye, Calendar, User, GraduationCap } from 'lucide-react';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
@@ -26,6 +28,7 @@ export default function ContentDetailPage() {
   const router = useRouter();
   const { isAuthenticated } = useAuthStore();
   const contentRef = useRef<HTMLDivElement>(null);
+  const pdfContentRef = useRef<HTMLDivElement>(null);
 
   const [tagModalOpen, setTagModalOpen] = useState(false);
   const [selectedTag, setSelectedTag] = useState('');
@@ -152,21 +155,25 @@ export default function ContentDetailPage() {
 
   return (
     <div className="container mx-auto py-8 px-4">
-      <div className="max-w-4xl mx-auto">
+      <div ref={pdfContentRef} className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-start justify-between gap-4 mb-4">
             <h1 className="text-4xl font-bold">{content.title}</h1>
-            {isAuthenticated && (
-              <Button
-                variant={content.is_favorited ? 'default' : 'outline'}
-                size="icon"
-                onClick={handleToggleFavorite}
-                disabled={toggleFavoriteMutation.isPending}
-              >
-                <Heart className={content.is_favorited ? 'fill-current' : ''} />
-              </Button>
-            )}
+            <div className="flex gap-2">
+              <QRCodeButton title={content.title} />
+              <PDFSaveButton title={content.title} contentRef={pdfContentRef} />
+              {isAuthenticated && (
+                <Button
+                  variant={content.is_favorited ? 'default' : 'outline'}
+                  size="icon"
+                  onClick={handleToggleFavorite}
+                  disabled={toggleFavoriteMutation.isPending}
+                >
+                  <Heart className={content.is_favorited ? 'fill-current' : ''} />
+                </Button>
+              )}
+            </div>
           </div>
 
           <p className="text-lg text-muted-foreground mb-4">{content.summary}</p>
