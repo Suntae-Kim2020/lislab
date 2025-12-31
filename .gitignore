@@ -1,0 +1,89 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+/media
+/staticfiles
+/static
+
+# Environment Variables (매우 중요!)
+.env
+.env.local
+.env.production
+*.env
+
+# Database
+*.sql
+*.dump
+*.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.bak
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node modules
+node_modules/
+npm-debug.log
+
+# User-uploaded files
+media/
+
+# Compiled static files
+staticfiles/
+collected_static/
+
+# Backup files
+*.backup
+backup/
+
+# Log files
+logs/
+*.log
+
+# Local development
+local_settings.py

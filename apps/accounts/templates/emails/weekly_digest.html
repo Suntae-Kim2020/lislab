@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIS Lab 주간 다이제스트</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        .header p {
+            margin: 0;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 30px;
+        }
+        .intro {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .category-section {
+            margin-bottom: 35px;
+        }
+        .category-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+        .content-item {
+            background-color: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            transition: box-shadow 0.2s;
+        }
+        .content-item:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .content-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin: 0 0 10px 0;
+        }
+        .content-title a {
+            color: #333;
+            text-decoration: none;
+        }
+        .content-title a:hover {
+            color: #667eea;
+        }
+        .content-meta {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .content-meta span {
+            margin-right: 15px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+        .badge-beginner {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .badge-intermediate {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .badge-advanced {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .content-summary {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 15px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #667eea;
+            color: white !important;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .btn:hover {
+            background-color: #5568d3;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 30px;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+        .footer-links {
+            margin-top: 15px;
+        }
+        .footer-links a {
+            color: #667eea;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        .unsubscribe {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #999;
+        }
+        .unsubscribe a {
+            color: #999;
+            text-decoration: underline;
+        }
+        .stats {
+            background-color: #f0f4ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .stats h3 {
+            margin: 0 0 15px 0;
+            font-size: 18px;
+            color: #333;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: #667eea;
+            display: block;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📚 LIS Lab 주간 다이제스트</h1>
+            <p>{{ week_start|date:"Y년 m월 d일" }} - {{ week_end|date:"Y년 m월 d일" }}</p>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Intro -->
+            <div class="intro">
+                <p>안녕하세요, <strong>{{ user.username }}</strong>님!</p>
+                <p>지난 한 주간 LIS Lab에 새로 추가된 콘텐츠를 소개합니다.</p>
+            </div>
+
+            <!-- Stats -->
+            {% if total_contents > 0 %}
+            <div class="stats">
+                <h3>이번 주 요약</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-number">{{ total_contents }}</span>
+                        <span class="stat-label">새 콘텐츠</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">{{ total_categories }}</span>
+                        <span class="stat-label">카테고리</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">{{ estimated_time }}</span>
+                        <span class="stat-label">예상 시간(분)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content by Category -->
+            {% for category_name, contents in contents_by_category.items %}
+            <div class="category-section">
+                <h2 class="category-title">{{ category_name }}</h2>
+
+                {% for content in contents %}
+                <div class="content-item">
+                    <h3 class="content-title">
+                        <a href="{{ site_url }}/contents/{{ content.slug }}">{{ content.title }}</a>
+                    </h3>
+
+                    <div class="content-meta">
+                        {% if content.difficulty == 'BEGINNER' %}
+                        <span class="badge badge-beginner">초급</span>
+                        {% elif content.difficulty == 'INTERMEDIATE' %}
+                        <span class="badge badge-intermediate">중급</span>
+                        {% elif content.difficulty == 'ADVANCED' %}
+                        <span class="badge badge-advanced">고급</span>
+                        {% endif %}
+
+                        <span>⏱️ {{ content.estimated_time }}분</span>
+                        <span>👁️ 조회 {{ content.view_count }}회</span>
+                    </div>
+
+                    <p class="content-summary">{{ content.summary }}</p>
+
+                    <a href="{{ site_url }}/contents/{{ content.slug }}" class="btn">
+                        지금 학습하기 →
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+
+            {% else %}
+            <div class="intro" style="text-align: center; padding: 40px 0;">
+                <p style="font-size: 18px; color: #666;">이번 주에는 새로운 콘텐츠가 없습니다.</p>
+                <p style="color: #999;">다음 주를 기대해 주세요!</p>
+            </div>
+            {% endif %}
+
+            <!-- CTA -->
+            <div style="text-align: center; padding: 30px 0; border-top: 1px solid #eee; margin-top: 30px;">
+                <p style="font-size: 16px; color: #333; margin-bottom: 20px;">
+                    더 많은 콘텐츠를 둘러보세요
+                </p>
+                <a href="{{ site_url }}/contents" class="btn" style="font-size: 16px; padding: 12px 30px;">
+                    전체 콘텐츠 보기
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>LIS Lab</strong> - Library & Information Science Learning Platform</p>
+            <div class="footer-links">
+                <a href="{{ site_url }}">홈페이지</a>
+                <a href="{{ site_url }}/my/mailing-settings">메일링 설정</a>
+                <a href="{{ site_url }}/about">소개</a>
+            </div>
+            <div class="unsubscribe">
+                <p>이 이메일을 더 이상 받고 싶지 않으시면
+                <a href="{{ site_url }}/my/mailing-settings">구독을 해지</a>하실 수 있습니다.</p>
+                <p style="margin-top: 10px;">© 2025 LIS Lab. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

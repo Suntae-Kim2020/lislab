@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNICODE 완벽 가이드</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+            line-height: 1.8;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #2c3e50;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 4px solid #3498db;
+            padding-bottom: 15px;
+            margin-top: 30px;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 35px;
+            padding-left: 10px;
+            border-left: 5px solid #3498db;
+        }
+        h3 {
+            color: #34495e;
+            margin-top: 25px;
+        }
+        h4 {
+            color: #7f8c8d;
+            margin-top: 20px;
+        }
+        .intro-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .intro-box h2 {
+            color: white;
+            border-left: 5px solid white;
+            margin-top: 0;
+        }
+        .concept-box {
+            background-color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 5px solid #3498db;
+        }
+        .example-box {
+            background-color: #fff9e6;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 5px solid #f39c12;
+        }
+        .warning-box {
+            background-color: #ffe6e6;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 5px solid #e74c3c;
+        }
+        .success-box {
+            background-color: #e8f8f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 5px solid #27ae60;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .comparison-table th {
+            background-color: #3498db;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        .comparison-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        .comparison-table tr:hover {
+            background-color: #e8f4f8;
+        }
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+            margin: 30px 0;
+        }
+        .timeline-item {
+            position: relative;
+            padding-left: 50px;
+            margin-bottom: 30px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 5px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: #3498db;
+            border: 3px solid #fff;
+            box-shadow: 0 0 0 3px #3498db;
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 21px;
+            top: 25px;
+            width: 2px;
+            height: calc(100% + 10px);
+            background-color: #bdc3c7;
+        }
+        .timeline-item:last-child::after {
+            display: none;
+        }
+        .timeline-year {
+            font-weight: bold;
+            color: #2980b9;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+        .code-block {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .highlight {
+            background-color: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 500;
+        }
+        .emoji-large {
+            font-size: 2em;
+            margin-right: 10px;
+        }
+        .character-example {
+            display: inline-block;
+            background-color: #f8f9fa;
+            border: 2px solid #dee2e6;
+            padding: 15px 20px;
+            margin: 10px;
+            border-radius: 8px;
+            text-align: center;
+            min-width: 100px;
+        }
+        .character-large {
+            font-size: 3em;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .character-info {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        .utf-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        .utf-card {
+            background-color: #fff;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .utf-card h4 {
+            margin-top: 0;
+            color: #3498db;
+            font-size: 1.3em;
+        }
+        .pros {
+            color: #27ae60;
+        }
+        .cons {
+            color: #e74c3c;
+        }
+        ul {
+            padding-left: 25px;
+        }
+        li {
+            margin: 10px 0;
+        }
+        strong {
+            color: #2c3e50;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .real-world-example {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+        }
+        .real-world-example h3 {
+            color: white;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🌏 UNICODE: 전 세계 문자를 하나로 연결하는 표준</h1>
+
+<div class="intro-box">
+    <h2>왜 UNICODE를 배워야 할까?</h2>
+    <p>컴퓨터는 원래 영어권에서 만들어졌기 때문에, 한글·한자·아랍어·이모지 등 다양한 문자를 표현하는 데 많은 어려움이 있었습니다. UNICODE는 이러한 문제를 해결하여 <strong>전 세계 모든 문자를 하나의 체계로 표현</strong>할 수 있게 만든 혁명적인 표준입니다.</p>
+    <p>도서관과 정보 시스템에서 다국어 자료를 다루려면 UNICODE에 대한 이해가 필수적입니다.</p>
+</div>
+
+<h2>1. UNICODE 이전의 세계: 혼돈의 시대</h2>
+
+<h3>1.1 ASCII: 영어만을 위한 세계</h3>
+
+<div class="concept-box">
+    <h4>📟 ASCII (American Standard Code for Information Interchange)</h4>
+    <p><strong>ASCII</strong>는 1963년 미국에서 만들어진 문자 인코딩 체계로, <span class="highlight">7비트(128개 문자)</span>만을 사용하여 영어 알파벳, 숫자, 특수문자만 표현할 수 있었습니다.</p>
+
+    <div class="example-box">
+        <h5>ASCII 코드 예시</h5>
+        <ul>
+            <li><code>A</code> = 65 (0x41)</li>
+            <li><code>B</code> = 66 (0x42)</li>
+            <li><code>a</code> = 97 (0x61)</li>
+            <li><code>0</code> = 48 (0x30)</li>
+        </ul>
+    </div>
+
+    <p><strong>문제점:</strong> 한글, 한자, 일본어, 아랍어 등 비영어권 문자를 전혀 표현할 수 없었습니다.</p>
+</div>
+
+<h3>1.2 각 나라의 독자적인 인코딩 체계</h3>
+
+<div class="warning-box">
+    <h4>⚠️ 분열의 시대</h4>
+    <p>ASCII의 한계를 극복하기 위해 각국이 자체적인 문자 인코딩을 만들었습니다:</p>
+    <ul>
+        <li><strong>EUC-KR, CP949</strong> (한국): 한글 표현</li>
+        <li><strong>Shift-JIS, EUC-JP</strong> (일본): 일본어 표현</li>
+        <li><strong>GB2312, Big5</strong> (중국·대만): 중국어 표현</li>
+        <li><strong>ISO-8859-1 (Latin-1)</strong> (서유럽): 유럽어 표현</li>
+    </ul>
+
+    <p><strong>심각한 문제:</strong></p>
+    <ul>
+        <li>같은 코드 값이 다른 문자를 의미함</li>
+        <li>한 문서에 여러 언어를 함께 쓸 수 없음</li>
+        <li>문서를 다른 시스템에서 열면 <span class="highlight">깨진 글자(mojibake)</span>가 나타남</li>
+    </ul>
+</div>
+
+<div class="example-box">
+    <h4>📝 실제 사례: 한글 깨짐 현상</h4>
+    <p>2000년대 초반, 한국에서 작성한 이메일을 미국에서 열면 이렇게 보였습니다:</p>
+    <div class="code-block">
+        원본: 안녕하세요
+        깨진 결과: ¾È³ç¿¡¼¼¿ä
+    </div>
+    <p>이는 <strong>EUC-KR로 인코딩된 문서를 ISO-8859-1로 잘못 해석</strong>했기 때문입니다.</p>
+</div>
+
+<h2>2. UNICODE의 탄생과 철학</h2>
+
+<h3>2.1 UNICODE란 무엇인가?</h3>
+
+<div class="success-box">
+    <h4>✨ UNICODE 정의</h4>
+    <p><strong>UNICODE</strong>는 전 세계의 모든 문자를 <span class="highlight">하나의 통일된 코드 공간</span>에서 표현하기 위한 국제 표준입니다.</p>
+    <ul>
+        <li><strong>개발 시작:</strong> 1987년 (Joe Becker, Lee Collins, Mark Davis)</li>
+        <li><strong>첫 발표:</strong> 1991년 UNICODE 1.0</li>
+        <li><strong>현재 버전:</strong> UNICODE 15.1 (2023년 9월)</li>
+        <li><strong>포함 문자:</strong> 149,000개 이상의 문자</li>
+        <li><strong>지원 문자 체계:</strong> 161개 스크립트</li>
+    </ul>
+</div>
+
+<h3>2.2 UNICODE의 3대 원칙</h3>
+
+<div class="concept-box">
+    <h4>🎯 1. Universality (보편성)</h4>
+    <p>모든 언어, 모든 문자를 하나의 체계 안에 포함시킵니다.</p>
+    <ul>
+        <li>현대 언어부터 고대 문자까지</li>
+        <li>한글, 한자, 라틴 문자, 아랍 문자, 힌디어 등</li>
+        <li>심지어 이모지(😀), 수학 기호(∑), 고대 이집트 상형문자(𓀀)까지</li>
+    </ul>
+</div>
+
+<div class="concept-box">
+    <h4>🎯 2. Efficiency (효율성)</h4>
+    <p>단순하고 효율적인 구조로 설계되었습니다.</p>
+    <ul>
+        <li>각 문자에 고유한 코드 포인트(Code Point) 부여</li>
+        <li>UTF-8, UTF-16, UTF-32 등 다양한 인코딩 방식 지원</li>
+    </ul>
+</div>
+
+<div class="concept-box">
+    <h4>🎯 3. Unambiguity (명확성)</h4>
+    <p>각 문자는 하나의 코드만 가지며, 혼동의 여지가 없습니다.</p>
+    <ul>
+        <li>한 코드는 항상 동일한 문자를 의미</li>
+        <li>문자 간 구분이 명확</li>
+    </ul>
+</div>
+
+<h2>3. UNICODE의 구조: Code Point와 Plane</h2>
+
+<h3>3.1 Code Point (코드 포인트)</h3>
+
+<div class="concept-box">
+    <h4>🔢 Code Point란?</h4>
+    <p>각 문자에 부여되는 <strong>고유한 번호</strong>를 의미합니다. <code>U+XXXX</code> 형식으로 표기합니다.</p>
+
+    <div class="character-example">
+        <span class="character-large">A</span>
+        <div class="character-info">
+            U+0041<br>
+            LATIN CAPITAL LETTER A
+        </div>
+    </div>
+
+    <div class="character-example">
+        <span class="character-large">가</span>
+        <div class="character-info">
+            U+AC00<br>
+            HANGUL SYLLABLE GA
+        </div>
+    </div>
+
+    <div class="character-example">
+        <span class="character-large">中</span>
+        <div class="character-info">
+            U+4E2D<br>
+            CJK UNIFIED IDEOGRAPH
+        </div>
+    </div>
+
+    <div class="character-example">
+        <span class="character-large">😀</span>
+        <div class="character-info">
+            U+1F600<br>
+            GRINNING FACE
+        </div>
+    </div>
+</div>
+
+<h3>3.2 UNICODE Plane (평면)</h3>
+
+<div class="concept-box">
+    <p>UNICODE는 코드 공간을 <strong>17개의 Plane</strong>으로 나누어 관리합니다. 각 Plane은 65,536개(0xFFFF)의 코드 포인트를 가집니다.</p>
+</div>
+
+<table class="comparison-table">
+    <thead>
+        <tr>
+            <th>Plane</th>
+            <th>범위</th>
+            <th>이름</th>
+            <th>주요 내용</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Plane 0</strong></td>
+            <td>U+0000 ~ U+FFFF</td>
+            <td>BMP (Basic Multilingual Plane)</td>
+            <td>가장 많이 쓰이는 문자들<br>한글, 한자, 라틴 문자, 아랍 문자 등</td>
+        </tr>
+        <tr>
+            <td><strong>Plane 1</strong></td>
+            <td>U+10000 ~ U+1FFFF</td>
+            <td>SMP (Supplementary Multilingual Plane)</td>
+            <td>이모지(😀), 고대 문자, 음악 기호</td>
+        </tr>
+        <tr>
+            <td><strong>Plane 2</strong></td>
+            <td>U+20000 ~ U+2FFFF</td>
+            <td>SIP (Supplementary Ideographic Plane)</td>
+            <td>확장 한자(CJK)</td>
+        </tr>
+        <tr>
+            <td><strong>Plane 3-13</strong></td>
+            <td>U+30000 ~ U+DFFFF</td>
+            <td>미할당</td>
+            <td>미래 확장을 위한 예비 공간</td>
+        </tr>
+        <tr>
+            <td><strong>Plane 14</strong></td>
+            <td>U+E0000 ~ U+EFFFF</td>
+            <td>SSP (Supplementary Special-purpose Plane)</td>
+            <td>특수 용도 문자</td>
+        </tr>
+        <tr>
+            <td><strong>Plane 15-16</strong></td>
+            <td>U+F0000 ~ U+10FFFF</td>
+            <td>PUA (Private Use Area)</td>
+            <td>개인/기업 전용 영역</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>3.3 한글의 UNICODE 배치</h3>
+
+<div class="success-box">
+    <h4>🇰🇷 한글 음절 (Hangul Syllables)</h4>
+    <p>한글 완성형 음절 11,172개가 연속적으로 배치되어 있습니다:</p>
+    <ul>
+        <li><strong>범위:</strong> U+AC00 ~ U+D7A3</li>
+        <li><strong>시작:</strong> 가 (U+AC00)</li>
+        <li><strong>끝:</strong> 힣 (U+D7A3)</li>
+    </ul>
+
+    <div class="code-block">
+        가 = U+AC00
+        각 = U+AC01
+        갂 = U+AC02
+        ...
+        힣 = U+D7A3
+    </div>
+
+    <p>또한 한글 자모(ㄱ, ㄴ, ㄷ, ㅏ, ㅑ 등)는 <code>U+1100 ~ U+11FF</code> 영역에 별도로 배치되어 있습니다.</p>
+</div>
+
+<h2>4. UNICODE Encoding: UTF-8, UTF-16, UTF-32</h2>
+
+<div class="concept-box">
+    <h4>🤔 Code Point vs Encoding</h4>
+    <p><strong>Code Point</strong>는 문자에 부여된 <em>추상적인 번호</em>이고, <strong>Encoding</strong>은 그 번호를 <em>실제 바이트로 저장하는 방법</em>입니다.</p>
+    <p>예: '가' = U+AC00 (Code Point) → 실제 저장 시 UTF-8, UTF-16, UTF-32 중 선택</p>
+</div>
+
+<h3>4.1 UTF-8 (8-bit Unicode Transformation Format)</h3>
+
+<div class="utf-comparison">
+    <div class="utf-card">
+        <h4>UTF-8</h4>
+        <p><strong>특징:</strong> 가변 길이 인코딩 (1~4바이트)</p>
+
+        <p class="pros"><strong>✅ 장점:</strong></p>
+        <ul>
+            <li>ASCII와 완벽 호환 (영어는 1바이트)</li>
+            <li>공간 효율적 (영어 문서에서 유리)</li>
+            <li><strong>웹 표준</strong> (전 세계 95% 이상의 웹사이트가 사용)</li>
+            <li>바이트 순서 문제 없음</li>
+        </ul>
+
+        <p class="cons"><strong>❌ 단점:</strong></p>
+        <ul>
+            <li>한글/한자는 3바이트 사용 (비효율적)</li>
+            <li>문자 길이 계산이 복잡</li>
+        </ul>
+    </div>
+</div>
+
+<div class="example-box">
+    <h5>UTF-8 인코딩 규칙 (간단 요약)</h5>
+    <p>UTF-8은 문자의 종류에 따라 <strong>필요한 만큼만</strong> 바이트를 사용합니다:</p>
+
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th>Code Point 범위</th>
+                <th>바이트 수</th>
+                <th>어떤 문자?</th>
+                <th>예시</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>U+0000 ~ U+007F</td>
+                <td><strong>1바이트</strong></td>
+                <td>영어 알파벳, 숫자, 기본 기호</td>
+                <td>A, B, 1, 2, !, ?</td>
+            </tr>
+            <tr>
+                <td>U+0080 ~ U+07FF</td>
+                <td><strong>2바이트</strong></td>
+                <td>라틴 확장, 그리스어, 아랍어 등</td>
+                <td>©, é, α, ñ</td>
+            </tr>
+            <tr>
+                <td>U+0800 ~ U+FFFF</td>
+                <td><strong>3바이트</strong></td>
+                <td>한글, 한자, 일본어 등</td>
+                <td>가, 中, あ</td>
+            </tr>
+            <tr>
+                <td>U+10000 ~ U+10FFFF</td>
+                <td><strong>4바이트</strong></td>
+                <td>이모지, 고대 문자 등</td>
+                <td>😀, 𓀀</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="concept-box">
+    <h4>🔬 실제 예시: '가'가 UTF-8로 저장되는 과정</h4>
+
+    <p><strong>Step 1: Code Point 확인</strong></p>
+    <div class="code-block">
+'가'의 UNICODE Code Point = U+AC00
+16진수: AC00
+2진수: 1010 1100 0000 0000
+    </div>
+
+    <p><strong>Step 2: 바이트 수 결정</strong></p>
+    <p>U+AC00은 U+0800 ~ U+FFFF 범위에 속하므로 → <span class="highlight">3바이트</span> 필요</p>
+
+    <p><strong>Step 3: UTF-8 패턴에 맞춰 변환</strong></p>
+    <div style="background: white; padding: 15px; border-radius: 5px; margin: 10px 0;">
+        <p>3바이트 UTF-8 패턴:</p>
+        <div class="code-block">
+1110xxxx 10xxxxxx 10xxxxxx
+        </div>
+        <p>여기서 'x' 부분에 실제 데이터를 채워 넣습니다:</p>
+        <div class="code-block">
+원본 2진수: 1010 1100 0000 0000
+         ↓ 나눠서 배치
+1110<span style="color: red;">1010</span> 10<span style="color: red;">110000</span> 10<span style="color: red;">000000</span>
+        </div>
+    </div>
+
+    <p><strong>Step 4: 16진수로 변환</strong></p>
+    <div class="code-block">
+11101010 → 0xEA
+10110000 → 0xB0
+10000000 → 0x80
+
+최종 결과: 가 = 0xEA 0xB0 0x80 (3바이트)
+    </div>
+
+    <p><strong>💡 이해하기:</strong></p>
+    <ul>
+        <li>UTF-8은 마치 <strong>짐을 포장하는 상자</strong>와 같습니다</li>
+        <li>작은 짐(영어)은 작은 상자(1바이트), 큰 짐(한글)은 큰 상자(3바이트)</li>
+        <li>상자 앞부분(1110, 10 등)은 "이것은 3바이트 데이터입니다"라는 표시</li>
+        <li>나머지 공간(xxxx 부분)에 실제 문자 정보를 담습니다</li>
+    </ul>
+</div>
+
+<h3>4.2 UTF-16</h3>
+
+<div class="utf-comparison">
+    <div class="utf-card">
+        <h4>UTF-16</h4>
+        <p><strong>특징:</strong> 가변 길이 인코딩 (2바이트 또는 4바이트)</p>
+
+        <p class="pros"><strong>✅ 장점:</strong></p>
+        <ul>
+            <li>BMP 문자는 2바이트로 고정</li>
+            <li>한글/한자에 효율적</li>
+            <li>Windows, Java 내부 인코딩</li>
+        </ul>
+
+        <p class="cons"><strong>❌ 단점:</strong></p>
+        <ul>
+            <li>영어도 2바이트 사용 (비효율)</li>
+            <li>Byte Order Mark (BOM) 필요</li>
+            <li>이모지 등은 4바이트 (Surrogate Pair)</li>
+        </ul>
+    </div>
+</div>
+
+<div class="example-box">
+    <h5>UTF-16 인코딩 예시</h5>
+    <div class="code-block">
+        A (U+0041) = 0x0041 (2바이트)
+        가 (U+AC00) = 0xAC00 (2바이트)
+        😀 (U+1F600) = 0xD83D 0xDE00 (4바이트, Surrogate Pair)
+    </div>
+</div>
+
+<h3>4.3 UTF-32</h3>
+
+<div class="utf-comparison">
+    <div class="utf-card">
+        <h4>UTF-32</h4>
+        <p><strong>특징:</strong> 고정 길이 인코딩 (모든 문자 4바이트)</p>
+
+        <p class="pros"><strong>✅ 장점:</strong></p>
+        <ul>
+            <li>모든 문자가 4바이트로 고정</li>
+            <li>문자 인덱싱이 간단</li>
+            <li>처리 속도 빠름</li>
+        </ul>
+
+        <p class="cons"><strong>❌ 단점:</strong></p>
+        <ul>
+            <li>공간 낭비가 심각 (영어도 4바이트)</li>
+            <li>거의 사용되지 않음</li>
+        </ul>
+    </div>
+</div>
+
+<h3>4.4 인코딩 비교 예시</h3>
+
+<p>같은 문자라도 어떤 인코딩 방식을 사용하느냐에 따라 <strong>저장되는 바이트 수가 달라집니다</strong>:</p>
+
+<table class="comparison-table">
+    <thead>
+        <tr>
+            <th>문자</th>
+            <th>Code Point</th>
+            <th>UTF-8</th>
+            <th>UTF-16</th>
+            <th>UTF-32</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>A</strong></td>
+            <td>U+0041</td>
+            <td><strong>1바이트</strong><br>0x41</td>
+            <td>2바이트<br>0x00 0x41</td>
+            <td>4바이트<br>0x00 0x00 0x00 0x41</td>
+        </tr>
+        <tr>
+            <td><strong>가</strong></td>
+            <td>U+AC00</td>
+            <td>3바이트<br>0xEA 0xB0 0x80</td>
+            <td><strong>2바이트</strong><br>0xAC 0x00</td>
+            <td>4바이트<br>0x00 0x00 0xAC 0x00</td>
+        </tr>
+        <tr>
+            <td><strong>😀</strong></td>
+            <td>U+1F600</td>
+            <td>4바이트<br>0xF0 0x9F 0x98 0x80</td>
+            <td>4바이트<br>0xD8 0x3D 0xDE 0x00</td>
+            <td><strong>4바이트</strong><br>0x00 0x01 0xF6 0x00</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="example-box">
+    <h4>📊 이 표를 어떻게 읽을까요?</h4>
+
+    <p><strong>예시 1: 영어 'A'를 저장할 때</strong></p>
+    <ul>
+        <li><strong>UTF-8:</strong> 1바이트 (0x41) → 가장 효율적! ✅</li>
+        <li><strong>UTF-16:</strong> 2바이트 (0x00 0x41) → 1바이트 낭비</li>
+        <li><strong>UTF-32:</strong> 4바이트 (0x00 0x00 0x00 0x41) → 3바이트 낭비</li>
+    </ul>
+    <p>→ 영어 문서는 <span class="highlight">UTF-8이 가장 효율적</span></p>
+
+    <p><strong>예시 2: 한글 '가'를 저장할 때</strong></p>
+    <ul>
+        <li><strong>UTF-8:</strong> 3바이트 (0xEA 0xB0 0x80)</li>
+        <li><strong>UTF-16:</strong> 2바이트 (0xAC 0x00) → 가장 효율적! ✅</li>
+        <li><strong>UTF-32:</strong> 4바이트 (0x00 0x00 0xAC 0x00) → 2바이트 낭비</li>
+    </ul>
+    <p>→ 한글/한자 문서는 <span class="highlight">UTF-16이 더 효율적</span></p>
+
+    <p><strong>예시 3: 이모지 '😀'를 저장할 때</strong></p>
+    <ul>
+        <li><strong>UTF-8:</strong> 4바이트</li>
+        <li><strong>UTF-16:</strong> 4바이트 (Surrogate Pair 방식)</li>
+        <li><strong>UTF-32:</strong> 4바이트 → 모두 동일! ✅</li>
+    </ul>
+    <p>→ 이모지는 어떤 인코딩이든 4바이트 필요</p>
+</div>
+
+<div class="success-box">
+    <h4>💡 그래서 실무에서는?</h4>
+    <ul>
+        <li><strong>웹사이트:</strong> UTF-8 (영어 많음, 웹 표준)</li>
+        <li><strong>Windows 프로그램:</strong> UTF-16 (Windows 내부 인코딩)</li>
+        <li><strong>도서관 시스템:</strong> UTF-8 (다국어 지원, 웹 연동)</li>
+        <li><strong>데이터베이스:</strong> UTF-8 또는 UTF-16 (시스템에 따라)</li>
+    </ul>
+</div>
+
+<h2>5. 도서관과 정보 시스템에서의 UNICODE</h2>
+
+<h3>5.1 다국어 목록 (Multilingual Cataloging)</h3>
+
+<div class="success-box">
+    <h4>📚 UNICODE가 해결한 문제</h4>
+    <p><strong>UNICODE 이전:</strong></p>
+    <ul>
+        <li>한국 도서관의 MARC 레코드에 한글과 영어를 동시에 쓸 수 없음</li>
+        <li>일본어 자료를 한국 시스템에 입력하면 깨짐</li>
+        <li>각 언어별로 별도 데이터베이스 구축 필요</li>
+    </ul>
+
+    <p><strong>UNICODE 이후:</strong></p>
+    <ul>
+        <li>하나의 MARC 레코드에 <strong>한글·영어·일본어·중국어를 동시에 기술</strong> 가능</li>
+        <li>국제적으로 호환되는 서지 데이터 생성</li>
+        <li>WorldCat 등 글로벌 도서관 네트워크 참여 가능</li>
+    </ul>
+</div>
+
+<div class="example-box">
+    <h4>📖 실제 사례: MARC 21 레코드</h4>
+    <div class="code-block">
+245 10 $a 論語 = $b Lun yu / $c 孔子 [지음] ; Confucius
+880 10 $6 245-01/$1 $a 论语 = $b Lun yu / $c 孔子 [지음]
+    </div>
+    <p>중국 고전 『논어』의 서명을 한자(번체/간체), 로마자, 한글로 모두 표현한 예시입니다. UNICODE 덕분에 가능해졌습니다.</p>
+</div>
+
+<h3>5.2 검색 시스템</h3>
+
+<div class="concept-box">
+    <h4>🔍 UNICODE Normalization (정규화)</h4>
+    <p>같은 문자가 여러 방식으로 표현될 수 있는 문제를 해결합니다.</p>
+
+    <div class="warning-box">
+        <h5>⚠️ 문제 사례: 한글 '각'이 두 가지 방식으로 저장될 수 있습니다</h5>
+
+        <p><strong>상황:</strong> 사용자 A와 사용자 B가 모두 '각'이라는 글자를 입력했습니다.</p>
+
+        <div style="background: white; padding: 15px; border-radius: 5px; margin: 15px 0;">
+            <p><strong>사용자 A의 방식 (완성형):</strong></p>
+            <div class="code-block">
+'각' = 1개의 코드 포인트
+U+AC01 (한글 음절 '각')
+            </div>
+            <p>→ 한글 완성형 글자 하나로 저장</p>
+        </div>
+
+        <div style="background: white; padding: 15px; border-radius: 5px; margin: 15px 0;">
+            <p><strong>사용자 B의 방식 (자모 조합):</strong></p>
+            <div class="code-block">
+'각' = 3개의 코드 포인트
+U+1100 (ㄱ) + U+1161 (ㅏ) + U+11A8 (ㄱ)
+            </div>
+            <p>→ 초성·중성·종성을 각각 저장한 후 화면에서 합쳐서 표시</p>
+        </div>
+
+        <p><strong>문제 발생:</strong> 화면에는 둘 다 똑같이 <span style="font-size: 2em; color: red;">'각'</span>으로 보이지만...</p>
+        <ul>
+            <li>컴퓨터 입장에서는 <strong>완전히 다른 데이터</strong>입니다</li>
+            <li>도서관 시스템에서 "각"을 검색하면 한쪽만 검색되고 다른 쪽은 누락될 수 있습니다</li>
+            <li>정렬(가나다순)도 제대로 안 될 수 있습니다</li>
+        </ul>
+    </div>
+
+    <div class="success-box">
+        <h4>✅ 해결책: UNICODE Normalization (정규화)</h4>
+        <p>검색하거나 비교하기 전에 <strong>모든 텍스트를 하나의 통일된 방식으로 변환</strong>합니다.</p>
+
+        <p><strong>방법 1: NFC (Normalization Form Composed - 완성형으로 통일)</strong></p>
+        <div class="code-block">
+변환 전:
+  사용자 A: 각 (U+AC01)
+  사용자 B: ㄱ+ㅏ+ㄱ (U+1100 U+1161 U+11A8)
+
+NFC 적용 후:
+  사용자 A: 각 (U+AC01)  ← 변화 없음
+  사용자 B: 각 (U+AC01)  ← 완성형으로 합쳐짐!
+
+→ 이제 둘이 완전히 같은 데이터가 되어 검색 가능!
+        </div>
+
+        <p><strong>방법 2: NFD (Normalization Form Decomposed - 자모 분리로 통일)</strong></p>
+        <div class="code-block">
+변환 전:
+  사용자 A: 각 (U+AC01)
+  사용자 B: ㄱ+ㅏ+ㄱ (U+1100 U+1161 U+11A8)
+
+NFD 적용 후:
+  사용자 A: ㄱ+ㅏ+ㄱ (U+1100 U+1161 U+11A8)  ← 분리됨!
+  사용자 B: ㄱ+ㅏ+ㄱ (U+1100 U+1161 U+11A8)  ← 변화 없음
+
+→ 이제 둘이 완전히 같은 데이터가 되어 검색 가능!
+        </div>
+
+        <p><strong>💡 실무에서는?</strong></p>
+        <ul>
+            <li><strong>웹 검색:</strong> 대부분 NFC 사용 (완성형이 더 효율적)</li>
+            <li><strong>데이터베이스:</strong> 저장 전 NFC로 정규화</li>
+            <li><strong>도서관 시스템:</strong> MARC 레코드 입력 시 자동으로 NFC 적용</li>
+        </ul>
+    </div>
+</div>
+
+<h3>5.3 디지털 아카이브와 장기 보존</h3>
+
+<div class="success-box">
+    <h4>🏛️ 장기 보존 표준으로서의 UNICODE</h4>
+    <p>디지털 자료의 장기 보존을 위해서는 <strong>미래에도 읽을 수 있는 형식</strong>이 중요합니다.</p>
+    <ul>
+        <li>UNICODE는 ISO/IEC 10646 국제 표준</li>
+        <li>거의 모든 운영체제와 프로그래밍 언어가 지원</li>
+        <li>향후 수십 년간 호환성 보장</li>
+    </ul>
+
+    <div class="example-box">
+        <h5>권장 사항</h5>
+        <p>디지털 아카이브 자료는 <strong>UTF-8</strong>로 인코딩하여 저장하는 것이 권장됩니다:</p>
+        <ul>
+            <li>웹 표준이며 가장 널리 지원됨</li>
+            <li>ASCII와 호환되어 기존 시스템과도 연동 가능</li>
+            <li>파일 크기와 호환성의 균형</li>
+        </ul>
+    </div>
+</div>
+
+<h2>6. UNICODE의 발전과 미래</h2>
+
+<h3>6.1 UNICODE 버전 역사</h3>
+
+<div class="timeline">
+    <div class="timeline-item">
+        <div class="timeline-year">1991</div>
+        <p><strong>UNICODE 1.0</strong> 발표 (7,161 문자)</p>
+    </div>
+
+    <div class="timeline-item">
+        <div class="timeline-year">1996</div>
+        <p><strong>UNICODE 2.0</strong> - 한글 11,172자 완성형 추가</p>
+    </div>
+
+    <div class="timeline-item">
+        <div class="timeline-year">2001</div>
+        <p><strong>UNICODE 3.1</strong> - BMP를 넘어 Supplementary Planes 추가</p>
+    </div>
+
+    <div class="timeline-item">
+        <div class="timeline-year">2010</div>
+        <p><strong>UNICODE 6.0</strong> - 이모지(Emoji) 공식 추가 😀</p>
+    </div>
+
+    <div class="timeline-item">
+        <div class="timeline-year">2014</div>
+        <p><strong>UNICODE 7.0</strong> - 고대 문자, 역사적 스크립트 대폭 확장</p>
+    </div>
+
+    <div class="timeline-item">
+        <div class="timeline-year">2023</div>
+        <p><strong>UNICODE 15.1</strong> - 현재 버전 (149,813 문자)</p>
+    </div>
+</div>
+
+<h3>6.2 이모지 혁명 🎉</h3>
+
+<div class="real-world-example">
+    <h3>😀 이모지의 등장과 영향</h3>
+    <p>이모지는 단순한 그림 문자가 아니라 <strong>공식 UNICODE 문자</strong>입니다.</p>
+    <ul>
+        <li><strong>2010년:</strong> UNICODE 6.0에서 이모지 공식 채택</li>
+        <li><strong>현재:</strong> 3,600개 이상의 이모지 존재</li>
+        <li><strong>의미:</strong> 문화적·감정적 표현의 새로운 차원</li>
+    </ul>
+
+    <div class="character-example" style="background-color: rgba(255,255,255,0.2); border-color: white;">
+        <span class="character-large">👨‍👩‍👧‍👦</span>
+        <div class="character-info" style="color: white;">
+            U+1F468 U+200D U+1F469 U+200D U+1F467 U+200D U+1F466<br>
+            Family: Man, Woman, Girl, Boy
+        </div>
+    </div>
+
+    <p>이모지는 여러 개의 Code Point를 조합(ZWJ Sequences)하여 복잡한 의미를 표현할 수 있습니다.</p>
+</div>
+
+<h3>6.3 미래: AI 시대의 UNICODE</h3>
+
+<div class="concept-box">
+    <h4>🤖 AI와 자연어 처리</h4>
+    <p>ChatGPT, Claude 같은 대규모 언어 모델(LLM)은 <strong>UNICODE 기반의 토크나이저</strong>를 사용하여 전 세계 언어를 학습합니다.</p>
+    <ul>
+        <li>UNICODE가 없었다면 다국어 AI는 불가능했을 것</li>
+        <li>한글·중국어·아랍어를 동시에 이해하고 생성</li>
+        <li>코드 포인트 기반의 언어 분석</li>
+    </ul>
+
+    <div class="success-box">
+        <h5>도서관 AI의 미래</h5>
+        <p>UNICODE 덕분에 도서관 AI 시스템은:</p>
+        <ul>
+            <li>다국어 서지 레코드를 자동으로 분석</li>
+            <li>언어 간 자동 번역 및 연결</li>
+            <li>글로벌 디지털 도서관 구축 가능</li>
+        </ul>
+    </div>
+</div>
+
+<h2>7. 실전 적용: UNICODE 다루기</h2>
+
+<h3>7.1 프로그래밍에서의 UNICODE</h3>
+
+<div class="code-block">
+# Python 예시
+text = "Hello 안녕 😀"
+
+# 문자 수 세기
+print(len(text))  # 10 (공백 포함)
+
+# 각 문자의 Code Point 확인
+for char in text:
+    print(f"{char} = U+{ord(char):04X}")
+
+# 결과:
+# H = U+0048
+# e = U+0065
+# l = U+006C
+# l = U+006C
+# o = U+006F
+#   = U+0020
+# 안 = U+C548
+# 녕 = U+B155
+#   = U+0020
+# 😀 = U+1F600
+</div>
+
+<h3>7.2 웹 개발에서의 UNICODE</h3>
+
+<div class="example-box">
+    <h4>🌐 HTML에서 UNICODE 사용</h4>
+    <div class="code-block">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="ko"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;  &lt;!-- UTF-8 선언 필수! --&gt;
+    &lt;title&gt;다국어 페이지&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Hello 안녕하세요 こんにちは 你好&lt;/h1&gt;
+
+    &lt;!-- HTML Entity로도 표현 가능 --&gt;
+    &lt;p&gt;&amp;#xAC00; = 가&lt;/p&gt;
+    &lt;p&gt;&amp;#128512; = 😀&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+    </div>
+</div>
+
+<h3>7.3 데이터베이스에서의 UNICODE</h3>
+
+<div class="warning-box">
+    <h4>⚠️ 데이터베이스 설정 주의사항</h4>
+    <p><strong>MySQL 예시:</strong></p>
+    <div class="code-block">
+-- 잘못된 설정 (이모지 저장 불가)
+CREATE DATABASE mydb CHARACTER SET utf8;
+
+-- 올바른 설정 (모든 UNICODE 문자 저장 가능)
+CREATE DATABASE mydb CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+    </div>
+
+    <p><strong>주의:</strong> MySQL의 <code>utf8</code>은 실제로는 UTF-8이 아니라 <strong>3바이트 제한</strong>이 있어 이모지(4바이트)를 저장할 수 없습니다. 반드시 <code>utf8mb4</code>를 사용해야 합니다!</p>
+</div>
+
+<h2>8. 정리 및 핵심 요약</h2>
+
+<div class="success-box">
+    <h3>✅ UNICODE를 배우고 나면</h3>
+    <ul>
+        <li>왜 한글이 깨지는지, 어떻게 해결하는지 알게 됩니다</li>
+        <li>도서관 시스템에서 다국어 자료를 올바르게 처리할 수 있습니다</li>
+        <li>UTF-8, UTF-16의 차이를 이해하고 적절히 선택할 수 있습니다</li>
+        <li>검색 시스템에서 정규화의 중요성을 이해합니다</li>
+        <li>디지털 아카이브 구축 시 장기 보존 전략을 세울 수 있습니다</li>
+    </ul>
+</div>
+
+<div class="concept-box">
+    <h3>🎓 핵심 개념 정리</h3>
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th>개념</th>
+                <th>설명</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>UNICODE</strong></td>
+                <td>전 세계 모든 문자를 하나의 체계로 표현하는 국제 표준</td>
+            </tr>
+            <tr>
+                <td><strong>Code Point</strong></td>
+                <td>각 문자에 부여된 고유 번호 (U+XXXX 형식)</td>
+            </tr>
+            <tr>
+                <td><strong>UTF-8</strong></td>
+                <td>가변 길이(1~4바이트), 웹 표준, 가장 널리 사용됨</td>
+            </tr>
+            <tr>
+                <td><strong>UTF-16</strong></td>
+                <td>가변 길이(2~4바이트), Windows/Java 내부 인코딩</td>
+            </tr>
+            <tr>
+                <td><strong>BMP</strong></td>
+                <td>가장 자주 쓰이는 문자들이 포함된 Plane 0</td>
+            </tr>
+            <tr>
+                <td><strong>Normalization</strong></td>
+                <td>같은 문자의 다양한 표현을 통일하는 과정</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="intro-box">
+    <h3>🌟 마무리</h3>
+    <p>UNICODE는 단순한 기술 표준이 아니라, <strong>전 세계 사람들이 디지털 세상에서 자신의 언어로 소통할 수 있게 만든 혁명</strong>입니다.</p>
+    <p>도서관과 정보 전문가로서 UNICODE를 이해하는 것은 글로벌 지식 공유의 핵심을 아는 것이며, 미래 디지털 도서관을 설계하는 데 필수적인 역량입니다.</p>
+</div>
+
+</body>
+</html>

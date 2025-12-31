@@ -1,0 +1,2168 @@
+<div class="counter-tutorial">
+  <h1>COUNTER Code of Practice: 전자자원 이용통계 표준의 모든 것</h1>
+
+  <div class="intro-section">
+    <h2>📚 학습 목표</h2>
+    <ul>
+      <li>COUNTER Code of Practice의 개념과 필요성 이해하기</li>
+      <li>COUNTER R5의 주요 보고서 유형과 측정 항목 파악하기</li>
+      <li>실제 COUNTER 보고서 예시를 통해 데이터 구조 학습하기</li>
+      <li>도서관에서 COUNTER를 활용한 컬렉션 평가 방법 이해하기</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>1️⃣ COUNTER란 무엇인가?</h2>
+
+    <div class="definition-box">
+      <h3>📖 정의</h3>
+      <p>
+        <strong>COUNTER (Counting Online Usage of Networked Electronic Resources)</strong>는
+        전자자원(전자저널, 전자책, 데이터베이스 등)의 이용통계를 <strong>측정하고 보고하는 국제 표준</strong>입니다.
+      </p>
+    </div>
+
+    <div class="key-concept">
+      <h3>🎯 핵심 개념</h3>
+      <p>COUNTER는 다음을 표준화합니다:</p>
+      <ul>
+        <li><strong>무엇을</strong> 측정할 것인가? (측정 항목)</li>
+        <li><strong>어떻게</strong> 측정할 것인가? (측정 방법)</li>
+        <li><strong>어떤 형식으로</strong> 보고할 것인가? (보고서 형식)</li>
+      </ul>
+    </div>
+
+    <div class="organization-info">
+      <h3>🏛️ 운영 조직</h3>
+      <ul>
+        <li><strong>공식 명칭:</strong> Project COUNTER</li>
+        <li><strong>설립:</strong> 2002년</li>
+        <li><strong>본부:</strong> 영국</li>
+        <li><strong>회원:</strong> 도서관, 출판사, 플랫폼 제공자, 컨소시엄 등</li>
+        <li><strong>웹사이트:</strong> <a href="https://www.projectcounter.org/" target="_blank">https://www.projectcounter.org/</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>2️⃣ 왜 COUNTER가 필요한가?</h2>
+
+    <h3>😰 COUNTER 이전의 문제들</h3>
+
+    <div class="problem-scenario">
+      <h4>📚 상황: 전북대학교 도서관의 고민</h4>
+      <p>
+        전북대학교 도서관이 3개 출판사와 전자저널 패키지를 구독하고 있습니다.
+        연간 구독료는 각각 5천만 원, 4천만 원, 3천만 원입니다.
+        예산이 삭감되어 하나를 취소해야 하는 상황입니다.
+      </p>
+
+      <div class="problem-box">
+        <h5>🔴 문제 1: 측정 방식이 제각각</h5>
+        <table class="problem-table">
+          <tr>
+            <th>출판사</th>
+            <th>제공하는 통계</th>
+            <th>측정 방식</th>
+          </tr>
+          <tr>
+            <td>Elsevier</td>
+            <td>"다운로드" 15,234건</td>
+            <td>PDF 다운로드만 집계</td>
+          </tr>
+          <tr>
+            <td>Springer</td>
+            <td>"접속" 28,901건</td>
+            <td>HTML 조회 + PDF 다운로드</td>
+          </tr>
+          <tr>
+            <td>Wiley</td>
+            <td>"이용" 12,456건</td>
+            <td>초록 조회까지 포함</td>
+          </tr>
+        </table>
+        <p class="problem-note">
+          ❌ <strong>문제:</strong> 숫자는 있지만 비교가 불가능합니다!<br>
+          "접속"과 "다운로드"는 같은 의미인가? 다른 의미인가?
+        </p>
+      </div>
+
+      <div class="problem-box">
+        <h5>🔴 문제 2: 보고서 형식이 제각각</h5>
+        <ul>
+          <li>Elsevier: Excel 파일, 저널명이 A열, 통계가 B열</li>
+          <li>Springer: PDF 파일, 표가 이미지로 삽입됨</li>
+          <li>Wiley: HTML 웹페이지, 복사해서 붙여넣기 해야 함</li>
+        </ul>
+        <p class="problem-note">
+          ❌ <strong>문제:</strong> 데이터 정리에만 하루가 걸립니다!
+        </p>
+      </div>
+
+      <div class="problem-box">
+        <h5>🔴 문제 3: 중복 제거 방식이 불명확</h5>
+        <p>
+          같은 사람이 같은 논문을 5번 다운로드했을 때:
+        </p>
+        <ul>
+          <li>Elsevier: 5건으로 집계</li>
+          <li>Springer: 1건으로 집계 (중복 제거)</li>
+          <li>Wiley: 3건으로 집계 (세션별 집계)</li>
+        </ul>
+        <p class="problem-note">
+          ❌ <strong>문제:</strong> 어느 것이 정확한 이용인가?
+        </p>
+      </div>
+    </div>
+
+    <div class="solution-box">
+      <h3>✅ COUNTER의 해결책</h3>
+      <div class="solution-grid">
+        <div class="solution-item">
+          <h4>📏 표준 측정 항목</h4>
+          <p>모든 출판사가 동일한 지표를 사용합니다</p>
+          <ul>
+            <li>Total_Item_Requests (전체 요청)</li>
+            <li>Unique_Item_Requests (고유 요청)</li>
+            <li>Unique_Title_Requests (타이틀별 고유 요청)</li>
+          </ul>
+        </div>
+        <div class="solution-item">
+          <h4>📋 표준 보고서 형식</h4>
+          <p>동일한 구조의 보고서를 제공합니다</p>
+          <ul>
+            <li>Excel (TSV) 형식</li>
+            <li>JSON 형식 (SUSHI API)</li>
+            <li>동일한 열(컬럼) 구조</li>
+          </ul>
+        </div>
+        <div class="solution-item">
+          <h4>🔢 표준 집계 규칙</h4>
+          <p>중복 제거와 집계 방식이 명확합니다</p>
+          <ul>
+            <li>세션 기반 중복 제거</li>
+            <li>IP 주소 + User Agent 조합</li>
+            <li>Double-Click 필터링</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="result-box">
+        <h4>🎉 결과</h4>
+        <p>
+          이제 전북대학교 도서관은 <strong>객관적이고 공정한 비교</strong>를 통해
+          예산 결정을 할 수 있습니다!
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>3️⃣ COUNTER의 역사: R1부터 R5까지</h2>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-year">2003</div>
+        <div class="timeline-content">
+          <h4>Release 1 (R1)</h4>
+          <p>최초 버전 출시. 기본적인 저널 이용통계만 제공</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-year">2006</div>
+        <div class="timeline-content">
+          <h4>Release 2 (R2)</h4>
+          <p>데이터베이스 보고서 추가</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-year">2008</div>
+        <div class="timeline-content">
+          <h4>Release 3 (R3)</h4>
+          <p>전자책 보고서 추가, 보고서 유형 확장</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-year">2012</div>
+        <div class="timeline-content">
+          <h4>Release 4 (R4)</h4>
+          <p>멀티미디어 콘텐츠 지원, Gold OA 구분</p>
+        </div>
+      </div>
+
+      <div class="timeline-item highlight">
+        <div class="timeline-year">2019</div>
+        <div class="timeline-content">
+          <h4>Release 5 (R5) ⭐ 현재 버전</h4>
+          <p>
+            <strong>대대적 개편!</strong><br>
+            • 보고서 단순화 (30개 → 4개 마스터 보고서)<br>
+            • JSON 형식 도입<br>
+            • REST API (SUSHI) 표준화<br>
+            • 측정 항목 명확화
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="r5-note">
+      <p><strong>💡 참고:</strong> 2024년 현재 대부분의 출판사가 R5를 사용합니다. R4 지원은 2024년 말 종료 예정입니다.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>4️⃣ COUNTER R5 보고서 유형</h2>
+
+    <div class="report-intro">
+      <p>
+        COUNTER R5는 복잡했던 30개 이상의 보고서를 <strong>4개의 마스터 보고서</strong>로 단순화했습니다.
+      </p>
+    </div>
+
+    <div class="reports-grid">
+      <div class="report-card">
+        <div class="report-icon">🖥️</div>
+        <h3>Platform Report (PR)</h3>
+        <p class="report-desc">플랫폼 전체의 이용 현황</p>
+        <div class="report-details">
+          <h4>측정 대상</h4>
+          <p>전체 플랫폼 (예: ScienceDirect, SpringerLink)</p>
+          <h4>주요 용도</h4>
+          <ul>
+            <li>플랫폼별 총 이용량 파악</li>
+            <li>플랫폼 간 비교</li>
+            <li>검색 행동 분석</li>
+          </ul>
+          <h4>주요 지표</h4>
+          <ul>
+            <li>Searches_Platform (플랫폼 검색)</li>
+            <li>Total_Item_Requests (전체 요청)</li>
+            <li>Unique_Item_Requests (고유 요청)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="report-card">
+        <div class="report-icon">💾</div>
+        <h3>Database Report (DR)</h3>
+        <p class="report-desc">개별 데이터베이스의 이용 현황</p>
+        <div class="report-details">
+          <h4>측정 대상</h4>
+          <p>개별 데이터베이스 (예: Web of Science, Scopus)</p>
+          <h4>주요 용도</h4>
+          <ul>
+            <li>데이터베이스별 이용량 비교</li>
+            <li>구독 갱신 결정</li>
+            <li>DB당 비용 대비 효과 분석</li>
+          </ul>
+          <h4>주요 지표</h4>
+          <ul>
+            <li>Searches_Regular (일반 검색)</li>
+            <li>Total_Item_Investigations (전체 조사)</li>
+            <li>Unique_Item_Investigations (고유 조사)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="report-card highlight">
+        <div class="report-icon">📰</div>
+        <h3>Title Report (TR)</h3>
+        <p class="report-desc">개별 저널/도서의 이용 현황</p>
+        <div class="report-details">
+          <h4>측정 대상</h4>
+          <p>저널 타이틀, 전자책 타이틀</p>
+          <h4>주요 용도</h4>
+          <ul>
+            <li>저널별 이용량 순위</li>
+            <li>저이용 저널 파악</li>
+            <li>Big Deal 평가</li>
+          </ul>
+          <h4>주요 지표</h4>
+          <ul>
+            <li>Total_Item_Requests (전체 요청)</li>
+            <li>Unique_Item_Requests (고유 요청)</li>
+            <li>Unique_Title_Requests (타이틀별 고유 요청)</li>
+          </ul>
+          <p class="most-used">⭐ 가장 많이 사용되는 보고서</p>
+        </div>
+      </div>
+
+      <div class="report-card">
+        <div class="report-icon">📄</div>
+        <h3>Item Report (IR)</h3>
+        <p class="report-desc">개별 논문/챕터의 이용 현황</p>
+        <div class="report-details">
+          <h4>측정 대상</h4>
+          <p>개별 논문, 개별 챕터 (DOI 단위)</p>
+          <h4>주요 용도</h4>
+          <ul>
+            <li>논문별 상세 이용 분석</li>
+            <li>인기 논문 파악</li>
+            <li>연구 성과 측정</li>
+          </ul>
+          <h4>주요 지표</h4>
+          <ul>
+            <li>Total_Item_Requests (전체 요청)</li>
+            <li>Unique_Item_Requests (고유 요청)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="report-note">
+      <h4>💡 보고서 선택 가이드</h4>
+      <ul>
+        <li><strong>플랫폼 전체 평가:</strong> PR 사용</li>
+        <li><strong>패키지/구독 결정:</strong> TR 사용 (가장 일반적)</li>
+        <li><strong>데이터베이스 갱신:</strong> DR 사용</li>
+        <li><strong>상세 분석:</strong> IR 사용</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>5️⃣ COUNTER 측정 항목 (Metric Types)</h2>
+
+    <div class="metrics-intro">
+      <p>
+        COUNTER R5는 <strong>명확하고 일관된 측정 항목</strong>을 정의합니다.
+        각 측정 항목은 정확히 무엇을 세는지 상세히 규정되어 있습니다.
+      </p>
+    </div>
+
+    <h3>📊 핵심 측정 항목</h3>
+
+    <div class="metric-card">
+      <h4>1️⃣ Total_Item_Requests</h4>
+      <div class="metric-definition">
+        <p><strong>정의:</strong> 콘텐츠(논문, 챕터)의 전체 요청 횟수</p>
+        <p><strong>포함:</strong> 풀텍스트 HTML 조회, PDF 다운로드</p>
+        <p><strong>제외:</strong> 초록만 조회, 검색 결과 페이지</p>
+      </div>
+      <div class="metric-example">
+        <h5>🔍 예시</h5>
+        <p><strong>상황:</strong></p>
+        <ul>
+          <li>김연구 학생이 논문 A를 HTML로 2번 조회</li>
+          <li>이교수 님이 논문 A를 PDF로 1번 다운로드</li>
+          <li>박학생 님이 논문 A를 HTML 1번, PDF 1번</li>
+        </ul>
+        <p class="metric-result">
+          <strong>Total_Item_Requests = 5</strong> (2 + 1 + 1 + 1)
+        </p>
+      </div>
+    </div>
+
+    <div class="metric-card">
+      <h4>2️⃣ Unique_Item_Requests</h4>
+      <div class="metric-definition">
+        <p><strong>정의:</strong> 중복을 제거한 콘텐츠 요청 횟수</p>
+        <p><strong>중복 제거 규칙:</strong> 같은 세션에서 같은 콘텐츠를 여러 번 요청하면 1회로 집계</p>
+        <p><strong>세션 정의:</strong> IP 주소 + User Agent 조합, 1시간 단위</p>
+      </div>
+      <div class="metric-example">
+        <h5>🔍 예시 (위와 동일한 상황)</h5>
+        <ul>
+          <li>김연구 학생: HTML 2번 → <strong>1건</strong> (같은 세션)</li>
+          <li>이교수 님: PDF 1번 → <strong>1건</strong></li>
+          <li>박학생 님: HTML 1번 + PDF 1번 → <strong>1건</strong> (같은 콘텐츠, 같은 세션)</li>
+        </ul>
+        <p class="metric-result">
+          <strong>Unique_Item_Requests = 3</strong>
+        </p>
+        <p class="metric-note">
+          💡 실제로 몇 명이 이용했는지 알 수 있는 지표!
+        </p>
+      </div>
+    </div>
+
+    <div class="metric-card">
+      <h4>3️⃣ Total_Item_Investigations</h4>
+      <div class="metric-definition">
+        <p><strong>정의:</strong> 콘텐츠 조사 행위 전체 (초록 조회 포함)</p>
+        <p><strong>포함:</strong> 초록 페이지 조회, HTML 조회, PDF 다운로드</p>
+        <p><strong>용도:</strong> 관심도 측정 (다운로드하지 않아도 초록을 본 경우)</p>
+      </div>
+      <div class="metric-example">
+        <h5>🔍 예시</h5>
+        <p><strong>상황:</strong> 논문 B에 대해</p>
+        <ul>
+          <li>10명이 초록만 조회</li>
+          <li>5명이 풀텍스트 조회</li>
+        </ul>
+        <p class="metric-result">
+          <strong>Total_Item_Investigations = 15</strong><br>
+          <strong>Total_Item_Requests = 5</strong>
+        </p>
+        <p class="metric-note">
+          💡 Investigations가 Requests보다 항상 크거나 같습니다!
+        </p>
+      </div>
+    </div>
+
+    <div class="metric-card">
+      <h4>4️⃣ Unique_Title_Requests</h4>
+      <div class="metric-definition">
+        <p><strong>정의:</strong> 저널 타이틀 단위로 중복 제거한 요청</p>
+        <p><strong>집계 단위:</strong> 저널 전체 (개별 논문이 아님)</p>
+        <p><strong>용도:</strong> 저널 전체의 고유 이용자 수 파악</p>
+      </div>
+      <div class="metric-example">
+        <h5>🔍 예시</h5>
+        <p><strong>상황:</strong> Nature 저널에서</p>
+        <ul>
+          <li>김연구 학생이 논문 3개 조회</li>
+          <li>이교수 님이 논문 2개 조회</li>
+          <li>박학생 님이 논문 1개 조회</li>
+        </ul>
+        <p class="metric-result">
+          <strong>Unique_Title_Requests = 3</strong><br>
+          (Nature 저널을 이용한 고유 사용자 3명)
+        </p>
+      </div>
+    </div>
+
+    <div class="metric-card">
+      <h4>5️⃣ Searches_Platform</h4>
+      <div class="metric-definition">
+        <p><strong>정의:</strong> 플랫폼에서 수행한 검색 횟수</p>
+        <p><strong>포함:</strong> 키워드 검색, 고급 검색</p>
+        <p><strong>제외:</strong> 브라우징, 필터링</p>
+      </div>
+      <div class="metric-example">
+        <h5>🔍 활용</h5>
+        <p>검색 기능 사용률을 통해 플랫폼의 발견 가능성(discoverability) 평가</p>
+      </div>
+    </div>
+
+    <div class="metric-comparison">
+      <h3>📊 측정 항목 비교표</h3>
+      <table class="comparison-table">
+        <tr>
+          <th>측정 항목</th>
+          <th>포함 범위</th>
+          <th>중복 제거</th>
+          <th>주요 용도</th>
+        </tr>
+        <tr>
+          <td>Total_Item_Requests</td>
+          <td>풀텍스트만</td>
+          <td>❌ 없음</td>
+          <td>전체 이용량</td>
+        </tr>
+        <tr>
+          <td>Unique_Item_Requests</td>
+          <td>풀텍스트만</td>
+          <td>✅ 있음</td>
+          <td>실제 이용자 수</td>
+        </tr>
+        <tr>
+          <td>Total_Item_Investigations</td>
+          <td>초록 포함</td>
+          <td>❌ 없음</td>
+          <td>관심도 측정</td>
+        </tr>
+        <tr>
+          <td>Unique_Item_Investigations</td>
+          <td>초록 포함</td>
+          <td>✅ 있음</td>
+          <td>실제 관심자 수</td>
+        </tr>
+        <tr>
+          <td>Unique_Title_Requests</td>
+          <td>저널 단위</td>
+          <td>✅ 있음</td>
+          <td>저널별 이용자 수</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>6️⃣ 실제 COUNTER 보고서 예시</h2>
+
+    <div class="report-format-intro">
+      <p>
+        COUNTER R5 보고서는 <strong>TSV (Tab-Separated Values)</strong>와 <strong>JSON</strong> 두 가지 형식으로 제공됩니다.
+      </p>
+    </div>
+
+    <h3>📊 Title Report (TR) 예시</h3>
+
+    <div class="example-scenario">
+      <h4>📖 시나리오</h4>
+      <p>
+        전북대학교 도서관이 Elsevier로부터 2024년 12월 Title Report를 받았습니다.
+        보고서에는 ScienceDirect 플랫폼의 저널별 이용통계가 포함되어 있습니다.
+      </p>
+    </div>
+
+    <h4>📄 TSV (Excel) 형식</h4>
+    <div class="tsv-example">
+      <p class="format-note">실제 Excel 파일을 열면 다음과 같은 형태로 보입니다:</p>
+      <div class="excel-preview">
+        <table class="excel-table">
+          <tr class="header-row">
+            <td colspan="13">Report_Name: Title Master Report</td>
+          </tr>
+          <tr class="header-row">
+            <td colspan="13">Report_ID: TR</td>
+          </tr>
+          <tr class="header-row">
+            <td colspan="13">Release: 5</td>
+          </tr>
+          <tr class="header-row">
+            <td colspan="13">Institution_Name: Jeonbuk National University</td>
+          </tr>
+          <tr class="header-row">
+            <td colspan="13">Reporting_Period: 2024-12-01 to 2024-12-31</td>
+          </tr>
+          <tr class="header-row">
+            <td colspan="13">Created: 2025-01-15</td>
+          </tr>
+          <tr class="blank-row">
+            <td colspan="13"></td>
+          </tr>
+          <tr class="column-headers">
+            <th>Title</th>
+            <th>Publisher</th>
+            <th>Platform</th>
+            <th>DOI</th>
+            <th>Print_ISSN</th>
+            <th>Online_ISSN</th>
+            <th>Metric_Type</th>
+            <th>Reporting_Period_Total</th>
+            <th>Dec-2024</th>
+          </tr>
+          <tr>
+            <td>Cell</td>
+            <td>Elsevier</td>
+            <td>ScienceDirect</td>
+            <td>10.1016/0092-8674</td>
+            <td>0092-8674</td>
+            <td>1097-4172</td>
+            <td>Total_Item_Requests</td>
+            <td>1523</td>
+            <td>1523</td>
+          </tr>
+          <tr>
+            <td>Cell</td>
+            <td>Elsevier</td>
+            <td>ScienceDirect</td>
+            <td>10.1016/0092-8674</td>
+            <td>0092-8674</td>
+            <td>1097-4172</td>
+            <td>Unique_Item_Requests</td>
+            <td>1102</td>
+            <td>1102</td>
+          </tr>
+          <tr>
+            <td>The Lancet</td>
+            <td>Elsevier</td>
+            <td>ScienceDirect</td>
+            <td>10.1016/S0140-6736</td>
+            <td>0140-6736</td>
+            <td>1474-547X</td>
+            <td>Total_Item_Requests</td>
+            <td>892</td>
+            <td>892</td>
+          </tr>
+          <tr>
+            <td>The Lancet</td>
+            <td>Elsevier</td>
+            <td>ScienceDirect</td>
+            <td>10.1016/S0140-6736</td>
+            <td>0140-6736</td>
+            <td>1474-547X</td>
+            <td>Unique_Item_Requests</td>
+            <td>654</td>
+            <td>654</td>
+          </tr>
+          <tr>
+            <td>Nature</td>
+            <td>Springer Nature</td>
+            <td>nature.com</td>
+            <td>10.1038/nature</td>
+            <td>0028-0836</td>
+            <td>1476-4687</td>
+            <td>Total_Item_Requests</td>
+            <td>2341</td>
+            <td>2341</td>
+          </tr>
+          <tr>
+            <td>Nature</td>
+            <td>Springer Nature</td>
+            <td>nature.com</td>
+            <td>10.1038/nature</td>
+            <td>0028-0836</td>
+            <td>1476-4687</td>
+            <td>Unique_Item_Requests</td>
+            <td>1876</td>
+            <td>1876</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="excel-explanation">
+        <h5>🔍 보고서 구조 설명</h5>
+        <ul>
+          <li><strong>헤더 정보 (1-6행):</strong> 보고서 메타데이터 (기관명, 기간 등)</li>
+          <li><strong>빈 행 (7행):</strong> 헤더와 데이터 구분</li>
+          <li><strong>컬럼 헤더 (8행):</strong> 데이터 필드명</li>
+          <li><strong>데이터 행 (9행~):</strong> 실제 통계 데이터</li>
+        </ul>
+
+        <div class="reading-tip">
+          <h5>📖 보고서 읽는 법</h5>
+          <p><strong>Cell 저널의 경우:</strong></p>
+          <ul>
+            <li>Total_Item_Requests = 1,523 → 총 1,523번 다운로드됨</li>
+            <li>Unique_Item_Requests = 1,102 → 실제 1,102명이 이용함</li>
+            <li>차이 = 421 → 같은 사람이 여러 번 다운로드한 경우</li>
+          </ul>
+          <p class="insight">
+            💡 <strong>해석:</strong> Cell 저널은 이용률이 높고, 중복 다운로드도 많음.
+            연구에 실제로 활용되고 있다는 증거!
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <h4>📦 JSON 형식 (SUSHI API 응답)</h4>
+    <div class="json-example">
+      <p class="format-note">SUSHI API로 자동 수집 시 받게 되는 JSON 형식:</p>
+      <pre class="json-code">{
+  "Report_Header": {
+    "Report_Name": "Title Master Report",
+    "Report_ID": "TR",
+    "Release": "5",
+    "Institution_Name": "Jeonbuk National University",
+    "Institution_ID": [
+      {
+        "Type": "Proprietary",
+        "Value": "JBNU_2024"
+      }
+    ],
+    "Reporting_Period": {
+      "Begin_Date": "2024-12-01",
+      "End_Date": "2024-12-31"
+    },
+    "Created": "2025-01-15T09:30:00Z",
+    "Created_By": "Elsevier SUSHI Service"
+  },
+  "Report_Items": [
+    {
+      "Title": "Cell",
+      "Publisher": "Elsevier",
+      "Platform": "ScienceDirect",
+      "DOI": "10.1016/0092-8674",
+      "Print_ISSN": "0092-8674",
+      "Online_ISSN": "1097-4172",
+      "Performance": [
+        {
+          "Period": {
+            "Begin_Date": "2024-12-01",
+            "End_Date": "2024-12-31"
+          },
+          "Instance": [
+            {
+              "Metric_Type": "Total_Item_Requests",
+              "Count": 1523
+            },
+            {
+              "Metric_Type": "Unique_Item_Requests",
+              "Count": 1102
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Title": "The Lancet",
+      "Publisher": "Elsevier",
+      "Platform": "ScienceDirect",
+      "DOI": "10.1016/S0140-6736",
+      "Print_ISSN": "0140-6736",
+      "Online_ISSN": "1474-547X",
+      "Performance": [
+        {
+          "Period": {
+            "Begin_Date": "2024-12-01",
+            "End_Date": "2024-12-31"
+          },
+          "Instance": [
+            {
+              "Metric_Type": "Total_Item_Requests",
+              "Count": 892
+            },
+            {
+              "Metric_Type": "Unique_Item_Requests",
+              "Count": 654
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}</pre>
+
+      <div class="json-explanation">
+        <h5>🔍 JSON 구조 설명</h5>
+        <ul>
+          <li><strong>Report_Header:</strong> 보고서 메타데이터</li>
+          <li><strong>Report_Items:</strong> 저널별 데이터 배열</li>
+          <li><strong>Performance:</strong> 성능 데이터 (기간별)</li>
+          <li><strong>Instance:</strong> 측정 항목별 실제 값</li>
+        </ul>
+        <p class="json-note">
+          💡 JSON 형식은 프로그램이 자동으로 처리하기 최적화되어 있습니다.
+          Python, R 등으로 쉽게 분석 가능!
+        </p>
+      </div>
+    </div>
+
+    <div class="format-comparison">
+      <h4>📊 TSV vs JSON 비교</h4>
+      <table class="comparison-table">
+        <tr>
+          <th>구분</th>
+          <th>TSV (Excel)</th>
+          <th>JSON</th>
+        </tr>
+        <tr>
+          <td>수집 방법</td>
+          <td>수동 다운로드</td>
+          <td>SUSHI API (자동)</td>
+        </tr>
+        <tr>
+          <td>가독성</td>
+          <td>사람이 읽기 편함</td>
+          <td>프로그램 처리 최적화</td>
+        </tr>
+        <tr>
+          <td>처리 방법</td>
+          <td>Excel로 열어서 수동 분석</td>
+          <td>Python/R로 자동 분석</td>
+        </tr>
+        <tr>
+          <td>주요 사용자</td>
+          <td>소규모 도서관</td>
+          <td>대규모 도서관, 컨소시엄</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>7️⃣ COUNTER Registry</h2>
+
+    <div class="registry-intro">
+      <p>
+        <strong>COUNTER Registry</strong>는 모든 COUNTER 준수 출판사의
+        SUSHI 접속 정보를 모아놓은 중앙 저장소입니다.
+      </p>
+    </div>
+
+    <div class="registry-info">
+      <h3>🌐 공식 사이트</h3>
+      <p class="registry-url">
+        <a href="https://registry.projectcounter.org/" target="_blank">
+          https://registry.projectcounter.org/
+        </a>
+      </p>
+
+      <h3>📋 제공 정보</h3>
+      <div class="registry-features">
+        <div class="feature-item">
+          <h4>🔗 SUSHI 접속 정보</h4>
+          <ul>
+            <li>API 엔드포인트 URL</li>
+            <li>지원하는 보고서 유형</li>
+            <li>인증 방법</li>
+          </ul>
+        </div>
+        <div class="feature-item">
+          <h4>✅ 준수 상태</h4>
+          <ul>
+            <li>COUNTER 준수 인증 여부</li>
+            <li>마지막 감사 날짜</li>
+            <li>지원 COUNTER 버전</li>
+          </ul>
+        </div>
+        <div class="feature-item">
+          <h4>📞 연락처</h4>
+          <ul>
+            <li>기술 지원 이메일</li>
+            <li>고객 지원 연락처</li>
+            <li>문서 링크</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="registry-example">
+      <h3>🔍 Registry 사용 예시</h3>
+      <div class="example-steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h4>출판사 검색</h4>
+            <p>Registry에서 "Elsevier" 검색</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h4>정보 확인</h4>
+            <p>SUSHI API URL 확인:<br>
+            <code>https://api.elsevier.com/sushi/reports/</code></p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h4>인증 정보 설정</h4>
+            <p>Customer ID, API Key 등록</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h4>자동 수집 시작</h4>
+            <p>도서관 시스템에서 SUSHI로 자동 수집</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="registry-tip">
+      <h4>💡 활용 팁</h4>
+      <p>
+        새로운 출판사와 계약할 때 Registry에서 먼저 확인하세요.
+        COUNTER 준수 출판사인지, SUSHI를 지원하는지 바로 알 수 있습니다!
+      </p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>8️⃣ 실무 활용 사례</h2>
+
+    <h3>📚 사례 1: 저이용 저널 취소로 예산 절감</h3>
+    <div class="case-study">
+      <div class="case-header">
+        <h4>배경</h4>
+        <p>
+          A대학교 도서관은 Springer 패키지 1,500종을 연간 1억 2천만 원에 구독 중.
+          예산 삭감으로 2천만 원을 줄여야 하는 상황.
+        </p>
+      </div>
+
+      <div class="case-process">
+        <h4>분석 과정</h4>
+        <div class="process-step">
+          <strong>1단계:</strong> COUNTER TR 보고서 다운로드
+        </div>
+        <div class="process-step">
+          <strong>2단계:</strong> Unique_Item_Requests 기준 정렬
+        </div>
+        <div class="process-step">
+          <strong>3단계:</strong> 이용 실적 분석
+          <ul>
+            <li>상위 100종: 전체 이용의 80% 차지</li>
+            <li>하위 500종: 연간 이용 5회 미만</li>
+          </ul>
+        </div>
+        <div class="process-step">
+          <strong>4단계:</strong> 저이용 저널 300종 취소 결정
+        </div>
+      </div>
+
+      <div class="case-result">
+        <h4>결과</h4>
+        <ul>
+          <li>💰 <strong>2,400만 원 절감</strong> (목표 초과 달성!)</li>
+          <li>📊 실제 이용에는 영향 없음 (상위 저널 유지)</li>
+          <li>✅ 객관적 데이터로 의사결정의 정당성 확보</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>📊 사례 2: Big Deal 평가</h3>
+    <div class="case-study">
+      <div class="case-header">
+        <h4>배경</h4>
+        <p>
+          B대학교는 Wiley Big Deal (2,000종) 구독 중.
+          일부 저널만 구독하는 것과 비교해 비용 효율성을 평가해야 함.
+        </p>
+      </div>
+
+      <div class="case-process">
+        <h4>분석</h4>
+        <table class="analysis-table">
+          <tr>
+            <th>항목</th>
+            <th>Big Deal</th>
+            <th>선택 구독</th>
+          </tr>
+          <tr>
+            <td>저널 수</td>
+            <td>2,000종</td>
+            <td>150종</td>
+          </tr>
+          <tr>
+            <td>연간 비용</td>
+            <td>8,000만 원</td>
+            <td>6,000만 원</td>
+          </tr>
+          <tr>
+            <td>실제 이용 저널 (Unique ≥ 10)</td>
+            <td>450종</td>
+            <td>150종</td>
+          </tr>
+          <tr>
+            <td>저널당 비용</td>
+            <td>17.7만 원</td>
+            <td>40만 원</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="case-result">
+        <h4>결정</h4>
+        <p>
+          <strong>Big Deal 유지!</strong><br>
+          실제 이용하는 저널 수가 많고, 저널당 비용이 더 저렴함.
+          COUNTER 데이터가 없었다면 잘못된 결정을 할 뻔했습니다.
+        </p>
+      </div>
+    </div>
+
+    <h3>📈 사례 3: 이용 추세 분석</h3>
+    <div class="case-study">
+      <div class="case-header">
+        <h4>목적</h4>
+        <p>코로나19 전후 전자자원 이용 패턴 변화 분석</p>
+      </div>
+
+      <div class="case-chart">
+        <h4>월별 이용 추이 (2019 vs 2020)</h4>
+        <div class="chart-placeholder">
+          <table class="trend-table">
+            <tr>
+              <th>월</th>
+              <th>2019년</th>
+              <th>2020년</th>
+              <th>증가율</th>
+            </tr>
+            <tr>
+              <td>3월</td>
+              <td>45,231</td>
+              <td>78,456</td>
+              <td>+73%</td>
+            </tr>
+            <tr>
+              <td>4월</td>
+              <td>42,890</td>
+              <td>89,234</td>
+              <td>+108%</td>
+            </tr>
+            <tr>
+              <td>5월</td>
+              <td>38,765</td>
+              <td>92,871</td>
+              <td>+140%</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="case-insight">
+        <h4>인사이트</h4>
+        <ul>
+          <li>원격 교육 시작 후 전자자원 이용 급증</li>
+          <li>전자자원 투자 확대 필요성 입증</li>
+          <li>학술지원처에 예산 증액 요청 시 근거 자료로 활용</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>9️⃣ COUNTER와 SUSHI의 관계</h2>
+
+    <div class="relationship-diagram">
+      <div class="relation-box">
+        <div class="relation-item counter-item">
+          <h3>COUNTER</h3>
+          <p class="relation-role">표준 (Standard)</p>
+          <div class="relation-detail">
+            <p><strong>"무엇을"</strong> 측정할지 정의</p>
+            <ul>
+              <li>측정 항목 정의</li>
+              <li>보고서 형식 규정</li>
+              <li>집계 규칙 명시</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="relation-arrow">⬅️ 내용 ➡️</div>
+
+        <div class="relation-item sushi-item">
+          <h3>SUSHI</h3>
+          <p class="relation-role">프로토콜 (Protocol)</p>
+          <div class="relation-detail">
+            <p><strong>"어떻게"</strong> 수집할지 정의</p>
+            <ul>
+              <li>API 엔드포인트</li>
+              <li>요청/응답 형식</li>
+              <li>인증 방법</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="relationship-analogy">
+      <h3>🍕 비유로 이해하기</h3>
+      <div class="analogy-grid">
+        <div class="analogy-item">
+          <h4>COUNTER = 메뉴판</h4>
+          <p>"피자는 이런 재료로, 이런 크기로 만들어야 합니다"</p>
+          <p class="analogy-note">→ 피자의 <strong>규격</strong>을 정의</p>
+        </div>
+        <div class="analogy-item">
+          <h4>SUSHI = 배달 시스템</h4>
+          <p>"앱으로 주문하면 30분 내 배달합니다"</p>
+          <p class="analogy-note">→ 피자를 <strong>전달하는 방법</strong>을 정의</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="relationship-flow">
+      <h3>🔄 전체 흐름</h3>
+      <div class="flow-steps">
+        <div class="flow-step">
+          <strong>1. COUNTER가 정의</strong><br>
+          "Total_Item_Requests를 이렇게 측정하세요"
+        </div>
+        <div class="flow-arrow">⬇️</div>
+        <div class="flow-step">
+          <strong>2. 출판사가 준수</strong><br>
+          COUNTER 규칙대로 통계 수집
+        </div>
+        <div class="flow-arrow">⬇️</div>
+        <div class="flow-step">
+          <strong>3. SUSHI로 제공</strong><br>
+          API를 통해 자동 전송
+        </div>
+        <div class="flow-arrow">⬇️</div>
+        <div class="flow-step">
+          <strong>4. 도서관이 수신</strong><br>
+          COUNTER 보고서를 자동 수집
+        </div>
+      </div>
+    </div>
+
+    <div class="relationship-note">
+      <p>
+        💡 <strong>핵심:</strong> SUSHI 응답의 내용이 바로 COUNTER 보고서입니다.
+        SUSHI는 COUNTER 보고서를 자동으로 가져오는 "전달 수단"입니다.
+      </p>
+      <p class="learn-more">
+        👉 SUSHI에 대해 더 알고 싶다면:
+        <a href="/contents?category=search-protocol">SUSHI 프로토콜 학습하기</a>
+      </p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>🔟 학습 자료 및 참고 링크</h2>
+
+    <div class="resources-grid">
+      <div class="resource-card official">
+        <h3>📚 공식 문서</h3>
+        <ul>
+          <li>
+            <a href="https://www.projectcounter.org/code-of-practice-5-0/" target="_blank">
+              COUNTER Code of Practice Release 5
+            </a>
+            <p class="link-desc">COUNTER R5 공식 규정 전문</p>
+          </li>
+          <li>
+            <a href="https://www.projectcounter.org/counter-release-5-faqs/" target="_blank">
+              COUNTER R5 FAQ
+            </a>
+            <p class="link-desc">자주 묻는 질문과 답변</p>
+          </li>
+          <li>
+            <a href="https://registry.projectcounter.org/" target="_blank">
+              COUNTER Registry
+            </a>
+            <p class="link-desc">출판사 SUSHI 접속 정보 저장소</p>
+          </li>
+        </ul>
+      </div>
+
+      <div class="resource-card tutorial">
+        <h3>🎓 학습 자료</h3>
+        <ul>
+          <li>
+            <a href="https://www.projectcounter.org/about/webinars-training/" target="_blank">
+              COUNTER Webinars & Training
+            </a>
+            <p class="link-desc">공식 웨비나 및 교육 자료</p>
+          </li>
+          <li>
+            <a href="https://www.projectcounter.org/friendly-guides/" target="_blank">
+              Friendly Guides
+            </a>
+            <p class="link-desc">초보자를 위한 친절한 가이드</p>
+          </li>
+        </ul>
+      </div>
+
+      <div class="resource-card tools">
+        <h3>🛠️ 도구 및 소프트웨어</h3>
+        <ul>
+          <li>
+            <a href="https://github.com/Project-Counter/cop5" target="_blank">
+              COUNTER R5 JSON Schema
+            </a>
+            <p class="link-desc">JSON 형식 스키마 및 검증 도구</p>
+          </li>
+          <li>
+            <a href="https://www.usus.org.uk/" target="_blank">
+              USUS (UK Serials Usage Statistics)
+            </a>
+            <p class="link-desc">영국 도서관 COUNTER 활용 사례</p>
+          </li>
+        </ul>
+      </div>
+
+      <div class="resource-card community">
+        <h3>👥 커뮤니티</h3>
+        <ul>
+          <li>
+            <a href="https://www.projectcounter.org/contact/" target="_blank">
+              COUNTER Support
+            </a>
+            <p class="link-desc">기술 지원 및 문의</p>
+          </li>
+          <li>
+            <a href="https://www.projectcounter.org/news-events/" target="_blank">
+              News & Events
+            </a>
+            <p class="link-desc">최신 소식 및 행사 정보</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="summary">
+    <h2>✨ 핵심 요약</h2>
+
+    <div class="summary-grid">
+      <div class="summary-item">
+        <h3>🎯 COUNTER란?</h3>
+        <p>전자자원 이용통계를 <strong>측정하고 보고하는 국제 표준</strong></p>
+      </div>
+
+      <div class="summary-item">
+        <h3>📊 R5 보고서</h3>
+        <p>4개 마스터 보고서: <strong>PR, DR, TR, IR</strong></p>
+      </div>
+
+      <div class="summary-item">
+        <h3>📏 핵심 측정 항목</h3>
+        <ul>
+          <li>Total_Item_Requests (전체 이용)</li>
+          <li>Unique_Item_Requests (실제 이용자)</li>
+        </ul>
+      </div>
+
+      <div class="summary-item">
+        <h3>🔗 SUSHI와의 관계</h3>
+        <p>COUNTER = 내용 규정<br>SUSHI = 전달 방법</p>
+      </div>
+
+      <div class="summary-item">
+        <h3>💼 실무 활용</h3>
+        <ul>
+          <li>컬렉션 평가</li>
+          <li>구독 결정</li>
+          <li>예산 절감</li>
+        </ul>
+      </div>
+
+      <div class="summary-item">
+        <h3>🌐 Registry</h3>
+        <p>출판사 SUSHI 정보 <strong>중앙 저장소</strong></p>
+      </div>
+    </div>
+
+    <div class="final-note">
+      <p>
+        <strong>💡 기억하세요:</strong><br>
+        COUNTER는 단순한 통계가 아닙니다.
+        도서관의 <strong>전략적 의사결정</strong>을 위한 필수 도구입니다!
+      </p>
+    </div>
+  </div>
+</div>
+
+<style>
+.counter-tutorial {
+  line-height: 1.8;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.intro-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.section {
+  margin: 3rem 0;
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.definition-box {
+  background: #e7f3ff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  border-left: 4px solid #007bff;
+}
+
+.key-concept {
+  background: #fff3cd;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  border-left: 4px solid #ffc107;
+}
+
+.organization-info {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  border: 2px solid #667eea;
+}
+
+.problem-scenario {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.problem-box {
+  background: #fff3cd;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  border-left: 4px solid #ffc107;
+}
+
+.problem-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  background: white;
+}
+
+.problem-table th,
+.problem-table td {
+  padding: 0.75rem;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.problem-table th {
+  background: #ff9800;
+  color: white;
+}
+
+.problem-note {
+  background: #ffe082;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+.solution-box {
+  background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.solution-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.solution-item {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.result-box {
+  background: #d4edda;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 1.1em;
+  border: 2px solid #28a745;
+}
+
+.timeline {
+  position: relative;
+  padding: 2rem 0;
+}
+
+.timeline-item {
+  display: flex;
+  gap: 2rem;
+  margin: 2rem 0;
+  position: relative;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: 80px;
+  top: 30px;
+  bottom: -30px;
+  width: 2px;
+  background: #667eea;
+}
+
+.timeline-item:last-child::before {
+  display: none;
+}
+
+.timeline-year {
+  min-width: 60px;
+  background: #667eea;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: bold;
+  height: fit-content;
+}
+
+.timeline-content {
+  flex: 1;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.timeline-item.highlight .timeline-year {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  font-size: 1.1em;
+  padding: 1rem;
+}
+
+.timeline-item.highlight .timeline-content {
+  border: 3px solid #667eea;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.r5-note {
+  background: #e7f3ff;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+  border-left: 4px solid #007bff;
+}
+
+.report-intro {
+  background: #e7f3ff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+  text-align: center;
+  font-size: 1.1em;
+}
+
+.reports-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.report-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: transform 0.3s;
+}
+
+.report-card:hover {
+  transform: translateY(-5px);
+}
+
+.report-card.highlight {
+  border: 3px solid #667eea;
+  background: linear-gradient(180deg, #ffffff 0%, #f0f4ff 100%);
+}
+
+.report-icon {
+  font-size: 3em;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.report-card h3 {
+  color: #667eea;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.report-desc {
+  text-align: center;
+  color: #666;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.report-details h4 {
+  color: #333;
+  margin: 1rem 0 0.5rem 0;
+  font-size: 0.9em;
+}
+
+.report-details ul {
+  margin: 0.5rem 0 1rem 1.5rem;
+  font-size: 0.9em;
+}
+
+.most-used {
+  background: #fff3cd;
+  padding: 0.5rem;
+  border-radius: 4px;
+  text-align: center;
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+.report-note {
+  background: #fff3e0;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+  border-left: 4px solid #ff9800;
+}
+
+.metrics-intro {
+  background: #e7f3ff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+  border-left: 4px solid #007bff;
+}
+
+.metric-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+  border-left: 5px solid #667eea;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.metric-card h4 {
+  color: #667eea;
+  margin-bottom: 1rem;
+}
+
+.metric-definition {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.metric-definition p {
+  margin: 0.5rem 0;
+}
+
+.metric-example {
+  background: #fff3e0;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.metric-example h5 {
+  color: #ff9800;
+  margin-bottom: 1rem;
+}
+
+.metric-result {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 4px;
+  margin: 1rem 0;
+  text-align: center;
+  font-size: 1.2em;
+  border: 2px solid #667eea;
+}
+
+.metric-note {
+  background: #e7f3ff;
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+}
+
+.metric-comparison {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.comparison-table th,
+.comparison-table td {
+  padding: 1rem;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.comparison-table th {
+  background: #667eea;
+  color: white;
+}
+
+.comparison-table tr:hover {
+  background: #f5f5f5;
+}
+
+.report-format-intro {
+  background: #e7f3ff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.example-scenario {
+  background: #fff3e0;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+  border-left: 4px solid #ff9800;
+}
+
+.tsv-example,
+.json-example {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.format-note {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+.excel-preview {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.excel-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85em;
+  min-width: 1000px;
+}
+
+.excel-table td,
+.excel-table th {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.header-row td {
+  background: #e7f3ff;
+  font-weight: bold;
+}
+
+.blank-row td {
+  background: #f8f9fa;
+  height: 10px;
+}
+
+.column-headers th {
+  background: #667eea;
+  color: white;
+  font-weight: bold;
+  position: sticky;
+  top: 0;
+}
+
+.excel-table tr:nth-child(n+9):hover {
+  background: #fff3e0;
+}
+
+.excel-explanation {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.reading-tip {
+  background: #e7f3ff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  border-left: 4px solid #007bff;
+}
+
+.insight {
+  background: #fff3cd;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+.json-code {
+  background: #2d2d2d;
+  color: #f8f8f2;
+  padding: 1.5rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 0.9em;
+  line-height: 1.6;
+}
+
+.json-explanation {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.json-note {
+  background: #e7f3ff;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+}
+
+.format-comparison {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.registry-intro {
+  background: #e7f3ff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+  text-align: center;
+  font-size: 1.1em;
+}
+
+.registry-info {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.registry-url {
+  text-align: center;
+  font-size: 1.2em;
+  margin: 1rem 0;
+}
+
+.registry-url a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.registry-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.feature-item {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid #667eea;
+}
+
+.registry-example {
+  background: #fff3e0;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.example-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.step-number {
+  width: 50px;
+  height: 50px;
+  background: #667eea;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.step-content {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  flex: 1;
+  width: 100%;
+}
+
+.step-content code {
+  background: #f0f0f0;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.85em;
+  display: block;
+  margin-top: 0.5rem;
+  word-break: break-all;
+}
+
+.registry-tip {
+  background: #d4edda;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+  border-left: 4px solid #28a745;
+}
+
+.case-study {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.case-header {
+  background: #e7f3ff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #007bff;
+}
+
+.case-process {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+.process-step {
+  background: white;
+  padding: 1rem;
+  border-radius: 4px;
+  margin: 1rem 0;
+  border-left: 3px solid #667eea;
+}
+
+.case-result {
+  background: #d4edda;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 1.5rem;
+  border-left: 4px solid #28a745;
+}
+
+.analysis-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+}
+
+.analysis-table th,
+.analysis-table td {
+  padding: 1rem;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.analysis-table th {
+  background: #667eea;
+  color: white;
+}
+
+.case-chart {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+.trend-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.trend-table th,
+.trend-table td {
+  padding: 0.75rem;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.trend-table th {
+  background: #667eea;
+  color: white;
+}
+
+.case-insight {
+  background: #fff3cd;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  border-left: 4px solid #ffc107;
+}
+
+.relationship-diagram {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.relation-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.relation-item {
+  flex: 1;
+  min-width: 250px;
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.counter-item {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.sushi-item {
+  background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+}
+
+.relation-role {
+  font-size: 0.9em;
+  opacity: 0.9;
+  margin: 0.5rem 0;
+}
+
+.relation-detail {
+  margin-top: 1.5rem;
+  text-align: left;
+}
+
+.counter-item .relation-detail {
+  background: rgba(255,255,255,0.2);
+  padding: 1rem;
+  border-radius: 4px;
+}
+
+.sushi-item .relation-detail {
+  background: rgba(255,255,255,0.5);
+  padding: 1rem;
+  border-radius: 4px;
+}
+
+.relation-arrow {
+  font-size: 2em;
+  font-weight: bold;
+  color: #667eea;
+}
+
+.relationship-analogy {
+  background: #fff3e0;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.analogy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin: 1.5rem 0;
+}
+
+.analogy-item {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid #ff9800;
+}
+
+.analogy-note {
+  background: #fff3cd;
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+.relationship-flow {
+  background: #f8f9fa;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.flow-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.flow-step {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.flow-arrow {
+  text-align: center;
+  font-size: 2em;
+  color: #667eea;
+}
+
+.relationship-note {
+  background: #e7f3ff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+  border-left: 4px solid #007bff;
+}
+
+.learn-more {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px solid #007bff;
+}
+
+.learn-more a {
+  color: #667eea;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.resources-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.resource-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.resource-card.official {
+  border-top: 4px solid #667eea;
+}
+
+.resource-card.tutorial {
+  border-top: 4px solid #28a745;
+}
+
+.resource-card.tools {
+  border-top: 4px solid #ff9800;
+}
+
+.resource-card.community {
+  border-top: 4px solid #17a2b8;
+}
+
+.resource-card h3 {
+  margin-bottom: 1.5rem;
+}
+
+.resource-card ul {
+  list-style: none;
+  padding: 0;
+}
+
+.resource-card li {
+  margin: 1.5rem 0;
+}
+
+.resource-card a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.05em;
+}
+
+.resource-card a:hover {
+  text-decoration: underline;
+}
+
+.link-desc {
+  color: #666;
+  font-size: 0.9em;
+  font-weight: normal;
+  margin: 0.5rem 0 0 0;
+}
+
+.summary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 2rem;
+  border-radius: 8px;
+}
+
+.summary h2 {
+  color: white;
+  margin-bottom: 2rem;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.summary-item {
+  background: rgba(255,255,255,0.2);
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.summary-item h3 {
+  color: white;
+  margin-bottom: 1rem;
+  font-size: 1.1em;
+}
+
+.summary-item ul {
+  margin-left: 1.5rem;
+}
+
+.final-note {
+  background: rgba(255,255,255,0.3);
+  padding: 2rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 1.1em;
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 1rem;
+  }
+
+  .solution-grid,
+  .reports-grid,
+  .registry-features,
+  .example-steps,
+  .analogy-grid,
+  .resources-grid,
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .timeline-item {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .timeline-item::before {
+    left: 30px;
+  }
+
+  .relation-box {
+    flex-direction: column;
+  }
+
+  .relation-arrow {
+    transform: rotate(90deg);
+  }
+}
+</style>

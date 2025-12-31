@@ -1,0 +1,1286 @@
+<div class="content-container">
+  <h1>RSS: 정보를 효율적으로 구독하는 방법</h1>
+
+  <div class="intro-section">
+    <p class="lead">
+      매일 여러 웹사이트를 방문해 새로운 글이 올라왔는지 확인하는 것이 번거로우신가요?
+      RSS를 사용하면 관심 있는 웹사이트의 업데이트를 자동으로 한 곳에서 확인할 수 있습니다.
+    </p>
+  </div>
+
+  <h2>1. RSS란 무엇인가?</h2>
+
+  <div class="concept-box">
+    <h3>📰 RSS의 개념</h3>
+    <p>
+      <strong>RSS (Really Simple Syndication)</strong>는 웹사이트의 새로운 콘텐츠를
+      자동으로 받아볼 수 있게 해주는 표준 형식입니다.
+    </p>
+    <p>
+      신문을 정기 구독하듯이, 좋아하는 블로그나 뉴스 사이트를 RSS로 구독하면
+      새 글이 올라올 때마다 자동으로 알림을 받을 수 있습니다.
+    </p>
+  </div>
+
+  <div class="analogy-box">
+    <h4>🎯 실생활 비유</h4>
+    <p>
+      RSS는 <strong>우편함</strong>과 같습니다:
+    </p>
+    <ul>
+      <li>여러 잡지를 구독하면 → 각 잡지사가 우편함에 배달</li>
+      <li>여러 웹사이트를 RSS로 구독하면 → RSS 리더가 새 글을 모아서 보여줌</li>
+      <li>우편함 한 곳에서 모든 잡지 확인 → RSS 리더 한 곳에서 모든 업데이트 확인</li>
+    </ul>
+  </div>
+
+  <h2>2. RSS의 역사와 필요성</h2>
+
+  <div class="timeline">
+    <h3>📅 RSS의 발전</h3>
+    <ul>
+      <li><strong>1999년</strong>: Netscape에서 RSS 0.90 개발</li>
+      <li><strong>2000년</strong>: RSS 1.0 발표 (RDF 기반)</li>
+      <li><strong>2002년</strong>: RSS 2.0 발표 (현재 가장 널리 사용)</li>
+      <li><strong>2003년</strong>: Atom 1.0 등장 (RSS의 대안)</li>
+      <li><strong>현재</strong>: 블로그, 뉴스, 팟캐스트 등에서 활용</li>
+    </ul>
+  </div>
+
+  <div class="why-box">
+    <h3>🤔 왜 RSS가 필요한가?</h3>
+    <div class="comparison-grid">
+      <div class="without-rss">
+        <h4>❌ RSS 없이</h4>
+        <ul>
+          <li>10개 블로그를 매일 방문해서 확인</li>
+          <li>새 글이 없어도 매번 확인해야 함</li>
+          <li>업데이트를 놓칠 수 있음</li>
+          <li>시간과 노력 낭비</li>
+        </ul>
+      </div>
+      <div class="with-rss">
+        <h4>✅ RSS 사용 시</h4>
+        <ul>
+          <li>RSS 리더 하나만 확인</li>
+          <li>새 글이 있을 때만 표시</li>
+          <li>모든 업데이트를 놓치지 않음</li>
+          <li>시간 절약, 효율적</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <h2>3. RSS의 작동 원리</h2>
+
+  <div class="how-it-works">
+    <h3>⚙️ RSS가 작동하는 방식</h3>
+
+    <div class="step-by-step">
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h4>웹사이트가 RSS 피드 생성</h4>
+          <p>블로그나 뉴스 사이트가 새 글을 XML 형식으로 변환하여 RSS 피드를 만듭니다.</p>
+          <div class="code-example">
+            <pre><code>&lt;rss version="2.0"&gt;
+  &lt;channel&gt;
+    &lt;title&gt;내 블로그&lt;/title&gt;
+    &lt;link&gt;https://myblog.com&lt;/link&gt;
+    &lt;description&gt;일상과 생각을 기록하는 공간&lt;/description&gt;
+
+    &lt;item&gt;
+      &lt;title&gt;RSS 사용법 소개&lt;/title&gt;
+      &lt;link&gt;https://myblog.com/rss-guide&lt;/link&gt;
+      &lt;description&gt;RSS를 활용하여 정보를 효율적으로...&lt;/description&gt;
+      &lt;pubDate&gt;Mon, 30 Dec 2024 09:00:00 +0900&lt;/pubDate&gt;
+    &lt;/item&gt;
+  &lt;/channel&gt;
+&lt;/rss&gt;</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h4>RSS 리더가 피드 구독</h4>
+          <p>사용자가 RSS 리더에 피드 주소(URL)를 등록합니다.</p>
+          <p class="example">예: <code>https://myblog.com/feed.xml</code></p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h4>자동으로 업데이트 확인</h4>
+          <p>RSS 리더가 주기적으로 피드를 확인하여 새 콘텐츠를 가져옵니다.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h4>한 곳에서 모든 글 확인</h4>
+          <p>구독한 모든 사이트의 새 글을 RSS 리더에서 한눈에 볼 수 있습니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>4. RSS vs Atom: 무엇이 다른가?</h2>
+
+  <div class="comparison-section">
+    <div class="format-intro">
+      <p>
+        RSS와 비슷한 목적으로 만들어진 <strong>Atom</strong>이라는 형식도 있습니다.
+        두 형식은 같은 목적을 가지고 있지만 몇 가지 차이점이 있습니다.
+      </p>
+    </div>
+
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>비교 항목</th>
+          <th>RSS 2.0</th>
+          <th>Atom 1.0</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>개발 시기</strong></td>
+          <td>2002년</td>
+          <td>2003년</td>
+        </tr>
+        <tr>
+          <td><strong>개발 목적</strong></td>
+          <td>간단한 콘텐츠 배포</td>
+          <td>RSS의 단점 보완</td>
+        </tr>
+        <tr>
+          <td><strong>표준화</strong></td>
+          <td>비공식 표준</td>
+          <td>IETF 공식 표준 (RFC 4287)</td>
+        </tr>
+        <tr>
+          <td><strong>날짜 형식</strong></td>
+          <td>RFC 822 (다양한 형식 허용)</td>
+          <td>RFC 3339 (엄격한 형식)</td>
+        </tr>
+        <tr>
+          <td><strong>콘텐츠 구분</strong></td>
+          <td>description만 사용</td>
+          <td>summary와 content 구분</td>
+        </tr>
+        <tr>
+          <td><strong>네임스페이스</strong></td>
+          <td>선택적</td>
+          <td>필수</td>
+        </tr>
+        <tr>
+          <td><strong>사용 편의성</strong></td>
+          <td>매우 간단</td>
+          <td>더 복잡하지만 명확</td>
+        </tr>
+        <tr>
+          <td><strong>보급률</strong></td>
+          <td>매우 높음 (가장 널리 사용)</td>
+          <td>중간 (기술 블로그 등에서 사용)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="atom-example">
+      <h4>Atom 피드 예시</h4>
+      <div class="code-example">
+        <pre><code>&lt;feed xmlns="http://www.w3.org/2005/Atom"&gt;
+  &lt;title&gt;내 블로그&lt;/title&gt;
+  &lt;link href="https://myblog.com"/&gt;
+  &lt;updated&gt;2024-12-30T09:00:00Z&lt;/updated&gt;
+  &lt;author&gt;
+    &lt;name&gt;홍길동&lt;/name&gt;
+  &lt;/author&gt;
+
+  &lt;entry&gt;
+    &lt;title&gt;RSS 사용법 소개&lt;/title&gt;
+    &lt;link href="https://myblog.com/rss-guide"/&gt;
+    &lt;id&gt;https://myblog.com/rss-guide&lt;/id&gt;
+    &lt;updated&gt;2024-12-30T09:00:00Z&lt;/updated&gt;
+    &lt;summary&gt;RSS를 활용하여 정보를 효율적으로...&lt;/summary&gt;
+    &lt;content type="html"&gt;
+      &lt;![CDATA[전체 글 내용...]]&gt;
+    &lt;/content&gt;
+  &lt;/entry&gt;
+&lt;/feed&gt;</code></pre>
+      </div>
+    </div>
+
+    <div class="which-to-use">
+      <h4>💡 어떤 것을 사용해야 할까?</h4>
+      <p><strong>사용자 입장에서는 차이가 거의 없습니다.</strong></p>
+      <ul>
+        <li>대부분의 RSS 리더는 RSS와 Atom을 모두 지원</li>
+        <li>웹사이트가 제공하는 형식을 그대로 사용하면 됨</li>
+        <li>RSS가 더 널리 사용되지만, 둘 다 동일하게 작동</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>5. Feedly: 가장 인기 있는 RSS 리더</h2>
+
+  <div class="feedly-section">
+    <div class="feedly-intro">
+      <h3>📱 Feedly란?</h3>
+      <p>
+        <strong>Feedly</strong>는 전 세계적으로 가장 많이 사용되는 RSS 리더 서비스입니다.
+        웹 브라우저와 모바일 앱에서 모두 사용할 수 있으며, 깔끔한 인터페이스로
+        구독한 콘텐츠를 효율적으로 관리할 수 있습니다.
+      </p>
+    </div>
+
+    <div class="feedly-features">
+      <h4>✨ Feedly의 주요 기능</h4>
+      <div class="features-grid">
+        <div class="feature">
+          <h5>🎨 깔끔한 인터페이스</h5>
+          <p>잡지처럼 보기 좋게 정리된 레이아웃</p>
+        </div>
+        <div class="feature">
+          <h5>📱 멀티 플랫폼</h5>
+          <p>웹, iOS, Android 앱 모두 지원</p>
+        </div>
+        <div class="feature">
+          <h5>🔍 AI 기반 검색</h5>
+          <p>관심 주제를 자동으로 찾아주는 기능</p>
+        </div>
+        <div class="feature">
+          <h5>📂 카테고리 관리</h5>
+          <p>피드를 주제별로 분류하여 정리</p>
+        </div>
+        <div class="feature">
+          <h5>💾 나중에 읽기</h5>
+          <p>Pocket, Instapaper 등과 연동</p>
+        </div>
+        <div class="feature">
+          <h5>🆓 무료 플랜</h5>
+          <p>기본 기능은 무료로 사용 가능</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="feedly-pricing">
+      <h4>💰 Feedly 요금제</h4>
+      <table class="pricing-table">
+        <thead>
+          <tr>
+            <th>플랜</th>
+            <th>가격</th>
+            <th>주요 기능</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Free</strong></td>
+            <td>무료</td>
+            <td>최대 100개 피드, 기본 기능</td>
+          </tr>
+          <tr>
+            <td><strong>Pro</strong></td>
+            <td>$6/월</td>
+            <td>무제한 피드, 고급 검색, 통합 기능</td>
+          </tr>
+          <tr>
+            <td><strong>Pro+</strong></td>
+            <td>$8.25/월</td>
+            <td>AI 기능, 뉴스레터 통합</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="note">💡 대부분의 학생은 <strong>무료 플랜</strong>으로도 충분합니다!</p>
+    </div>
+  </div>
+
+  <h2>6. Feedly 사용법: 단계별 가이드</h2>
+
+  <div class="tutorial-section">
+    <h3>🚀 Feedly 시작하기</h3>
+
+    <div class="tutorial-step">
+      <h4>Step 1: 회원가입</h4>
+      <ol>
+        <li><a href="https://feedly.com" target="_blank">Feedly 웹사이트</a>에 접속</li>
+        <li>"Get started for free" 클릭</li>
+        <li>이메일, Google, Apple 계정 중 하나로 가입</li>
+        <li>무료 플랜(Free) 선택</li>
+      </ol>
+      <div class="tip-box">
+        <strong>💡 Tip:</strong> Google 계정으로 가입하면 더 빠릅니다!
+      </div>
+    </div>
+
+    <div class="tutorial-step">
+      <h4>Step 2: 첫 피드 추가하기</h4>
+      <ol>
+        <li>Feedly 메인 화면에서 <strong>"Add Content"</strong> 또는 <strong>검색창</strong> 클릭</li>
+        <li>관심 있는 웹사이트 이름이나 주제 입력
+          <ul>
+            <li>예: "TechCrunch", "BBC News", "한겨레신문"</li>
+          </ul>
+        </li>
+        <li>검색 결과에서 원하는 피드 선택</li>
+        <li><strong>"Follow"</strong> 버튼 클릭</li>
+        <li>피드를 저장할 카테고리 선택 (또는 새로 만들기)
+          <ul>
+            <li>예: "뉴스", "기술", "블로그", "학술" 등</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+
+    <div class="tutorial-step">
+      <h4>Step 3: RSS 피드 URL로 직접 추가하기</h4>
+      <p>웹사이트에서 RSS 아이콘(<span style="color: orange;">📡</span>)을 찾거나, URL 끝에 <code>/feed</code>, <code>/rss</code>, <code>/atom.xml</code> 등을 추가합니다.</p>
+
+      <div class="example-box">
+        <h5>📌 실제 RSS 피드 예시</h5>
+        <ul>
+          <li><strong>Naver 블로그:</strong> <code>https://blog.naver.com/사용자ID/rss</code></li>
+          <li><strong>Tistory 블로그:</strong> <code>https://블로그주소/rss</code></li>
+          <li><strong>Medium:</strong> <code>https://medium.com/feed/@사용자명</code></li>
+          <li><strong>YouTube 채널:</strong> <code>https://www.youtube.com/feeds/videos.xml?channel_id=채널ID</code></li>
+          <li><strong>한겨레:</strong> <code>https://www.hani.co.kr/rss/</code></li>
+          <li><strong>TechCrunch:</strong> <code>https://techcrunch.com/feed/</code></li>
+        </ul>
+      </div>
+
+      <ol>
+        <li>RSS 피드 URL 복사</li>
+        <li>Feedly 검색창에 URL 붙여넣기</li>
+        <li>"Follow" 클릭하여 구독</li>
+      </ol>
+    </div>
+
+    <div class="tutorial-step">
+      <h4>Step 4: 카테고리(폴더) 관리하기</h4>
+      <p>피드가 많아지면 카테고리별로 정리하는 것이 좋습니다.</p>
+      <div class="category-examples">
+        <h5>📂 카테고리 구성 예시</h5>
+        <ul>
+          <li><strong>📰 뉴스</strong>
+            <ul>
+              <li>한겨레, 경향신문, BBC News</li>
+            </ul>
+          </li>
+          <li><strong>💻 기술</strong>
+            <ul>
+              <li>TechCrunch, The Verge, GeekNews</li>
+            </ul>
+          </li>
+          <li><strong>📚 학술/연구</strong>
+            <ul>
+              <li>Nature, Science Daily, arXiv</li>
+            </ul>
+          </li>
+          <li><strong>✍️ 개인 블로그</strong>
+            <ul>
+              <li>좋아하는 블로거들의 블로그</li>
+            </ul>
+          </li>
+          <li><strong>🎓 도서관·정보학</strong>
+            <ul>
+              <li>ALA, OCLC, 국립중앙도서관</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <p><strong>카테고리 생성 방법:</strong></p>
+      <ol>
+        <li>좌측 사이드바에서 <strong>"+ New Feed"</strong> 클릭</li>
+        <li>피드 추가 시 "Create a new category" 선택</li>
+        <li>카테고리 이름 입력 (예: "학술자료")</li>
+      </ol>
+    </div>
+
+    <div class="tutorial-step">
+      <h4>Step 5: 글 읽기 및 관리</h4>
+
+      <div class="reading-tips">
+        <h5>📖 효율적인 읽기 방법</h5>
+
+        <div class="view-modes">
+          <h6>화면 모드 선택</h6>
+          <ul>
+            <li><strong>Title Only View:</strong> 제목만 보기 (빠르게 훑어보기)</li>
+            <li><strong>Magazine View:</strong> 이미지와 요약 보기 (추천)</li>
+            <li><strong>Cards View:</strong> 카드 형식으로 보기</li>
+            <li><strong>Article View:</strong> 전체 글 보기</li>
+          </ul>
+        </div>
+
+        <div class="reading-actions">
+          <h6>주요 기능</h6>
+          <ul>
+            <li><strong>Mark as Read:</strong> 읽음으로 표시</li>
+            <li><strong>Save for Later:</strong> 나중에 읽기 (북마크)</li>
+            <li><strong>Share:</strong> 트위터, 페이스북 등으로 공유</li>
+            <li><strong>Open in Browser:</strong> 원본 웹페이지에서 보기</li>
+          </ul>
+        </div>
+
+        <div class="shortcuts">
+          <h6>⌨️ 유용한 키보드 단축키</h6>
+          <table class="shortcuts-table">
+            <tr>
+              <td><kbd>J</kbd></td>
+              <td>다음 글로 이동</td>
+            </tr>
+            <tr>
+              <td><kbd>K</kbd></td>
+              <td>이전 글로 이동</td>
+            </tr>
+            <tr>
+              <td><kbd>M</kbd></td>
+              <td>읽음으로 표시</td>
+            </tr>
+            <tr>
+              <td><kbd>S</kbd></td>
+              <td>나중에 읽기로 저장</td>
+            </tr>
+            <tr>
+              <td><kbd>V</kbd></td>
+              <td>원본 웹페이지 열기</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="tutorial-step">
+      <h4>Step 6: 모바일 앱 사용하기</h4>
+      <ol>
+        <li>App Store (iOS) 또는 Google Play (Android)에서 "Feedly" 검색</li>
+        <li>앱 다운로드 및 설치</li>
+        <li>웹에서 사용한 계정으로 로그인</li>
+        <li>자동으로 구독 목록이 동기화됨</li>
+      </ol>
+
+      <div class="mobile-tip">
+        <strong>💡 모바일 활용 팁:</strong>
+        <ul>
+          <li>출퇴근 시간에 새 글 확인하기</li>
+          <li>오프라인 읽기 기능 활용 (Pro 플랜)</li>
+          <li>알림 설정으로 중요 피드 실시간 확인</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <h2>7. 다양한 RSS 활용 사례</h2>
+
+  <div class="use-cases">
+    <h3>🎯 학생들을 위한 RSS 활용법</h3>
+
+    <div class="use-case">
+      <h4>1. 📰 뉴스 및 시사 정보 모니터링</h4>
+      <p><strong>시나리오:</strong> 정치외교학과 학생이 매일 주요 뉴스를 확인해야 하는 경우</p>
+      <div class="example">
+        <h5>구독 목록 예시:</h5>
+        <ul>
+          <li>한겨레 정치 섹션 RSS</li>
+          <li>BBC World News RSS</li>
+          <li>외교부 보도자료 RSS</li>
+          <li>통일뉴스 RSS</li>
+        </ul>
+        <p class="benefit"><strong>효과:</strong> 매일 아침 Feedly만 확인하면 모든 뉴스를 한눈에!</p>
+      </div>
+    </div>
+
+    <div class="use-case">
+      <h4>2. 📚 학술 연구 논문 및 저널 구독</h4>
+      <p><strong>시나리오:</strong> 대학원생이 특정 주제의 최신 연구를 추적하는 경우</p>
+      <div class="example">
+        <h5>구독 목록 예시:</h5>
+        <ul>
+          <li>PLOS ONE RSS (오픈 액세스 저널)</li>
+          <li>Nature.com 특정 주제 RSS</li>
+          <li>Google Scholar Alerts RSS</li>
+          <li>arXiv.org 특정 카테고리 RSS</li>
+          <li>RISS 신규 논문 알림</li>
+        </ul>
+        <p class="benefit"><strong>효과:</strong> 최신 연구 동향을 놓치지 않고 추적 가능!</p>
+      </div>
+    </div>
+
+    <div class="use-case">
+      <h4>3. 📖 좋아하는 블로거 및 작가 팔로우</h4>
+      <p><strong>시나리오:</strong> 문예창작과 학생이 좋아하는 작가들의 글을 모아보는 경우</p>
+      <div class="example">
+        <h5>구독 목록 예시:</h5>
+        <ul>
+          <li>좋아하는 소설가의 브런치 RSS</li>
+          <li>문학 비평가의 블로그 RSS</li>
+          <li>출판사 신간 소식 RSS</li>
+          <li>문학 웹진 RSS</li>
+        </ul>
+        <p class="benefit"><strong>효과:</strong> 관심 작가의 모든 글을 빠짐없이 확인!</p>
+      </div>
+    </div>
+
+    <div class="use-case">
+      <h4>4. 🎬 YouTube 채널 구독 (광고 없이!)</h4>
+      <p><strong>시나리오:</strong> YouTube 알고리즘에 방해받지 않고 원하는 채널만 보고 싶은 경우</p>
+      <div class="example">
+        <h5>YouTube RSS 구독 방법:</h5>
+        <ol>
+          <li>YouTube 채널 페이지에서 채널 ID 확인</li>
+          <li>RSS URL 생성: <code>https://www.youtube.com/feeds/videos.xml?channel_id=채널ID</code></li>
+          <li>Feedly에 추가</li>
+        </ol>
+        <p class="benefit"><strong>효과:</strong> 추천 알고리즘 없이 순수하게 구독 채널만 확인!</p>
+      </div>
+    </div>
+
+    <div class="use-case">
+      <h4>5. 🏛️ 공공기관 및 도서관 소식 구독</h4>
+      <p><strong>시나리오:</strong> 문헌정보학과 학생이 도서관 업계 동향을 파악하는 경우</p>
+      <div class="example">
+        <h5>구독 목록 예시:</h5>
+        <ul>
+          <li>국립중앙도서관 새소식 RSS</li>
+          <li>문화체육관광부 보도자료 RSS</li>
+          <li>ALA (American Library Association) RSS</li>
+          <li>IFLA (국제도서관협회연맹) RSS</li>
+        </ul>
+        <p class="benefit"><strong>효과:</strong> 도서관 정책 및 트렌드를 실시간으로 파악!</p>
+      </div>
+    </div>
+
+    <div class="use-case">
+      <h4>6. 🎓 대학 공지사항 및 학과 소식</h4>
+      <p><strong>시나리오:</strong> 학교 홈페이지 방문 없이 공지사항 확인</p>
+      <div class="example">
+        <h5>구독 예시:</h5>
+        <ul>
+          <li>학교 공지사항 RSS</li>
+          <li>학과 게시판 RSS</li>
+          <li>도서관 신착자료 RSS</li>
+          <li>장학금 공고 RSS</li>
+        </ul>
+        <p class="benefit"><strong>효과:</strong> 중요한 공지를 놓치지 않음!</p>
+      </div>
+    </div>
+  </div>
+
+  <h2>8. Feedly 외 다른 RSS 리더</h2>
+
+  <div class="alternatives">
+    <p>Feedly가 가장 인기 있지만, 다른 선택지도 있습니다:</p>
+
+    <div class="reader-comparison">
+      <div class="reader">
+        <h4>📱 Inoreader</h4>
+        <ul>
+          <li>무료 플랜: 150개 피드</li>
+          <li>강력한 필터링 기능</li>
+          <li>규칙 기반 자동화</li>
+          <li>파워 유저에게 추천</li>
+        </ul>
+      </div>
+
+      <div class="reader">
+        <h4>🔖 The Old Reader</h4>
+        <ul>
+          <li>Google Reader 스타일</li>
+          <li>소셜 기능 강화</li>
+          <li>친구와 피드 공유</li>
+          <li>간단하고 클래식한 인터페이스</li>
+        </ul>
+      </div>
+
+      <div class="reader">
+        <h4>📰 NewsBlur</h4>
+        <ul>
+          <li>무료: 64개 피드</li>
+          <li>인텔리전트 트레이닝</li>
+          <li>소셜 네트워크 기능</li>
+          <li>텍스트 분석 기능</li>
+        </ul>
+      </div>
+
+      <div class="reader">
+        <h4>🎨 Flipboard</h4>
+        <ul>
+          <li>완전 무료</li>
+          <li>잡지 스타일 레이아웃</li>
+          <li>시각적으로 아름다움</li>
+          <li>소셜 미디어 통합</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="recommendation">
+      <h4>💡 어떤 것을 선택해야 할까?</h4>
+      <ul>
+        <li><strong>처음 사용:</strong> Feedly 추천 (가장 직관적)</li>
+        <li><strong>많은 피드 관리:</strong> Inoreader 추천</li>
+        <li><strong>시각적 즐거움:</strong> Flipboard 추천</li>
+        <li><strong>고급 기능:</strong> Inoreader 또는 NewsBlur 추천</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>9. RSS 사용 시 주의사항 및 팁</h2>
+
+  <div class="tips-section">
+    <div class="dos-donts">
+      <div class="dos">
+        <h4>✅ 이렇게 하세요</h4>
+        <ul>
+          <li><strong>카테고리 정리:</strong> 피드를 주제별로 분류하여 관리</li>
+          <li><strong>정기적 확인:</strong> 매일 또는 매주 정해진 시간에 확인</li>
+          <li><strong>읽지 않은 글 관리:</strong> 주기적으로 "모두 읽음" 처리</li>
+          <li><strong>중요도 설정:</strong> 자주 확인하는 피드는 우선순위 설정</li>
+          <li><strong>모바일 활용:</strong> 이동 시간을 활용하여 글 읽기</li>
+        </ul>
+      </div>
+
+      <div class="donts">
+        <h4>❌ 이렇게 하지 마세요</h4>
+        <ul>
+          <li><strong>과다 구독:</strong> 너무 많은 피드 구독 (읽을 수 없음)</li>
+          <li><strong>방치:</strong> 구독만 하고 확인 안 함</li>
+          <li><strong>완벽주의:</strong> 모든 글을 다 읽으려 함</li>
+          <li><strong>중복 구독:</strong> 같은 소스를 여러 번 구독</li>
+          <li><strong>정리 없이 추가:</strong> 카테고리 없이 무작위 추가</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="best-practices">
+      <h4>🏆 RSS 사용 베스트 프랙티스</h4>
+
+      <div class="practice">
+        <h5>1. "Inbox Zero" 접근법</h5>
+        <p>이메일처럼 RSS도 "받은편지함 비우기"를 목표로 합니다.</p>
+        <ul>
+          <li>매일 새 글 확인</li>
+          <li>중요한 글은 저장 또는 공유</li>
+          <li>나머지는 읽고 "읽음" 처리</li>
+          <li>관심 없는 글은 제목만 보고 넘김</li>
+        </ul>
+      </div>
+
+      <div class="practice">
+        <h5>2. 우선순위 기반 읽기</h5>
+        <p>모든 피드가 동일하게 중요하지 않습니다.</p>
+        <ul>
+          <li><strong>High Priority:</strong> 매일 확인 (학과 공지, 중요 뉴스)</li>
+          <li><strong>Medium Priority:</strong> 주 2-3회 확인 (블로그, 일반 뉴스)</li>
+          <li><strong>Low Priority:</strong> 시간 날 때 확인 (취미, 여가)</li>
+        </ul>
+      </div>
+
+      <div class="practice">
+        <h5>3. 주기적인 구독 목록 정리</h5>
+        <p>한 달에 한 번은 구독 목록을 검토합니다.</p>
+        <ul>
+          <li>더 이상 관심 없는 피드 제거</li>
+          <li>업데이트가 없는 피드 제거</li>
+          <li>중복되는 소스 통합</li>
+          <li>새로운 관심사 추가</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <h2>10. 자주 묻는 질문 (FAQ)</h2>
+
+  <div class="faq-section">
+    <div class="faq-item">
+      <h4>Q1. RSS를 지원하지 않는 웹사이트는 어떻게 하나요?</h4>
+      <p><strong>A:</strong> 다음과 같은 방법이 있습니다:</p>
+      <ul>
+        <li><strong>RSS Bridge:</strong> RSS가 없는 사이트를 RSS로 변환하는 서비스</li>
+        <li><strong>Feed43:</strong> 웹페이지를 RSS 피드로 만들어주는 도구</li>
+        <li><strong>Page Monitor:</strong> 브라우저 확장 프로그램으로 페이지 변경 감지</li>
+        <li><strong>이메일 알림:</strong> 웹사이트의 이메일 구독 기능 사용</li>
+      </ul>
+    </div>
+
+    <div class="faq-item">
+      <h4>Q2. RSS 피드를 찾을 수 없는데 어떻게 하나요?</h4>
+      <p><strong>A:</strong> 다음 방법으로 찾아보세요:</p>
+      <ul>
+        <li>웹사이트 하단의 RSS 아이콘(📡) 찾기</li>
+        <li>URL 끝에 <code>/feed</code>, <code>/rss</code>, <code>/atom.xml</code> 추가해보기</li>
+        <li>웹사이트 소스 보기(Ctrl+U)에서 "rss" 또는 "atom" 검색</li>
+        <li>Feedly에서 웹사이트 주소로 직접 검색</li>
+      </ul>
+    </div>
+
+    <div class="faq-item">
+      <h4>Q3. RSS와 이메일 뉴스레터의 차이는?</h4>
+      <p><strong>A:</strong> 주요 차이점:</p>
+      <table class="comparison-simple">
+        <tr>
+          <th>RSS</th>
+          <th>이메일 뉴스레터</th>
+        </tr>
+        <tr>
+          <td>받은편지함을 차지하지 않음</td>
+          <td>이메일로 받아 받은편지함 차지</td>
+        </tr>
+        <tr>
+          <td>즉시 구독 취소 가능</td>
+          <td>구독 취소 절차 필요</td>
+        </tr>
+        <tr>
+          <td>개인정보(이메일) 제공 불필요</td>
+          <td>이메일 주소 제공 필요</td>
+        </tr>
+        <tr>
+          <td>광고 없음</td>
+          <td>광고 포함 가능</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="faq-item">
+      <h4>Q4. RSS가 죽었다는 얘기를 들었는데요?</h4>
+      <p><strong>A:</strong> 아닙니다! RSS는 여전히 활발히 사용되고 있습니다.</p>
+      <ul>
+        <li>2013년 Google Reader가 종료되면서 그런 말이 나왔지만</li>
+        <li>Feedly 등 대체 서비스들이 더욱 발전</li>
+        <li>팟캐스트는 사실상 RSS 기반</li>
+        <li>많은 블로그, 뉴스 사이트가 여전히 RSS 제공</li>
+        <li>개인정보 보호와 알고리즘 피로감으로 다시 주목받는 중</li>
+      </ul>
+    </div>
+
+    <div class="faq-item">
+      <h4>Q5. 무료 플랜으로 충분한가요?</h4>
+      <p><strong>A:</strong> 대부분의 경우 충분합니다!</p>
+      <ul>
+        <li><strong>Feedly 무료:</strong> 100개 피드 (학생에게 충분)</li>
+        <li>기본 읽기, 저장, 공유 기능 모두 사용 가능</li>
+        <li>유료 기능은 고급 검색, AI 추천, 팀 협업 등</li>
+        <li>개인 사용자는 무료로도 충분히 활용 가능</li>
+      </ul>
+    </div>
+
+    <div class="faq-item">
+      <h4>Q6. 전체 글이 안 보이고 요약만 보여요.</h4>
+      <p><strong>A:</strong> 이는 피드 제공자의 설정입니다.</p>
+      <ul>
+        <li>일부 사이트는 요약만 RSS로 제공 (트래픽 유도 목적)</li>
+        <li>Feedly에서 "Open in Browser" 클릭하여 원문 보기</li>
+        <li>또는 Feedly Pro의 "Full Article" 기능 사용</li>
+        <li>대부분의 경우 요약으로도 내용 파악 가능</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>11. 결론: RSS로 정보 생활의 주인이 되세요</h2>
+
+  <div class="conclusion">
+    <div class="summary-box">
+      <h3>🎓 핵심 요약</h3>
+      <ul>
+        <li><strong>RSS는</strong> 여러 웹사이트의 업데이트를 한 곳에서 확인할 수 있는 표준 형식</li>
+        <li><strong>Atom은</strong> RSS와 유사하지만 더 엄격한 표준을 가진 대안 형식</li>
+        <li><strong>Feedly는</strong> 가장 인기 있는 RSS 리더로 무료로 사용 가능</li>
+        <li><strong>활용법은</strong> 뉴스, 학술 논문, 블로그, YouTube 등 다양함</li>
+        <li><strong>핵심은</strong> 적절한 구독 관리와 정기적인 확인</li>
+      </ul>
+    </div>
+
+    <div class="benefits-recap">
+      <h3>✨ RSS 사용의 장점</h3>
+      <div class="benefits-grid">
+        <div class="benefit-item">
+          <h4>⏰ 시간 절약</h4>
+          <p>여러 웹사이트를 일일이 방문할 필요 없음</p>
+        </div>
+        <div class="benefit-item">
+          <h4>🎯 정보 효율성</h4>
+          <p>관심 있는 콘텐츠만 선별하여 수신</p>
+        </div>
+        <div class="benefit-item">
+          <h4>🔒 개인정보 보호</h4>
+          <p>이메일 주소 제공 불필요</p>
+        </div>
+        <div class="benefit-item">
+          <h4>🚫 알고리즘 회피</h4>
+          <p>SNS 알고리즘에 휘둘리지 않음</p>
+        </div>
+        <div class="benefit-item">
+          <h4>📱 멀티 플랫폼</h4>
+          <p>웹, 모바일, 데스크톱에서 동기화</p>
+        </div>
+        <div class="benefit-item">
+          <h4>🆓 무료</h4>
+          <p>기본 기능은 완전 무료</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="final-thoughts">
+      <h3>💭 마치며</h3>
+      <p>
+        현대 사회는 정보 과잉 시대입니다. 소셜 미디어의 알고리즘은 당신이 보고 싶은 것보다
+        광고주가 보여주고 싶은 것을 보여줍니다. 이메일 받은편지함은 뉴스레터로 가득 차 있고,
+        브라우저 북마크는 확인하지 않는 사이트들로 넘쳐납니다.
+      </p>
+      <p>
+        <strong>RSS는 이러한 문제에 대한 해답입니다.</strong> 당신이 선택한 정보원에서,
+        당신이 원하는 방식으로, 당신이 원하는 시간에 정보를 받을 수 있습니다.
+        광고도, 알고리즘도, 스팸도 없습니다.
+      </p>
+      <p>
+        특히 학생과 연구자에게 RSS는 필수 도구입니다. 학술 저널의 최신 논문,
+        관심 분야의 뉴스, 존경하는 학자들의 블로그를 한 곳에서 추적할 수 있습니다.
+        정보를 찾아 헤매는 대신, 정보가 당신에게 찾아오게 만드세요.
+      </p>
+      <p class="cta">
+        <strong>지금 바로 Feedly 계정을 만들고, 첫 번째 피드를 구독해보세요!</strong>
+      </p>
+    </div>
+  </div>
+
+  <div class="further-reading">
+    <h3>📚 더 알아보기</h3>
+    <ul>
+      <li><a href="https://feedly.com" target="_blank">Feedly 공식 웹사이트</a></li>
+      <li><a href="https://aboutfeeds.com/" target="_blank">About Feeds - RSS 입문 가이드</a></li>
+      <li><a href="https://www.rssboard.org/rss-specification" target="_blank">RSS 2.0 Specification</a></li>
+      <li><a href="https://datatracker.ietf.org/doc/html/rfc4287" target="_blank">Atom Syndication Format (RFC 4287)</a></li>
+    </ul>
+  </div>
+</div>
+
+<style>
+.content-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.8;
+  color: #333;
+}
+
+h1 {
+  font-size: 2.5em;
+  color: #2c3e50;
+  border-bottom: 4px solid #3498db;
+  padding-bottom: 10px;
+  margin-bottom: 30px;
+}
+
+h2 {
+  font-size: 2em;
+  color: #2c3e50;
+  margin-top: 50px;
+  margin-bottom: 20px;
+  padding-left: 10px;
+  border-left: 5px solid #3498db;
+}
+
+h3 {
+  font-size: 1.5em;
+  color: #34495e;
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+
+h4 {
+  font-size: 1.2em;
+  color: #555;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.lead {
+  font-size: 1.2em;
+  color: #555;
+  background: #f8f9fa;
+  padding: 20px;
+  border-left: 4px solid #3498db;
+  margin-bottom: 30px;
+}
+
+.concept-box, .analogy-box, .why-box, .tip-box, .example-box, .mobile-tip, .note, .recommendation {
+  background: #f0f8ff;
+  border: 1px solid #b8d4f1;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.analogy-box {
+  background: #fff9e6;
+  border-color: #ffd966;
+}
+
+.timeline {
+  background: #f5f5f5;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.timeline ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.timeline li {
+  padding: 10px 0;
+  border-left: 3px solid #3498db;
+  padding-left: 15px;
+  margin-bottom: 10px;
+}
+
+.comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.without-rss, .with-rss, .dos, .donts {
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.without-rss, .donts {
+  background: #fee;
+  border: 2px solid #fcc;
+}
+
+.with-rss, .dos {
+  background: #efe;
+  border: 2px solid #cfc;
+}
+
+.step-by-step {
+  margin: 20px 0;
+}
+
+.step {
+  display: flex;
+  gap: 20px;
+  margin: 30px 0;
+  padding: 20px;
+  background: #fafafa;
+  border-radius: 8px;
+  border-left: 4px solid #3498db;
+}
+
+.step-number {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  background: #3498db;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.step-content {
+  flex: 1;
+}
+
+.code-example {
+  background: #2d2d2d;
+  color: #f8f8f2;
+  padding: 15px;
+  border-radius: 5px;
+  overflow-x: auto;
+  margin: 15px 0;
+}
+
+.code-example code {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9em;
+  line-height: 1.5;
+}
+
+.comparison-table, .pricing-table, .shortcuts-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.comparison-table th, .pricing-table th, .shortcuts-table th {
+  background: #3498db;
+  color: white;
+  padding: 12px;
+  text-align: left;
+}
+
+.comparison-table td, .pricing-table td, .shortcuts-table td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+.comparison-table tr:nth-child(even), .pricing-table tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.feature {
+  background: white;
+  padding: 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.feature:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.feature h5 {
+  color: #3498db;
+  margin-top: 0;
+}
+
+.tutorial-step {
+  background: #f9f9f9;
+  padding: 25px;
+  margin: 25px 0;
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+}
+
+.tutorial-step h4 {
+  color: #3498db;
+  font-size: 1.3em;
+  margin-top: 0;
+}
+
+.category-examples {
+  background: white;
+  padding: 15px;
+  border-radius: 5px;
+  margin: 15px 0;
+}
+
+.reading-tips {
+  background: #f5f5f5;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 15px 0;
+}
+
+.view-modes, .reading-actions, .shortcuts {
+  margin: 20px 0;
+}
+
+kbd {
+  background: #333;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+.shortcuts-table {
+  width: auto;
+  margin: 15px 0;
+}
+
+.use-cases {
+  margin: 30px 0;
+}
+
+.use-case {
+  background: #fafafa;
+  padding: 25px;
+  margin: 25px 0;
+  border-radius: 8px;
+  border-left: 5px solid #3498db;
+}
+
+.use-case .example {
+  background: white;
+  padding: 15px;
+  margin: 15px 0;
+  border-radius: 5px;
+  border: 1px solid #e0e0e0;
+}
+
+.benefit {
+  color: #27ae60;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.reader-comparison {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.reader {
+  background: white;
+  padding: 20px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.reader h4 {
+  color: #3498db;
+  margin-top: 0;
+}
+
+.dos-donts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.practice {
+  background: #f9f9f9;
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 8px;
+  border-left: 4px solid #27ae60;
+}
+
+.faq-section {
+  margin: 30px 0;
+}
+
+.faq-item {
+  background: white;
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+}
+
+.faq-item h4 {
+  color: #3498db;
+  margin-top: 0;
+}
+
+.comparison-simple {
+  width: 100%;
+  margin: 15px 0;
+}
+
+.comparison-simple th {
+  background: #3498db;
+  color: white;
+  padding: 10px;
+}
+
+.comparison-simple td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.conclusion {
+  margin: 40px 0;
+}
+
+.summary-box {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px;
+  border-radius: 12px;
+  margin: 20px 0;
+}
+
+.summary-box h3 {
+  color: white;
+  margin-top: 0;
+}
+
+.summary-box ul {
+  font-size: 1.1em;
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.benefit-item {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  border: 2px solid #3498db;
+  text-align: center;
+}
+
+.benefit-item h4 {
+  color: #3498db;
+  margin-top: 0;
+}
+
+.final-thoughts {
+  background: #f9f9f9;
+  padding: 30px;
+  border-radius: 8px;
+  margin: 30px 0;
+  line-height: 2;
+}
+
+.cta {
+  background: #3498db;
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 1.2em;
+  margin-top: 20px;
+}
+
+.further-reading {
+  background: #f0f8ff;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 30px 0;
+}
+
+.further-reading a {
+  color: #3498db;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.further-reading a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .comparison-grid, .dos-donts {
+    grid-template-columns: 1fr;
+  }
+
+  .features-grid, .reader-comparison {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

@@ -1,0 +1,2604 @@
+<div class="doi-tutorial">
+  <h1>DOI 완벽 가이드: 학술 세계의 영구 주소</h1>
+
+  <div class="intro-section">
+    <h2>📚 학습 목표</h2>
+    <ul>
+      <li>DOI의 개념과 구조를 완벽하게 이해하기</li>
+      <li>DOI가 왜 만들어졌는지 탄생 배경 알아보기</li>
+      <li>DOI 시스템의 구성 요소와 작동 원리 학습하기</li>
+      <li>CrossRef, DataCite, Korea DOI Center의 역할 이해하기</li>
+      <li>실제 도서관 시스템 개발 사례를 통해 DOI 활용 방법 배우기</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>1️⃣ DOI란 무엇인가?</h2>
+
+    <div class="definition-box">
+      <h3>📖 정의</h3>
+      <p>
+        <strong>DOI (Digital Object Identifier)</strong>는
+        디지털 객체를 <strong>영구적으로 식별</strong>하기 위한 <strong>국제 표준 식별자</strong>입니다.
+      </p>
+      <p>
+        쉽게 말하면, <strong>"인터넷 세상의 주민등록번호"</strong>입니다.
+        웹 주소(URL)는 바뀔 수 있지만, DOI는 절대 변하지 않습니다!
+      </p>
+    </div>
+
+    <div class="analogy-box">
+      <h3>🏠 쉬운 비유: 집 주소 vs 주민등록번호</h3>
+      <div class="comparison-grid">
+        <div class="comparison-item url">
+          <h4>URL (집 주소)</h4>
+          <div class="icon">🏠📍</div>
+          <p><strong>예시:</strong> "서울시 강남구 테헤란로 123"</p>
+          <div class="problem">
+            <p><strong>문제:</strong></p>
+            <ul>
+              <li>이사 가면 주소가 바뀜</li>
+              <li>건물이 철거되면 주소가 사라짐</li>
+              <li>도로명이 변경되면 주소도 변경</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="comparison-item doi">
+          <h4>DOI (주민등록번호)</h4>
+          <div class="icon">👤🆔</div>
+          <p><strong>예시:</strong> "123456-1234567"</p>
+          <div class="solution">
+            <p><strong>장점:</strong></p>
+            <ul>
+              <li>평생 변하지 않음</li>
+              <li>어디로 이사 가도 동일</li>
+              <li>이름이 바뀌어도 그대로</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="key-insight">
+        <p>💡 <strong>핵심:</strong> URL은 "위치"를 가리키지만, DOI는 "대상 자체"를 가리킵니다!</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>2️⃣ DOI의 탄생 배경</h2>
+
+    <div class="history-section">
+      <h3>🕰️ 1990년대 후반의 문제 상황</h3>
+
+      <div class="problem-scenario">
+        <h4>❌ URL의 심각한 문제</h4>
+        <div class="story-box">
+          <p><strong>상황:</strong> 1998년, 한 연구자가 논문을 작성했습니다.</p>
+
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="year">1998년</div>
+              <div class="event">
+                <p>논문 출판, 참고문헌에 URL 기재</p>
+                <pre class="code-block">참고: http://old-journal.com/1998/vol5/paper123.pdf</pre>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="year">2001년</div>
+              <div class="event">
+                <p>저널이 새 출판사로 인수됨</p>
+                <pre class="code-block">→ 웹사이트 주소 변경
+→ http://new-publisher.com/archives/...</pre>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="year">2005년</div>
+              <div class="event">
+                <p>또 다른 출판사로 재인수</p>
+                <pre class="code-block">→ 또 주소 변경
+→ http://mega-publisher.com/legacy/...</pre>
+              </div>
+            </div>
+
+            <div class="timeline-item problem">
+              <div class="year">2024년</div>
+              <div class="event">
+                <p>원래 논문의 참고문헌을 확인하려고 함</p>
+                <pre class="code-block">http://old-journal.com/1998/vol5/paper123.pdf
+→ <span class="error">404 Not Found</span></pre>
+                <p class="impact">😱 <strong>참고문헌 링크가 깨졌다!</strong></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="statistics">
+          <h4>📊 실제 통계 (연구 결과)</h4>
+          <div class="stat-grid">
+            <div class="stat-item">
+              <div class="number">50%</div>
+              <p>5년 후 링크 깨짐률</p>
+            </div>
+            <div class="stat-item">
+              <div class="number">75%</div>
+              <p>10년 후 링크 깨짐률</p>
+            </div>
+            <div class="stat-item">
+              <div class="number">90%</div>
+              <p>20년 후 링크 깨짐률</p>
+            </div>
+          </div>
+          <p class="stat-note">→ <strong>학술 연구의 연속성이 심각하게 위협받음!</strong></p>
+        </div>
+      </div>
+
+      <div class="solution-birth">
+        <h3>✨ DOI의 탄생</h3>
+        <div class="birth-story">
+          <div class="birth-year">
+            <h4>1998년</h4>
+            <p>국제 DOI 재단 (IDF) 설립</p>
+          </div>
+          <div class="birth-vision">
+            <h4>핵심 아이디어</h4>
+            <blockquote>
+              "URL은 바뀌어도, DOI는 영원히 같은 자료를 가리킨다!"
+            </blockquote>
+            <p>→ 논문에 <strong>영구 식별자</strong>를 부여하자!</p>
+          </div>
+        </div>
+
+        <div class="how-it-works">
+          <h4>🔧 해결 방법</h4>
+          <pre class="code-block">논문에 DOI 부여: 10.1234/journal.1998.123
+
+1998년: DOI → http://old-journal.com/...
+2001년: DOI → http://new-publisher.com/...  (URL 업데이트)
+2005년: DOI → http://mega-publisher.com/... (URL 업데이트)
+2024년: DOI → http://mega-publisher.com/... (여전히 작동!)
+
+→ DOI는 변하지 않지만, 가리키는 URL은 업데이트됨!</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>3️⃣ DOI의 구조</h2>
+
+    <div class="structure-section">
+      <div class="doi-example-large">
+        <h3>🔍 DOI 해부하기</h3>
+        <div class="doi-visual">
+          <code class="big-doi">10.1234/journal.2024.v15.p123</code>
+        </div>
+
+        <div class="structure-breakdown">
+          <div class="part prefix">
+            <div class="part-header">
+              <strong>10</strong>
+              <span class="label">DOI 시스템</span>
+            </div>
+            <p>모든 DOI는 "10"으로 시작</p>
+            <p class="note">"이것은 DOI입니다"라는 표시</p>
+          </div>
+
+          <div class="separator">.</div>
+
+          <div class="part registrant">
+            <div class="part-header">
+              <strong>1234</strong>
+              <span class="label">출판사/기관 번호</span>
+            </div>
+            <p>DOI를 등록한 기관의 고유 번호</p>
+            <p class="note">이 번호를 <strong>Prefix</strong>라고 부름</p>
+            <div class="examples">
+              <p><strong>실제 예시:</strong></p>
+              <ul>
+                <li>10.1038: Nature 출판사</li>
+                <li>10.1016: Elsevier 출판사</li>
+                <li>10.1109: IEEE</li>
+                <li>10.5281: Zenodo (오픈 리포지토리)</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="separator">/</div>
+
+          <div class="part suffix">
+            <div class="part-header">
+              <strong>journal.2024.v15.p123</strong>
+              <span class="label">개별 객체 식별 번호</span>
+            </div>
+            <p>해당 기관 내에서 부여한 고유 번호</p>
+            <p class="note">이 번호를 <strong>Suffix</strong>라고 부름</p>
+            <div class="examples">
+              <p><strong>자유로운 형식:</strong></p>
+              <ul>
+                <li>journal.2024.001</li>
+                <li>jlis-2024-v15-n2-p123</li>
+                <li>abc123xyz789</li>
+                <li>kim-2024-library-study</li>
+              </ul>
+              <p class="freedom">→ 기관이 알아서 정할 수 있음!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="key-rules">
+        <h3>📋 DOI 구성 규칙</h3>
+        <div class="rules-grid">
+          <div class="rule-item">
+            <h4>1. Prefix는 표준화</h4>
+            <p>DOI 재단이 발급하는 공식 번호</p>
+            <p class="example">예: 10.1234</p>
+          </div>
+          <div class="rule-item">
+            <h4>2. Suffix는 자유</h4>
+            <p>각 기관이 자유롭게 설계</p>
+            <p class="example">예: abc123, journal.2024.001</p>
+          </div>
+          <div class="rule-item">
+            <h4>3. 대소문자 구분 안 함</h4>
+            <p>10.1234/ABC = 10.1234/abc</p>
+          </div>
+          <div class="rule-item">
+            <h4>4. 영구 불변</h4>
+            <p>한 번 부여되면 절대 변경 안 됨</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>4️⃣ DOI 시스템의 구성</h2>
+
+    <div class="system-architecture">
+      <h3>🏗️ DOI 생태계</h3>
+
+      <div class="architecture-diagram">
+        <div class="layer top">
+          <div class="box foundation">
+            <h4>🏛️ DOI 재단 (IDF)</h4>
+            <p>International DOI Foundation</p>
+            <div class="roles">
+              <p><strong>역할:</strong></p>
+              <ul>
+                <li>DOI 시스템 전체 관리</li>
+                <li>표준 및 정책 수립</li>
+                <li>Prefix 발급 관리</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="layer middle">
+          <div class="box agency crossref">
+            <h4>CrossRef</h4>
+            <p>학술 논문 전문</p>
+            <div class="stats">
+              <p>📊 1억 4천만+ DOI</p>
+              <p>📚 주요 학술지 대부분 포함</p>
+            </div>
+          </div>
+
+          <div class="box agency datacite">
+            <h4>DataCite</h4>
+            <p>연구 데이터 전문</p>
+            <div class="stats">
+              <p>📊 4천만+ DOI</p>
+              <p>🔬 데이터셋, 소프트웨어 등</p>
+            </div>
+          </div>
+
+          <div class="box agency kisti">
+            <h4>Korea DOI Center</h4>
+            <p>한국 대표 기관 (KISTI)</p>
+            <div class="stats">
+              <p>🇰🇷 국내 DOI 등록</p>
+              <p>📖 DataCite의 한국 파트너</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="layer bottom">
+          <div class="registrants">
+            <h4>⚙️ 등록 기관 (수천 개)</h4>
+            <div class="registrant-examples">
+              <span class="tag">Nature</span>
+              <span class="tag">Elsevier</span>
+              <span class="tag">IEEE</span>
+              <span class="tag">PANGAEA</span>
+              <span class="tag">Zenodo</span>
+              <span class="tag">국립중앙도서관</span>
+              <span class="tag">...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="agency-details">
+        <h3>📌 주요 에이전시 상세</h3>
+
+        <div class="agency-card crossref-card">
+          <div class="agency-header">
+            <h4>CrossRef</h4>
+            <a href="https://www.crossref.org" target="_blank">https://www.crossref.org</a>
+          </div>
+          <div class="agency-content">
+            <p><strong>설립:</strong> 2000년</p>
+            <p><strong>전문 분야:</strong> 학술 논문, 저널 아티클, 학술 도서</p>
+            <p><strong>주요 기능:</strong></p>
+            <ul>
+              <li>DOI 등록 및 관리</li>
+              <li>참고문헌 연결 (Citation Linking)</li>
+              <li>메타데이터 무료 공개</li>
+              <li>Similarity Check (표절 검사 도구)</li>
+            </ul>
+            <p><strong>회원:</strong> 전 세계 18,000+ 출판사 및 기관</p>
+
+            <div class="real-example">
+              <h5>실제 사례</h5>
+              <p>Elsevier, Springer, Wiley, Taylor & Francis 등 거의 모든 주요 학술 출판사가 CrossRef를 통해 DOI를 등록합니다.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="agency-card datacite-card">
+          <div class="agency-header">
+            <h4>DataCite</h4>
+            <a href="https://datacite.org" target="_blank">https://datacite.org</a>
+          </div>
+          <div class="agency-content">
+            <p><strong>설립:</strong> 2009년</p>
+            <p><strong>전문 분야:</strong> 연구 데이터, 데이터셋, 소프트웨어, 회색문헌</p>
+            <p><strong>주요 기능:</strong></p>
+            <ul>
+              <li>연구 데이터에 DOI 부여</li>
+              <li>데이터 인용 추적</li>
+              <li>FAIR 원칙 지원 (Findable, Accessible, Interoperable, Reusable)</li>
+            </ul>
+            <p><strong>회원:</strong> 전 세계 2,000+ 연구기관 및 리포지토리</p>
+
+            <div class="real-example">
+              <h5>실제 사례</h5>
+              <p>PANGAEA (해양·지구과학 데이터), Zenodo (오픈 리포지토리), Figshare (연구 산출물) 등이 DataCite를 통해 데이터셋에 DOI를 부여합니다.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="agency-card kisti-card">
+          <div class="agency-header">
+            <h4>Korea DOI Center (KISTI)</h4>
+            <a href="https://www.doi.or.kr" target="_blank">https://www.doi.or.kr</a>
+          </div>
+          <div class="agency-content">
+            <p><strong>운영 기관:</strong> 한국과학기술정보연구원 (KISTI)</p>
+            <p><strong>역할:</strong> DataCite의 한국 대표 기관</p>
+            <p><strong>주요 서비스:</strong></p>
+            <ul>
+              <li>국내 기관에 DOI Prefix 발급</li>
+              <li>DOI 등록 및 관리 시스템 제공</li>
+              <li>DOI 사용 교육 및 컨설팅</li>
+              <li>국내 연구 데이터 DOI 등록 지원</li>
+            </ul>
+
+            <div class="real-example">
+              <h5>실제 사례</h5>
+              <p>국내 대학 기관 리포지토리, 연구 데이터 센터, 정부 출연 연구소 등이 Korea DOI Center를 통해 DOI를 발급받고 있습니다.</p>
+              <pre class="code-block">예시 Prefix: 10.22800 (KISTI 자체)
+국내 기관 DOI: 10.12345/data-2024-001</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>5️⃣ DOI 핸들 시스템</h2>
+
+    <div class="handle-system">
+      <h3>🔧 DOI의 핵심 기술: Handle System</h3>
+
+      <div class="definition-box">
+        <p>
+          <strong>Handle System</strong>은 DOI가 작동하는 기반 기술입니다.
+          "주민등록번호로 현재 주소를 찾는 시스템"이라고 생각하면 됩니다.
+        </p>
+      </div>
+
+      <div class="handle-workflow">
+        <h4>🌐 DOI가 작동하는 과정</h4>
+
+        <div class="workflow-visual">
+          <div class="step user-click">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h5>사용자가 DOI 클릭</h5>
+              <code>https://doi.org/10.1234/article123</code>
+            </div>
+          </div>
+
+          <div class="arrow-down">↓</div>
+
+          <div class="step handle-server">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h5>Handle 서버에 질의</h5>
+              <p>"10.1234/article123의 현재 URL은?"</p>
+            </div>
+          </div>
+
+          <div class="arrow-down">↓</div>
+
+          <div class="step database">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h5>데이터베이스 조회</h5>
+              <pre class="code-block">DOI: 10.1234/article123
+→ URL: https://publisher.com/article/2024/123
+   Updated: 2024-11-15</pre>
+            </div>
+          </div>
+
+          <div class="arrow-down">↓</div>
+
+          <div class="step redirect">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h5>사용자를 실제 URL로 리다이렉트</h5>
+              <code>→ https://publisher.com/article/2024/123</code>
+            </div>
+          </div>
+
+          <div class="arrow-down">↓</div>
+
+          <div class="step result">
+            <div class="step-number">5</div>
+            <div class="step-content">
+              <h5>논문 페이지 표시</h5>
+              <p>✅ 사용자가 원하는 논문을 봄</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="handle-features">
+        <h4>⚡ Handle System의 특징</h4>
+        <div class="feature-grid">
+          <div class="feature-item">
+            <h5>🌍 분산 시스템</h5>
+            <p>전 세계 여러 서버에 데이터 분산 저장</p>
+            <p class="benefit">→ 한 곳이 망가져도 작동</p>
+          </div>
+          <div class="feature-item">
+            <h5>⚡ 빠른 응답</h5>
+            <p>밀리초 단위로 URL 조회</p>
+            <p class="benefit">→ 사용자는 지연을 느끼지 못함</p>
+          </div>
+          <div class="feature-item">
+            <h5>🔒 안정성</h5>
+            <p>20년 이상 안정적으로 운영</p>
+            <p class="benefit">→ 99.9% 이상 가용성</p>
+          </div>
+          <div class="feature-item">
+            <h5>🔄 업데이트 가능</h5>
+            <p>URL이 바뀌면 데이터베이스만 업데이트</p>
+            <p class="benefit">→ DOI는 그대로 유지</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="critical-point">
+        <h4>⚠️ 중요: URL 업데이트의 중요성</h4>
+        <div class="importance-box">
+          <p><strong>핵심 원리:</strong> DOI가 작동하려면 <strong>현재 URL을 계속 업데이트</strong>해야 합니다!</p>
+
+          <div class="scenario-comparison">
+            <div class="scenario bad">
+              <h5>❌ URL을 업데이트하지 않으면</h5>
+              <pre class="code-block">2020년: DOI → http://old-site.com/article
+2024년: 출판사가 웹사이트 변경
+        BUT URL 업데이트 안 함!
+
+→ DOI 클릭 시: http://old-site.com/article
+→ <span class="error">404 Not Found</span>
+→ DOI가 무용지물!</pre>
+            </div>
+
+            <div class="scenario good">
+              <h5>✅ URL을 제때 업데이트하면</h5>
+              <pre class="code-block">2020년: DOI → http://old-site.com/article
+2024년: 출판사가 웹사이트 변경
+        → Handle DB 업데이트!
+        DOI → http://new-site.com/articles/2020/123
+
+→ DOI 클릭 시: http://new-site.com/articles/2020/123
+→ ✅ 정상 작동!</pre>
+            </div>
+          </div>
+
+          <div class="responsibility">
+            <p><strong>💼 누가 업데이트하나요?</strong></p>
+            <p>DOI를 등록한 <strong>출판사나 기관</strong>이 책임을 집니다.</p>
+            <ul>
+              <li>웹사이트 구조 변경 시</li>
+              <li>다른 출판사로 이관 시</li>
+              <li>서버 주소 변경 시</li>
+            </ul>
+            <p>→ <strong>반드시 DOI의 URL을 업데이트</strong>해야 합니다!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>6️⃣ DOI 등록 과정</h2>
+
+    <div class="registration-process">
+      <h3>📝 기관이 DOI를 만드는 방법</h3>
+
+      <div class="process-steps">
+        <div class="process-step">
+          <div class="step-header">
+            <span class="step-num">STEP 1</span>
+            <h4>Prefix 신청 및 발급</h4>
+          </div>
+          <div class="step-body">
+            <p>기관이 DOI 에이전시에 가입</p>
+            <pre class="code-block"># CrossRef, DataCite, 또는 Korea DOI Center에 신청
+
+발급 예시:
+→ Prefix: 10.1234</pre>
+            <p class="note">💰 연회비 납부 필요 (수십만~수백만 원)</p>
+          </div>
+        </div>
+
+        <div class="process-step">
+          <div class="step-header">
+            <span class="step-num">STEP 2</span>
+            <h4>DOI 생성</h4>
+          </div>
+          <div class="step-body">
+            <p>기관이 Suffix를 직접 설계</p>
+            <pre class="code-block">Prefix: 10.1234
+Suffix 규칙 설계: journal.{year}.{vol}.{article}
+
+생성된 DOI:
+10.1234/journal.2024.v15.a001
+10.1234/journal.2024.v15.a002
+...</pre>
+          </div>
+        </div>
+
+        <div class="process-step">
+          <div class="step-header">
+            <span class="step-num">STEP 3</span>
+            <h4>메타데이터 준비</h4>
+          </div>
+          <div class="step-body">
+            <p>DOI와 함께 제공해야 하는 정보</p>
+            <div class="metadata-example">
+              <h5>필수 메타데이터</h5>
+              <pre class="code-block">{
+  "DOI": "10.1234/journal.2024.v15.a001",
+  "URL": "https://ourjournal.com/2024/vol15/article001",
+  "title": "도서관 정보학의 미래",
+  "authors": [
+    {"name": "김도서", "orcid": "0000-0001-2345-6789"},
+    {"name": "이정보", "orcid": "0000-0002-3456-7890"}
+  ],
+  "publication_date": "2024-03-15",
+  "journal": "한국도서관정보학회지",
+  "volume": "15",
+  "issue": "2",
+  "pages": "123-145",
+  "abstract": "본 연구는...",
+  "keywords": ["도서관", "정보학", "미래"],
+  "references": [...]  // 참고문헌 목록
+}</pre>
+            </div>
+            <p class="importance">⚠️ <strong>URL은 필수입니다!</strong> DOI가 가리킬 주소를 반드시 지정해야 합니다.</p>
+          </div>
+        </div>
+
+        <div class="process-step">
+          <div class="step-header">
+            <span class="step-num">STEP 4</span>
+            <h4>에이전시에 등록</h4>
+          </div>
+          <div class="step-body">
+            <p>CrossRef, DataCite 등에 DOI + URL + 메타데이터 전송</p>
+            <div class="registration-methods">
+              <h5>등록 방법</h5>
+              <ul>
+                <li><strong>웹 인터페이스:</strong> 수동으로 입력</li>
+                <li><strong>API:</strong> 프로그램으로 자동 등록</li>
+                <li><strong>XML 파일 업로드:</strong> 대량 등록</li>
+              </ul>
+            </div>
+            <pre class="code-block"># CrossRef API 예시
+POST https://api.crossref.org/deposits
+Content-Type: application/vnd.crossref.deposit+xml
+
+&lt;doi_batch&gt;
+  &lt;head&gt;...&lt;/head&gt;
+  &lt;body&gt;
+    &lt;journal&gt;
+      &lt;journal_metadata&gt;...&lt;/journal_metadata&gt;
+      &lt;journal_article&gt;
+        &lt;doi_data&gt;
+          &lt;doi&gt;10.1234/journal.2024.v15.a001&lt;/doi&gt;
+          &lt;resource&gt;https://ourjournal.com/2024/vol15/article001&lt;/resource&gt;
+        &lt;/doi_data&gt;
+      &lt;/journal_article&gt;
+    &lt;/journal&gt;
+  &lt;/body&gt;
+&lt;/doi_batch&gt;</pre>
+          </div>
+        </div>
+
+        <div class="process-step">
+          <div class="step-header">
+            <span class="step-num">STEP 5</span>
+            <h4>등록 완료 및 활성화</h4>
+          </div>
+          <div class="step-body">
+            <p>등록 후 몇 시간~1일 내 활성화</p>
+            <pre class="code-block">✅ 등록 완료!
+
+이제 전 세계 어디서든:
+https://doi.org/10.1234/journal.2024.v15.a001
+
+→ 해당 논문 페이지로 이동됨!</pre>
+          </div>
+        </div>
+
+        <div class="process-step maintenance">
+          <div class="step-header">
+            <span class="step-num">지속 관리</span>
+            <h4>URL 업데이트 (매우 중요!)</h4>
+          </div>
+          <div class="step-body">
+            <p>URL이 변경될 때마다 업데이트</p>
+            <pre class="code-block"># 웹사이트 변경 시
+PUT https://api.crossref.org/works/10.1234/journal.2024.v15.a001
+{
+  "resource": "https://new-domain.com/articles/2024/15/001"
+}
+
+→ DOI는 그대로, URL만 업데이트!</pre>
+            <p class="warning">⚠️ 이 단계를 빠뜨리면 DOI가 링크 깨진 URL을 가리키게 됩니다!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>7️⃣ DOI 활용 사례</h2>
+
+    <div class="use-cases">
+      <div class="use-case-card research-data">
+        <div class="use-case-header">
+          <h3>🔬 사례 1: 연구 데이터와 논문 연계</h3>
+          <p class="subtitle">PANGAEA × Elsevier</p>
+        </div>
+        <div class="use-case-body">
+          <h4>배경</h4>
+          <p>
+            <strong>PANGAEA</strong>는 해양·지구과학 데이터를 보관하는 세계적인 데이터 리포지토리입니다.
+            <strong>Elsevier</strong>는 과학 저널을 출판하는 대형 출판사입니다.
+          </p>
+
+          <h4>문제</h4>
+          <div class="problem-box">
+            <p>연구자가 논문을 쓸 때 사용한 데이터를 어떻게 공유하고 인용할 것인가?</p>
+            <ul>
+              <li>논문: "우리는 2023년 남극 빙하 데이터를 분석했다"</li>
+              <li>독자: "그 데이터를 어디서 볼 수 있나요?"</li>
+              <li>기존 방식: 부록에 엑셀 파일 첨부 😢</li>
+            </ul>
+          </div>
+
+          <h4>✅ DOI 솔루션</h4>
+          <div class="solution-workflow">
+            <div class="workflow-step">
+              <strong>1단계: 데이터 업로드</strong>
+              <p>연구자가 PANGAEA에 데이터 업로드</p>
+              <pre class="code-block">데이터셋: "Antarctic Ice Sheet Measurements 2023"
+파일: ice_data_2023.csv, metadata.xml
+→ PANGAEA가 DOI 발급: 10.1594/PANGAEA.123456</pre>
+            </div>
+
+            <div class="workflow-step">
+              <strong>2단계: 논문 작성</strong>
+              <p>연구자가 Elsevier 저널에 논문 제출</p>
+              <pre class="code-block">논문 제목: "남극 빙하의 최근 변화 분석"
+데이터 인용:
+  Kim et al. (2023). Antarctic Ice Sheet Measurements 2023.
+  PANGAEA. https://doi.org/10.1594/PANGAEA.123456
+
+→ Elsevier가 논문에 DOI 발급: 10.1016/j.icarus.2024.001</pre>
+            </div>
+
+            <div class="workflow-step">
+              <strong>3단계: 양방향 연결</strong>
+              <pre class="code-block">📄 논문 (10.1016/j.icarus.2024.001)
+   → "이 논문에서 사용한 데이터: 10.1594/PANGAEA.123456"
+
+📊 데이터 (10.1594/PANGAEA.123456)
+   → "이 데이터를 사용한 논문: 10.1016/j.icarus.2024.001"</pre>
+            </div>
+
+            <div class="workflow-step result">
+              <strong>결과</strong>
+              <p>✨ <strong>완벽한 재현성!</strong></p>
+              <ul>
+                <li>독자가 논문을 읽고 → 데이터 DOI 클릭 → 원본 데이터 다운로드</li>
+                <li>데이터 재분석 가능</li>
+                <li>데이터 제공자도 인용 실적 획득</li>
+                <li>과학적 투명성 확보</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="real-impact">
+            <h5>📊 실제 효과</h5>
+            <p>PANGAEA는 100만 개 이상의 데이터셋에 DOI를 부여했고,
+            이 데이터셋들은 수만 편의 논문에서 정확하게 인용되고 있습니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="use-case-card metadata">
+        <div class="use-case-header">
+          <h3>📋 사례 2: 메타데이터에서 DOI 활용</h3>
+        </div>
+        <div class="use-case-body">
+          <h4>도서관 시스템의 서지 레코드</h4>
+          <p>전자 저널 논문의 서지 정보를 관리할 때 DOI를 메타데이터 필드로 포함합니다.</p>
+
+          <div class="metadata-structure">
+            <h5>MARC 레코드 예시</h5>
+            <pre class="code-block">024 7_ $a 10.1234/jlis.2024.001 $2 doi
+100 1_ $a 김도서, $d 1980-
+245 10 $a 도서관 정보학의 미래 / $c 김도서
+773 0_ $t 한국도서관정보학회지 $g Vol.15, No.2, p.123-145 (2024)
+856 40 $u https://doi.org/10.1234/jlis.2024.001 $y 원문 보기</pre>
+          </div>
+
+          <h5>활용</h5>
+          <ul>
+            <li><strong>통합 검색:</strong> 여러 데이터베이스의 같은 논문을 DOI로 식별</li>
+            <li><strong>원문 연결:</strong> 이용자가 "원문 보기" 클릭 시 DOI로 리다이렉트</li>
+            <li><strong>중복 제거:</strong> 같은 DOI = 같은 논문으로 자동 판단</li>
+          </ul>
+
+          <h5>Dublin Core 메타데이터 예시</h5>
+          <pre class="code-block">&lt;metadata&gt;
+  &lt;dc:title&gt;도서관 정보학의 미래&lt;/dc:title&gt;
+  &lt;dc:creator&gt;김도서&lt;/dc:creator&gt;
+  &lt;dc:date&gt;2024-03-15&lt;/dc:date&gt;
+  &lt;dc:identifier&gt;https://doi.org/10.1234/jlis.2024.001&lt;/dc:identifier&gt;
+  &lt;dc:relation&gt;10.1594/PANGAEA.123456&lt;/dc:relation&gt;
+&lt;/metadata&gt;</pre>
+        </div>
+      </div>
+
+      <div class="use-case-card citation">
+        <div class="use-case-header">
+          <h3>📚 사례 3: 참고문헌 자동 연결</h3>
+        </div>
+        <div class="use-case-body">
+          <p>CrossRef의 "참고문헌 연결" 서비스</p>
+
+          <h4>작동 방식</h4>
+          <div class="citation-workflow">
+            <div class="step">
+              <strong>1.</strong> 출판사가 논문의 참고문헌 목록을 CrossRef에 제공
+            </div>
+            <div class="step">
+              <strong>2.</strong> CrossRef가 각 참고문헌의 DOI를 자동으로 찾음
+            </div>
+            <div class="step">
+              <strong>3.</strong> 참고문헌에 DOI 링크 자동 생성
+            </div>
+          </div>
+
+          <h5>예시</h5>
+          <pre class="code-block">논문 A의 참고문헌:
+[1] Kim, D. (2023). Library Science. Journal of LIS, 15(2), 123-145.
+    → CrossRef 자동 매칭: DOI 10.1234/jlis.2023.001 연결!
+
+독자가 [1] 클릭 → 논문 원문으로 바로 이동!</pre>
+
+          <div class="benefit">
+            <p>✨ <strong>효과:</strong> 학술 논문들이 서로 연결되어 "지식의 그물망" 형성</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>8️⃣ 실전 경험담: KAIST 도서관 NDSL 시스템 개발</h2>
+
+    <div class="story-section">
+      <div class="story-intro">
+        <h3>📖 2001년, DOI와의 첫 만남</h3>
+        <p class="story-context">
+          2001년 KAIST 도서관에서 <strong>NDSL (National Discovery for Science Leaders)</strong>
+          시스템을 개발할 때의 실제 경험담입니다.
+        </p>
+      </div>
+
+      <div class="story-timeline">
+        <div class="story-chapter">
+          <div class="chapter-header">
+            <h4>🚀 프로젝트 시작</h4>
+            <span class="year">2001년</span>
+          </div>
+          <div class="chapter-content">
+            <p><strong>목표:</strong> 국내외 과학기술 논문을 통합 검색하는 시스템 구축</p>
+            <p><strong>과제:</strong> 전 세계 수백만 편의 논문을 수집하고, 원문으로 연결해야 함</p>
+
+            <div class="challenge">
+              <h5>당시 상황</h5>
+              <ul>
+                <li>DOI가 막 보급되기 시작한 시기</li>
+                <li>CrossRef도 이제 막 본격 가동 (2000년 설립)</li>
+                <li>많은 출판사들이 DOI를 도입 중</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="story-chapter">
+          <div class="chapter-header">
+            <h4>💡 DOI LookUp 시스템 개발</h4>
+          </div>
+          <div class="chapter-content">
+            <p><strong>아이디어:</strong> 논문의 DOI를 이용해 원문 링크를 자동으로 찾자!</p>
+
+            <div class="system-design">
+              <h5>시스템 구조</h5>
+              <pre class="code-block">1. 출판사로부터 논문 메타데이터 수집
+   → 제목, 저자, DOI 포함
+
+2. NDSL 데이터베이스에 저장
+
+3. 사용자가 논문 검색
+
+4. DOI LookUp 시스템 작동:
+   - 논문의 DOI를 CrossRef에 질의
+   - CrossRef가 현재 원문 URL 반환
+   - 사용자에게 "원문 보기" 링크 제공</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="story-chapter problem">
+          <div class="chapter-header">
+            <h4>😱 실시간 등록 문제 발생!</h4>
+          </div>
+          <div class="chapter-content">
+            <h5>문제 상황</h5>
+            <div class="problem-description">
+              <p>출판사로부터 수집한 메타데이터에 DOI가 있는데,
+              <strong>CrossRef에 아직 등록되지 않은 경우가 빈번</strong>했습니다!</p>
+
+              <div class="problem-timeline">
+                <div class="event">
+                  <strong>Day 1:</strong> 출판사가 논문 출판 + DOI 부여
+                  <pre class="code-block">DOI: 10.1016/j.example.2001.001</pre>
+                </div>
+                <div class="event">
+                  <strong>Day 2:</strong> 출판사가 NDSL에 메타데이터 제공
+                  <pre class="code-block">Title: "Example Paper"
+DOI: 10.1016/j.example.2001.001
+URL: https://publisher.com/article/2001/001</pre>
+                </div>
+                <div class="event">
+                  <strong>Day 3:</strong> NDSL에서 이 논문 검색됨
+                </div>
+                <div class="event problem-moment">
+                  <strong>Day 3:</strong> 사용자가 "원문 보기" 클릭
+                  <pre class="code-block">→ DOI LookUp 실행
+→ CrossRef 질의: 10.1016/j.example.2001.001
+→ CrossRef 응답: <span class="error">"NOT FOUND"</span> 😱</pre>
+                </div>
+                <div class="event">
+                  <strong>Day 5~7:</strong> 출판사가 CrossRef에 등록
+                  <pre class="code-block">→ 이제야 CrossRef에 등록됨!
+→ 하지만 이미 이용자는 못 찾음...</pre>
+                </div>
+              </div>
+            </div>
+
+            <h5>왜 이런 일이?</h5>
+            <ul>
+              <li><strong>출판 속도 vs 등록 속도:</strong> 논문은 바로 출판되지만, CrossRef 등록은 며칠 걸림</li>
+              <li><strong>대량 일괄 등록:</strong> 출판사가 논문을 모아서 일주일에 한 번 등록</li>
+              <li><strong>등록 프로세스:</strong> 메타데이터 검증, 승인 과정이 필요</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="story-chapter solution">
+          <div class="chapter-header">
+            <h4>🔧 해결 방법</h4>
+          </div>
+          <div class="chapter-content">
+            <h5>우리가 적용한 솔루션</h5>
+            <div class="solution-strategy">
+              <div class="strategy">
+                <strong>1. Fallback URL 사용</strong>
+                <p>CrossRef에서 DOI를 찾지 못하면, 출판사가 제공한 URL을 그대로 사용</p>
+                <pre class="code-block">try {
+  url = crossref.lookup(doi);  // CrossRef 조회
+} catch (NotFound) {
+  url = metadata.original_url;  // 원본 URL 사용
+}</pre>
+              </div>
+
+              <div class="strategy">
+                <strong>2. 주기적 재확인</strong>
+                <p>일주일 후 다시 CrossRef를 확인하여 URL 업데이트</p>
+                <pre class="code-block">// 매주 실행되는 배치 작업
+for (article in articles_with_unresolved_doi) {
+  if (crossref.has(article.doi)) {
+    article.url = crossref.lookup(article.doi);
+    article.url_source = "crossref";
+  }
+}</pre>
+              </div>
+
+              <div class="strategy">
+                <strong>3. 사용자에게 안내</strong>
+                <p>"DOI 조회 중..." 메시지 표시 후, 출판사 URL 제공</p>
+                <pre class="code-block">[원문 보기]
+※ DOI 시스템에 등록 대기 중입니다.
+  출판사 URL로 연결됩니다.</pre>
+              </div>
+            </div>
+
+            <h5>교훈</h5>
+            <div class="lesson-box">
+              <p><strong>💡 DOI 시스템의 핵심:</strong></p>
+              <ul>
+                <li>DOI는 <strong>"즉시 등록"</strong>되는 게 아니라 <strong>"프로세스"</strong>를 거친다</li>
+                <li>출판사와 DOI 에이전시 간의 <strong>동기화 시간차</strong>가 존재한다</li>
+                <li>실시간 서비스를 만들 때는 <strong>Fallback 전략</strong>이 필수다</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="story-chapter reflection">
+          <div class="chapter-header">
+            <h4>🎓 20년 후 돌아보며</h4>
+            <span class="year">2024년</span>
+          </div>
+          <div class="chapter-content">
+            <p>지금은 상황이 많이 개선되었습니다:</p>
+            <ul>
+              <li>✅ 출판사들이 <strong>API를 통해 자동으로 즉시 등록</strong></li>
+              <li>✅ CrossRef가 <strong>실시간 등록 시스템</strong> 구축</li>
+              <li>✅ 등록 후 <strong>몇 시간 내 활성화</strong></li>
+            </ul>
+
+            <div class="modern-process">
+              <h5>현재의 프로세스 (2024년)</h5>
+              <pre class="code-block">논문 출판 → API 자동 등록 → 1~2시간 후 활성화
+
+거의 실시간!</pre>
+            </div>
+
+            <div class="ndsl-history">
+              <h5>📚 NDSL 서비스의 발자취</h5>
+              <div class="history-timeline">
+                <div class="history-item">
+                  <strong>2001년</strong>
+                  <p>KAIST 도서관에서 NDSL 개발 시작</p>
+                  <p class="detail">국내외 과학기술 논문 통합 검색 시스템</p>
+                </div>
+                <div class="history-item">
+                  <strong>2006년</strong>
+                  <p>KISTI로 서비스 이관</p>
+                  <p class="detail">국가 차원의 과학기술 지식 인프라로 발전</p>
+                </div>
+                <div class="history-item current">
+                  <strong>현재</strong>
+                  <p>ScienceON 플랫폼으로 개편</p>
+                  <p class="detail">
+                    <a href="https://scienceon.kisti.re.kr" target="_blank">https://scienceon.kisti.re.kr</a>
+                  </p>
+                  <p class="note">→ 국내외 1억 건 이상의 과학기술 연구 성과물 통합 서비스</p>
+                </div>
+              </div>
+              <p class="history-note">
+                💡 20여 년 전 KAIST에서 시작한 작은 프로젝트가
+                현재는 대한민국을 대표하는 과학기술 지식 플랫폼으로 성장했습니다!
+              </p>
+            </div>
+
+            <p class="reflection-note">
+              하지만 여전히 <strong>URL 업데이트의 중요성</strong>은 변하지 않았습니다.
+              DOI 시스템은 "자동으로 작동하는 마법"이 아니라,
+              <strong>사람이 지속적으로 관리해야 하는 시스템</strong>입니다.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>9️⃣ 학습 자료 및 참고 링크</h2>
+
+    <div class="resources-grid">
+      <div class="resource-card official">
+        <h3>📚 공식 사이트</h3>
+        <ul>
+          <li>
+            <a href="https://www.doi.org/" target="_blank">
+              DOI 재단 (IDF)
+            </a>
+            <p class="link-desc">DOI 시스템 공식 사이트</p>
+          </li>
+          <li>
+            <a href="https://www.crossref.org/" target="_blank">
+              CrossRef
+            </a>
+            <p class="link-desc">학술 논문 DOI 에이전시</p>
+          </li>
+          <li>
+            <a href="https://datacite.org/" target="_blank">
+              DataCite
+            </a>
+            <p class="link-desc">연구 데이터 DOI 에이전시</p>
+          </li>
+          <li>
+            <a href="https://www.doi.or.kr/" target="_blank">
+              Korea DOI Center (KISTI)
+            </a>
+            <p class="link-desc">한국 DOI 센터</p>
+          </li>
+        </ul>
+      </div>
+
+      <div class="resource-card tools">
+        <h3>🔧 유용한 도구</h3>
+        <ul>
+          <li>
+            <a href="https://doi.org/" target="_blank">
+              DOI Resolver
+            </a>
+            <p class="link-desc">DOI를 입력하면 원문으로 이동</p>
+          </li>
+          <li>
+            <a href="https://www.crossref.org/services/metadata-search/" target="_blank">
+              CrossRef Metadata Search
+            </a>
+            <p class="link-desc">DOI 메타데이터 검색</p>
+          </li>
+          <li>
+            <a href="https://search.datacite.org/" target="_blank">
+              DataCite Search
+            </a>
+            <p class="link-desc">데이터셋 DOI 검색</p>
+          </li>
+        </ul>
+      </div>
+
+      <div class="resource-card data">
+        <h3>📊 데이터 리포지토리</h3>
+        <ul>
+          <li>
+            <a href="https://www.pangaea.de/" target="_blank">
+              PANGAEA
+            </a>
+            <p class="link-desc">지구과학 데이터 아카이브</p>
+          </li>
+          <li>
+            <a href="https://zenodo.org/" target="_blank">
+              Zenodo
+            </a>
+            <p class="link-desc">오픈 연구 데이터 리포지토리</p>
+          </li>
+          <li>
+            <a href="https://figshare.com/" target="_blank">
+              Figshare
+            </a>
+            <p class="link-desc">연구 산출물 공유 플랫폼</p>
+          </li>
+        </ul>
+      </div>
+
+      <div class="resource-card korean">
+        <h3>🇰🇷 국내 자료</h3>
+        <ul>
+          <li>
+            <a href="https://www.ndsl.kr/" target="_blank">
+              NDSL (과학기술 지식인프라)
+            </a>
+            <p class="link-desc">국내 과학기술 논문 통합 검색</p>
+          </li>
+          <li>
+            <a href="https://www.kci.go.kr/" target="_blank">
+              KCI 한국학술지인용색인
+            </a>
+            <p class="link-desc">국내 학술지 DOI 서비스</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="summary">
+    <h2>🎯 핵심 요약</h2>
+    <div class="summary-grid">
+      <div class="summary-item">
+        <h3>DOI란?</h3>
+        <p><strong>영구 식별자</strong></p>
+        <p>URL은 바뀌어도 DOI는 불변</p>
+        <p>= 인터넷 세상의 주민등록번호</p>
+      </div>
+
+      <div class="summary-item">
+        <h3>구조</h3>
+        <p><strong>Prefix + Suffix</strong></p>
+        <p>10.1234/article.2024.001</p>
+        <p>기관번호 + 개별번호</p>
+      </div>
+
+      <div class="summary-item">
+        <h3>생태계</h3>
+        <p><strong>DOI 재단</strong> (표준 관리)</p>
+        <p><strong>CrossRef</strong> (학술 논문)</p>
+        <p><strong>DataCite</strong> (연구 데이터)</p>
+        <p><strong>Korea DOI Center</strong> (국내)</p>
+      </div>
+
+      <div class="summary-item">
+        <h3>핵심 기술</h3>
+        <p><strong>Handle System</strong></p>
+        <p>DOI → URL 변환</p>
+        <p>분산 시스템, 99.9% 가용성</p>
+      </div>
+
+      <div class="summary-item">
+        <h3>등록 과정</h3>
+        <p>1. Prefix 발급</p>
+        <p>2. DOI 생성</p>
+        <p>3. 메타데이터 준비</p>
+        <p>4. 에이전시 등록</p>
+        <p>5. <strong>URL 지속 관리!</strong></p>
+      </div>
+
+      <div class="summary-item">
+        <h3>활용</h3>
+        <p>📄 논문 영구 식별</p>
+        <p>📊 데이터-논문 연계</p>
+        <p>🔗 참고문헌 자동 연결</p>
+        <p>📚 메타데이터 통합</p>
+      </div>
+    </div>
+
+    <div class="final-message">
+      <h3>💡 가장 중요한 것</h3>
+      <p>
+        DOI는 단순한 "번호"가 아니라 <strong>"시스템"</strong>입니다.
+      </p>
+      <p>
+        DOI가 제대로 작동하려면 <strong>URL을 계속 업데이트</strong>해야 하며,
+        이는 <strong>출판사와 기관의 책임</strong>입니다.
+      </p>
+      <p>
+        DOI 덕분에 20년 전 논문도 지금 찾을 수 있고,
+        앞으로 50년 후에도 찾을 수 있을 것입니다!
+      </p>
+    </div>
+  </div>
+</div>
+
+<style>
+.doi-tutorial {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+h1 {
+  font-size: 2.5em;
+  color: #1a237e;
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 4px solid #3f51b5;
+}
+
+h2 {
+  font-size: 2em;
+  color: #283593;
+  margin: 3rem 0 1.5rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #5c6bc0;
+}
+
+h3 {
+  font-size: 1.5em;
+  color: #3949ab;
+  margin: 2rem 0 1rem 0;
+}
+
+h4 {
+  font-size: 1.2em;
+  color: #5e35b1;
+  margin: 1.5rem 0 0.8rem 0;
+}
+
+h5 {
+  font-size: 1.05em;
+  color: #7b1fa2;
+  margin: 1rem 0 0.5rem 0;
+}
+
+.intro-section {
+  background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%);
+  padding: 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+}
+
+.intro-section ul {
+  margin: 1rem 0 0 2rem;
+  font-size: 1.1em;
+}
+
+.intro-section li {
+  margin: 0.8rem 0;
+}
+
+.section {
+  margin: 3rem 0;
+}
+
+.definition-box {
+  background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);
+  border-left: 5px solid #0277bd;
+  padding: 2rem;
+  margin: 1.5rem 0;
+  border-radius: 8px;
+}
+
+.definition-box h3 {
+  color: #01579b;
+  margin-top: 0;
+}
+
+.definition-box p {
+  font-size: 1.15em;
+  line-height: 1.9;
+  color: #004d40;
+  margin: 1rem 0;
+}
+
+.analogy-box {
+  background: #fff3e0;
+  border: 2px solid #ff9800;
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem 0;
+}
+
+.analogy-box h3 {
+  color: #e65100;
+  margin-top: 0;
+}
+
+.comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.comparison-item {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.comparison-item.url {
+  border-top: 4px solid #f44336;
+}
+
+.comparison-item.doi {
+  border-top: 4px solid #4caf50;
+}
+
+.comparison-item h4 {
+  margin-top: 0;
+  text-align: center;
+}
+
+.icon {
+  font-size: 3em;
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.problem,
+.solution {
+  margin-top: 1.5rem;
+}
+
+.problem p strong {
+  color: #d32f2f;
+}
+
+.solution p strong {
+  color: #2e7d32;
+}
+
+.problem ul,
+.solution ul {
+  margin: 0.5rem 0 0 1.5rem;
+}
+
+.problem li,
+.solution li {
+  margin: 0.5rem 0;
+}
+
+.key-insight {
+  background: #fff3e0;
+  border: 2px solid #ff9800;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 1.05em;
+}
+
+.history-section {
+  margin: 2rem 0;
+}
+
+.problem-scenario {
+  background: #ffebee;
+  padding: 2rem;
+  border-radius: 12px;
+  margin: 2rem 0;
+}
+
+.story-box {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+.timeline {
+  margin: 2rem 0;
+}
+
+.timeline-item {
+  display: flex;
+  gap: 2rem;
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 8px;
+  border-left: 4px solid #2196f3;
+}
+
+.timeline-item.problem {
+  border-left-color: #f44336;
+  background: #ffebee;
+}
+
+.year {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #1565c0;
+  min-width: 100px;
+}
+
+.event {
+  flex: 1;
+}
+
+.event p {
+  margin: 0.5rem 0;
+}
+
+.code-block {
+  background: #263238;
+  color: #aed581;
+  padding: 1.5rem;
+  border-radius: 6px;
+  font-family: 'Courier New', monospace;
+  overflow-x: auto;
+  margin: 1rem 0;
+  line-height: 1.8;
+  font-size: 0.95em;
+}
+
+.error {
+  color: #ff5252;
+  font-weight: bold;
+}
+
+.impact {
+  font-size: 1.2em;
+  text-align: center;
+  margin-top: 1rem;
+  color: #d32f2f;
+  font-weight: bold;
+}
+
+.statistics {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 2rem;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+.number {
+  font-size: 3em;
+  font-weight: bold;
+  color: #f44336;
+}
+
+.stat-item p {
+  margin: 1rem 0 0 0;
+  color: #666;
+}
+
+.stat-note {
+  text-align: center;
+  font-weight: bold;
+  color: #d32f2f;
+  font-size: 1.1em;
+  margin-top: 2rem;
+}
+
+.solution-birth {
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  padding: 2rem;
+  border-radius: 12px;
+  margin: 2rem 0;
+}
+
+.birth-story {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 2rem;
+  margin: 2rem 0;
+  align-items: center;
+}
+
+.birth-year {
+  text-align: center;
+  padding: 2rem;
+  background: white;
+  border-radius: 8px;
+}
+
+.birth-year h4 {
+  font-size: 2em;
+  color: #2e7d32;
+  margin: 0;
+}
+
+.birth-vision blockquote {
+  background: white;
+  padding: 1.5rem;
+  border-left: 4px solid #4caf50;
+  border-radius: 4px;
+  margin: 1rem 0;
+  font-size: 1.1em;
+  font-style: italic;
+  color: #1b5e20;
+}
+
+.how-it-works {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+}
+
+.structure-section {
+  margin: 2rem 0;
+}
+
+.doi-example-large {
+  background: white;
+  border: 2px solid #5c6bc0;
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem 0;
+}
+
+.doi-visual {
+  text-align: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%);
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.big-doi {
+  font-size: 2em;
+  font-family: 'Courier New', monospace;
+  color: #1a237e;
+  font-weight: bold;
+}
+
+.structure-breakdown {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.part {
+  background: #f5f5f5;
+  padding: 1.5rem;
+  border-radius: 8px;
+  flex: 1;
+  min-width: 200px;
+}
+
+.part.prefix {
+  border-top: 4px solid #2196f3;
+}
+
+.part.registrant {
+  border-top: 4px solid #4caf50;
+}
+
+.part.suffix {
+  border-top: 4px solid #ff9800;
+}
+
+.part-header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.part-header strong {
+  display: block;
+  font-size: 1.5em;
+  color: #1a237e;
+  margin-bottom: 0.5rem;
+}
+
+.label {
+  display: block;
+  font-size: 0.9em;
+  color: #666;
+  font-weight: normal;
+}
+
+.note {
+  color: #7b1fa2;
+  font-style: italic;
+  font-size: 0.95em;
+  margin-top: 0.5rem;
+}
+
+.examples {
+  background: white;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-top: 1rem;
+}
+
+.examples ul {
+  margin: 0.5rem 0 0 1.5rem;
+}
+
+.examples li {
+  margin: 0.3rem 0;
+  font-size: 0.9em;
+}
+
+.freedom {
+  color: #2e7d32;
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
+
+.separator {
+  font-size: 2em;
+  color: #666;
+  font-weight: bold;
+  padding: 0 0.5rem;
+}
+
+.key-rules {
+  background: #f5f5f5;
+  padding: 2rem;
+  border-radius: 12px;
+  margin: 2rem 0;
+}
+
+.rules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.rule-item {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.rule-item h4 {
+  color: #5e35b1;
+  margin-top: 0;
+  font-size: 1.1em;
+}
+
+.example {
+  color: #666;
+  font-style: italic;
+  font-size: 0.95em;
+  margin-top: 0.5rem;
+}
+
+.system-architecture {
+  margin: 2rem 0;
+}
+
+.architecture-diagram {
+  background: white;
+  border: 2px solid #9e9e9e;
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem 0;
+}
+
+.layer {
+  margin: 2rem 0;
+}
+
+.layer.top {
+  text-align: center;
+}
+
+.layer.middle {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.box {
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.box.foundation {
+  background: linear-gradient(135deg, #5c6bc0 0%, #3f51b5 100%);
+  color: white;
+  display: inline-block;
+  min-width: 400px;
+}
+
+.box.foundation h4 {
+  color: white;
+  margin: 0 0 0.5rem 0;
+}
+
+.box.agency {
+  background: #f5f5f5;
+}
+
+.box.agency.crossref {
+  border-top: 4px solid #ff9800;
+}
+
+.box.agency.datacite {
+  border-top: 4px solid #2196f3;
+}
+
+.box.agency.kisti {
+  border-top: 4px solid #4caf50;
+}
+
+.box h4 {
+  margin-top: 0;
+}
+
+.roles,
+.stats {
+  margin-top: 1rem;
+}
+
+.roles ul,
+.stats p {
+  margin: 0.5rem 0;
+}
+
+.registrants {
+  background: #fafafa;
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.registrant-examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.tag {
+  background: #e0e0e0;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9em;
+}
+
+.agency-details {
+  margin: 3rem 0;
+}
+
+.agency-card {
+  background: white;
+  border-radius: 12px;
+  margin: 2rem 0;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.agency-card.crossref-card {
+  border-top: 4px solid #ff9800;
+}
+
+.agency-card.datacite-card {
+  border-top: 4px solid #2196f3;
+}
+
+.agency-card.kisti-card {
+  border-top: 4px solid #4caf50;
+}
+
+.agency-header {
+  background: #f5f5f5;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.agency-header h4 {
+  margin: 0;
+  font-size: 1.5em;
+}
+
+.agency-header a {
+  color: #1976d2;
+  text-decoration: none;
+  font-size: 0.9em;
+}
+
+.agency-content {
+  padding: 2rem;
+}
+
+.agency-content p {
+  margin: 0.8rem 0;
+}
+
+.agency-content ul {
+  margin: 0.5rem 0 1rem 2rem;
+}
+
+.agency-content li {
+  margin: 0.5rem 0;
+}
+
+.real-example {
+  background: #f9fbe7;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 1.5rem;
+  border-left: 4px solid #cddc39;
+}
+
+.real-example h5 {
+  margin-top: 0;
+  color: #827717;
+}
+
+.handle-system {
+  margin: 2rem 0;
+}
+
+.handle-workflow {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  margin: 2rem 0;
+  border: 2px solid #9c27b0;
+}
+
+.workflow-visual {
+  margin: 2rem 0;
+}
+
+.step {
+  background: #f5f5f5;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.step-number {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background: #7b1fa2;
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 40px;
+  font-weight: bold;
+  margin-right: 1rem;
+  vertical-align: middle;
+}
+
+.step-content {
+  display: inline-block;
+  vertical-align: middle;
+  width: calc(100% - 60px);
+}
+
+.step h5 {
+  margin: 0 0 0.5rem 0;
+  color: #4a148c;
+}
+
+.arrow-down {
+  text-align: center;
+  font-size: 2em;
+  color: #7b1fa2;
+  margin: 0.5rem 0;
+}
+
+.handle-features {
+  margin: 2rem 0;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.feature-item {
+  background: #f3e5f5;
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.feature-item h5 {
+  color: #6a1b9a;
+  margin-top: 0;
+}
+
+.benefit {
+  color: #2e7d32;
+  font-weight: bold;
+  font-size: 0.95em;
+  margin-top: 0.5rem;
+}
+
+.critical-point {
+  background: #fff3e0;
+  padding: 2rem;
+  border-radius: 12px;
+  margin: 2rem 0;
+  border: 2px solid #ff9800;
+}
+
+.importance-box {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+.scenario-comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.scenario {
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.scenario.bad {
+  background: #ffebee;
+  border-left: 4px solid #f44336;
+}
+
+.scenario.good {
+  background: #e8f5e9;
+  border-left: 4px solid #4caf50;
+}
+
+.responsibility {
+  background: #e3f2fd;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+}
+
+.responsibility ul {
+  margin: 0.5rem 0 0.5rem 2rem;
+}
+
+.registration-process {
+  margin: 2rem 0;
+}
+
+.process-steps {
+  margin: 2rem 0;
+}
+
+.process-step {
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  margin: 2rem 0;
+  overflow: hidden;
+}
+
+.process-step.maintenance {
+  border-color: #f44336;
+}
+
+.step-header {
+  background: linear-gradient(135deg, #5c6bc0 0%, #3f51b5 100%);
+  color: white;
+  padding: 1.5rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.process-step.maintenance .step-header {
+  background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+}
+
+.step-num {
+  background: rgba(255,255,255,0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+.step-header h4 {
+  margin: 0;
+  color: white;
+  flex: 1;
+}
+
+.step-body {
+  padding: 2rem;
+}
+
+.metadata-example {
+  background: #f5f5f5;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+.metadata-example h5 {
+  margin-top: 0;
+}
+
+.importance {
+  background: #fff3e0;
+  border-left: 4px solid #ff9800;
+  padding: 1rem;
+  margin-top: 1rem;
+  border-radius: 4px;
+  color: #e65100;
+  font-weight: bold;
+}
+
+.registration-methods {
+  background: #e8f5e9;
+  padding: 1rem 1.5rem;
+  border-radius: 6px;
+  margin: 1rem 0;
+}
+
+.registration-methods ul {
+  margin: 0.5rem 0 0 1.5rem;
+}
+
+.warning {
+  background: #ffebee;
+  border-left: 4px solid #f44336;
+  padding: 1rem;
+  margin-top: 1rem;
+  border-radius: 4px;
+  color: #c62828;
+  font-weight: bold;
+}
+
+.use-cases {
+  margin: 2rem 0;
+}
+
+.use-case-card {
+  background: white;
+  border-radius: 12px;
+  margin: 2rem 0;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.use-case-card.research-data {
+  border-top: 4px solid #2196f3;
+}
+
+.use-case-card.metadata {
+  border-top: 4px solid #4caf50;
+}
+
+.use-case-card.citation {
+  border-top: 4px solid #ff9800;
+}
+
+.use-case-header {
+  background: #f5f5f5;
+  padding: 2rem;
+}
+
+.use-case-header h3 {
+  margin: 0 0 0.5rem 0;
+}
+
+.subtitle {
+  color: #666;
+  font-size: 1.1em;
+  margin: 0;
+}
+
+.use-case-body {
+  padding: 2rem;
+}
+
+.problem-box {
+  background: #ffebee;
+  padding: 1.5rem;
+  border-left: 4px solid #f44336;
+  border-radius: 6px;
+  margin: 1.5rem 0;
+}
+
+.solution-workflow {
+  margin: 2rem 0;
+}
+
+.workflow-step {
+  background: #f5f5f5;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  border-left: 4px solid #2196f3;
+}
+
+.workflow-step.result {
+  background: #e8f5e9;
+  border-left-color: #4caf50;
+}
+
+.workflow-step strong {
+  display: block;
+  color: #1565c0;
+  font-size: 1.1em;
+  margin-bottom: 0.5rem;
+}
+
+.workflow-step.result strong {
+  color: #2e7d32;
+}
+
+.real-impact {
+  background: #e3f2fd;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+}
+
+.real-impact h5 {
+  margin-top: 0;
+  color: #1565c0;
+}
+
+.metadata-structure {
+  margin: 1.5rem 0;
+}
+
+.citation-workflow {
+  background: #f5f5f5;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+.citation-workflow .step {
+  background: white;
+  padding: 1rem;
+  border-radius: 6px;
+  margin: 1rem 0;
+  border-left: 3px solid #ff9800;
+}
+
+.story-section {
+  background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+  padding: 3rem 2rem;
+  border-radius: 12px;
+  margin: 3rem 0;
+}
+
+.story-intro {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.story-context {
+  font-size: 1.15em;
+  color: #4a148c;
+  line-height: 1.8;
+}
+
+.story-timeline {
+  margin: 2rem 0;
+}
+
+.story-chapter {
+  background: white;
+  border-radius: 12px;
+  margin: 2rem 0;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.story-chapter.problem .chapter-header {
+  background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+}
+
+.story-chapter.solution .chapter-header {
+  background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+}
+
+.story-chapter.reflection .chapter-header {
+  background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+}
+
+.chapter-header {
+  background: linear-gradient(135deg, #7b1fa2 0%, #6a1b9a 100%);
+  color: white;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chapter-header h4 {
+  margin: 0;
+  color: white;
+  font-size: 1.3em;
+}
+
+.chapter-header .year {
+  background: rgba(255,255,255,0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+.chapter-content {
+  padding: 2rem;
+}
+
+.challenge {
+  background: #fff3e0;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+.challenge h5 {
+  margin-top: 0;
+  color: #e65100;
+}
+
+.system-design {
+  background: #e3f2fd;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+.system-design h5 {
+  margin-top: 0;
+  color: #1565c0;
+}
+
+.problem-description {
+  background: #ffebee;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+.problem-timeline {
+  margin: 2rem 0;
+}
+
+.problem-timeline .event {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  border-left: 4px solid #2196f3;
+}
+
+.problem-timeline .event.problem-moment {
+  border-left-color: #f44336;
+  background: #fff3e0;
+}
+
+.solution-strategy {
+  margin: 2rem 0;
+}
+
+.strategy {
+  background: #e8f5e9;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  border-left: 4px solid #4caf50;
+}
+
+.strategy strong {
+  display: block;
+  color: #2e7d32;
+  font-size: 1.1em;
+  margin-bottom: 0.5rem;
+}
+
+.lesson-box {
+  background: #fff3e0;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  border: 2px solid #ff9800;
+}
+
+.lesson-box ul {
+  margin: 1rem 0 0 2rem;
+}
+
+.modern-process {
+  background: #e8f5e9;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+.modern-process h5 {
+  margin-top: 0;
+  color: #2e7d32;
+}
+
+.ndsl-history {
+  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+  padding: 2rem;
+  border-radius: 12px;
+  margin: 2rem 0;
+  border: 2px solid #ff9800;
+}
+
+.ndsl-history h5 {
+  margin-top: 0;
+  color: #e65100;
+  font-size: 1.2em;
+}
+
+.history-timeline {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.history-item {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid #ff9800;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.history-item.current {
+  border-left-color: #4caf50;
+  background: #f1f8e9;
+}
+
+.history-item strong {
+  display: block;
+  font-size: 1.3em;
+  color: #ff6f00;
+  margin-bottom: 0.5rem;
+}
+
+.history-item.current strong {
+  color: #2e7d32;
+}
+
+.history-item p {
+  margin: 0.5rem 0;
+  line-height: 1.6;
+}
+
+.history-item .detail {
+  color: #666;
+  font-size: 0.95em;
+}
+
+.history-item .note {
+  color: #2e7d32;
+  font-weight: bold;
+  font-size: 0.95em;
+  margin-top: 0.8rem;
+}
+
+.history-item a {
+  color: #1976d2;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.history-item a:hover {
+  text-decoration: underline;
+}
+
+.history-note {
+  background: rgba(255, 255, 255, 0.8);
+  padding: 1.2rem;
+  border-radius: 6px;
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 1.05em;
+  color: #e65100;
+  font-weight: bold;
+  border: 2px dashed #ff9800;
+}
+
+.reflection-note {
+  background: #e3f2fd;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 1.5rem;
+  font-size: 1.05em;
+  line-height: 1.8;
+  color: #01579b;
+}
+
+.resources-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.resource-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.resource-card.official {
+  border-top: 4px solid #1976d2;
+}
+
+.resource-card.tools {
+  border-top: 4px solid #4caf50;
+}
+
+.resource-card.data {
+  border-top: 4px solid #ff9800;
+}
+
+.resource-card.korean {
+  border-top: 4px solid #7b1fa2;
+}
+
+.resource-card h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.resource-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.resource-card li {
+  margin: 1.5rem 0;
+}
+
+.resource-card a {
+  color: #1976d2;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.05em;
+}
+
+.resource-card a:hover {
+  text-decoration: underline;
+}
+
+.link-desc {
+  color: #666;
+  font-size: 0.9em;
+  font-weight: normal;
+  margin: 0.5rem 0 0 0;
+}
+
+.summary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 3rem;
+  border-radius: 12px;
+  margin-top: 4rem;
+}
+
+.summary h2 {
+  color: white;
+  border-bottom: 2px solid rgba(255,255,255,0.5);
+  margin-bottom: 2rem;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.summary-item {
+  background: rgba(255,255,255,0.2);
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.summary-item h3 {
+  color: white;
+  margin: 0 0 1rem 0;
+  font-size: 1.3em;
+}
+
+.summary-item p {
+  margin: 0.8rem 0;
+  line-height: 1.6;
+}
+
+.final-message {
+  background: rgba(255,255,255,0.3);
+  padding: 2rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.final-message h3 {
+  color: white;
+  margin-top: 0;
+}
+
+.final-message p {
+  font-size: 1.1em;
+  line-height: 1.8;
+  margin: 1rem 0;
+}
+
+@media (max-width: 768px) {
+  .doi-tutorial {
+    padding: 1rem;
+  }
+
+  h1 {
+    font-size: 1.8em;
+  }
+
+  h2 {
+    font-size: 1.5em;
+  }
+
+  .comparison-grid,
+  .stat-grid,
+  .feature-grid,
+  .scenario-comparison,
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .birth-story {
+    grid-template-columns: 1fr;
+  }
+
+  .structure-breakdown {
+    flex-direction: column;
+  }
+
+  .separator {
+    transform: rotate(90deg);
+    margin: 1rem 0;
+  }
+
+  .layer.middle {
+    grid-template-columns: 1fr;
+  }
+
+  .box.foundation {
+    min-width: auto;
+  }
+}
+</style>

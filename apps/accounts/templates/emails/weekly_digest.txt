@@ -1,0 +1,51 @@
+LIS Lab 주간 다이제스트
+{{ week_start|date:"Y년 m월 d일" }} - {{ week_end|date:"Y년 m월 d일" }}
+
+====================================
+
+안녕하세요, {{ user.username }}님!
+
+지난 한 주간 LIS Lab에 새로 추가된 콘텐츠를 소개합니다.
+
+{% if total_contents > 0 %}
+이번 주 요약
+============
+새 콘텐츠: {{ total_contents }}개
+카테고리: {{ total_categories }}개
+예상 시간: {{ estimated_time }}분
+
+{% for category_name, contents in contents_by_category.items %}
+{{ category_name }}
+------------------------------------
+{% for content in contents %}
+{{ content.title }}
+{% if content.difficulty == 'BEGINNER' %}[초급]{% elif content.difficulty == 'INTERMEDIATE' %}[중급]{% elif content.difficulty == 'ADVANCED' %}[고급]{% endif %} ⏱️ {{ content.estimated_time }}분 | 👁️ 조회 {{ content.view_count }}회
+
+{{ content.summary }}
+
+🔗 지금 학습하기: {{ site_url }}/contents/{{ content.slug }}
+
+{% endfor %}
+{% endfor %}
+
+{% else %}
+이번 주에는 새로운 콘텐츠가 없습니다.
+다음 주를 기대해 주세요!
+{% endif %}
+
+====================================
+더 많은 콘텐츠 보기
+{{ site_url }}/contents
+
+====================================
+
+LIS Lab - Library & Information Science Learning Platform
+
+🏠 홈페이지: {{ site_url }}
+⚙️ 메일링 설정: {{ site_url }}/my/mailing-settings
+ℹ️ 소개: {{ site_url }}/about
+
+이 이메일을 더 이상 받고 싶지 않으시면 아래 링크에서 구독을 해지하실 수 있습니다:
+{{ site_url }}/my/mailing-settings
+
+© 2025 LIS Lab. All rights reserved.

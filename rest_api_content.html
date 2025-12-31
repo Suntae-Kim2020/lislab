@@ -1,0 +1,2680 @@
+<div class="rest-api-tutorial">
+  <h1>REST API 완벽 가이드: 웹 서비스의 핵심 이해하기</h1>
+
+  <div class="intro-section">
+    <h2>📚 학습 목표</h2>
+    <ul>
+      <li>REST API의 개념과 원칙 완벽하게 이해하기</li>
+      <li>HTTP 메서드와 상태 코드의 의미와 사용법 익히기</li>
+      <li>실제 REST API 요청과 응답 구조 분석하기</li>
+      <li>도서관 시스템(SUSHI 등)에서의 REST API 활용 이해하기</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>1️⃣ REST API란 무엇인가?</h2>
+
+    <div class="definition-box">
+      <h3>📖 정의</h3>
+      <p>
+        <strong>REST (Representational State Transfer)</strong>는 
+        웹의 장점을 최대한 활용할 수 있는 <strong>아키텍처 스타일</strong>입니다.
+      </p>
+      <p>
+        <strong>REST API</strong>는 REST 원칙을 따르는 
+        <strong>웹 서비스 인터페이스</strong>로, 
+        클라이언트와 서버 간의 데이터 교환을 표준화된 방식으로 수행합니다.
+      </p>
+    </div>
+
+    <div class="analogy-box">
+      <h3>🍕 레스토랑 비유로 이해하기</h3>
+      <div class="analogy-grid">
+        <div class="analogy-item">
+          <h4>레스토랑 시스템</h4>
+          <ul>
+            <li><strong>손님:</strong> 클라이언트 (웹 브라우저, 앱)</li>
+            <li><strong>메뉴판:</strong> API 문서</li>
+            <li><strong>주문:</strong> HTTP 요청 (Request)</li>
+            <li><strong>주방:</strong> 서버</li>
+            <li><strong>음식:</strong> 데이터 (JSON)</li>
+            <li><strong>서빙:</strong> HTTP 응답 (Response)</li>
+          </ul>
+        </div>
+        <div class="analogy-item">
+          <h4>REST API 시스템</h4>
+          <ul>
+            <li><strong>클라이언트:</strong> 데이터를 요청하는 쪽</li>
+            <li><strong>API 엔드포인트:</strong> 주문 가능한 메뉴</li>
+            <li><strong>GET /pizzas:</strong> "피자 목록 주세요"</li>
+            <li><strong>서버:</strong> 요청을 처리하고 데이터 준비</li>
+            <li><strong>JSON 데이터:</strong> 요청한 정보</li>
+            <li><strong>200 OK:</strong> "주문 완료했습니다"</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="key-points">
+      <h3>🎯 REST의 핵심 개념</h3>
+      <div class="concept-grid">
+        <div class="concept-item">
+          <h4>1. 자원 (Resource)</h4>
+          <p>URI로 식별되는 모든 것</p>
+          <code>/users/123</code>
+          <p class="example">→ ID가 123인 사용자</p>
+        </div>
+        <div class="concept-item">
+          <h4>2. 행위 (Verb)</h4>
+          <p>HTTP 메서드로 표현</p>
+          <code>GET, POST, PUT, DELETE</code>
+          <p class="example">→ 조회, 생성, 수정, 삭제</p>
+        </div>
+        <div class="concept-item">
+          <h4>3. 표현 (Representation)</h4>
+          <p>자원의 상태를 나타내는 형식</p>
+          <code>JSON, XML</code>
+          <p class="example">→ 주로 JSON 사용</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>2️⃣ REST의 6가지 원칙</h2>
+
+    <div class="principle-card">
+      <h3>1️⃣ 클라이언트-서버 구조 (Client-Server)</h3>
+      <div class="principle-content">
+        <p><strong>의미:</strong> 클라이언트와 서버가 독립적으로 진화할 수 있어야 합니다.</p>
+        <div class="principle-example">
+          <h4>예시</h4>
+          <p><strong>✅ 좋은 예:</strong></p>
+          <ul>
+            <li>서버: 데이터 저장 및 처리만 담당</li>
+            <li>클라이언트: UI 표시만 담당</li>
+            <li>→ 서버를 변경해도 클라이언트에 영향 없음</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="principle-card">
+      <h3>2️⃣ 무상태성 (Stateless)</h3>
+      <div class="principle-content">
+        <p><strong>의미:</strong> 각 요청은 독립적이며, 서버는 클라이언트의 상태를 저장하지 않습니다.</p>
+
+        <div class="easy-explanation">
+          <h4>🤔 쉽게 설명하면?</h4>
+          <p>
+            서버는 "건망증"이 있습니다.
+            방금 전에 누가 왔는지 전혀 기억하지 못해요.
+            그래서 매번 "저 김도서입니다"라고 신분증을 보여줘야 합니다.
+          </p>
+        </div>
+
+        <div class="principle-example">
+          <h4>📖 도서관 비유</h4>
+          <p><strong>❌ 나쁜 예 (Stateful - 상태 기억):</strong></p>
+          <div class="story-box">
+            <p>첫 방문: "안녕하세요, 저는 학번 2024001 김도서입니다."</p>
+            <p>사서: "네, 기억할게요!" (메모장에 적음)</p>
+            <p>두 번째 방문: "책 대출할게요."</p>
+            <p>사서: "아, 김도서님이시죠? 네!" (메모장 확인)</p>
+          </div>
+          <p class="problem">⚠️ 문제: 사서가 메모장을 잃어버리면? 방문자가 너무 많으면 메모장이 꽉 찰 수 있어요!</p>
+
+          <p><strong>✅ 좋은 예 (Stateless - 상태 저장 안 함):</strong></p>
+          <div class="story-box">
+            <p>첫 방문: "안녕하세요, 저는 학번 2024001 김도서입니다."</p>
+            <p>사서: "여기 회원카드 드릴게요!" (카드에 학번 적혀있음)</p>
+            <p>두 번째 방문: "책 대출할게요. (카드 제시)"</p>
+            <p>사서: "카드 확인... 2024001 김도서님이시군요. 네!"</p>
+          </div>
+          <p class="benefit">✅ 장점: 사서는 아무것도 기억할 필요 없음. 카드만 확인하면 돼요!</p>
+
+          <div class="tech-terms">
+            <h5>💡 용어 설명</h5>
+            <ul>
+              <li><strong>세션 (Session):</strong> 서버의 "메모장". 방문자 정보를 임시로 저장하는 공간</li>
+              <li><strong>토큰 (Token):</strong> "회원카드". 사용자 정보가 담긴 암호화된 문자열</li>
+              <li><strong>무상태성:</strong> 서버가 메모장을 사용하지 않고, 매번 카드를 확인하는 방식</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="principle-card">
+      <h3>3️⃣ 캐시 가능 (Cacheable)</h3>
+      <div class="principle-content">
+        <p><strong>의미:</strong> 응답은 캐시 가능 여부를 명시해야 합니다.</p>
+
+        <div class="easy-explanation">
+          <h4>🤔 캐시(Cache)가 뭐예요?</h4>
+          <p>
+            <strong>캐시</strong>는 "복사본 보관함"입니다.
+            자주 보는 정보를 미리 복사해서 가까운 곳에 보관해두면,
+            멀리 있는 원본을 매번 가져올 필요가 없어요!
+          </p>
+        </div>
+
+        <div class="principle-example">
+          <h4>📖 도서관 비유</h4>
+          <div class="story-box">
+            <p><strong>캐시 없이:</strong></p>
+            <p>학생: "도서관 이용 안내문 주세요."</p>
+            <p>사서: "잠깐만요. 서고에 가서 가져올게요..." (5분 소요)</p>
+            <p>다른 학생: "저도 도서관 이용 안내문 주세요."</p>
+            <p>사서: "또 서고에 가야 하네요..." (5분 소요)</p>
+            <p class="problem">⚠️ 비효율적! 같은 일을 반복하고 있어요.</p>
+          </div>
+
+          <div class="story-box">
+            <p><strong>캐시 사용:</strong></p>
+            <p>학생: "도서관 이용 안내문 주세요."</p>
+            <p>사서: "서고에서 가져올게요... 자, 여기 있어요. 복사본도 책상에 놔둘게요!" (캐시 저장)</p>
+            <p>다른 학생: "저도 도서관 이용 안내문 주세요."</p>
+            <p>사서: "여기 책상에 있어요!" (캐시에서 바로 제공 - 즉시 제공)</p>
+            <p class="benefit">✅ 효율적! 한 번 가져온 건 복사본을 활용해요.</p>
+          </div>
+
+          <div class="tech-terms">
+            <h5>💡 용어 설명</h5>
+            <ul>
+              <li><strong>Cache-Control:</strong> "이 정보는 1시간 동안 복사본을 써도 돼요"라고 알려주는 표시</li>
+              <li><strong>max-age=3600:</strong> 3600초 (1시간) 동안 캐시 사용 가능</li>
+              <li><strong>ETag:</strong> "버전 번호". 원본이 바뀌었는지 확인하는 표시 (예: "v1", "v2")</li>
+            </ul>
+          </div>
+
+          <div class="cache-benefit">
+            <h5>왜 중요한가요?</h5>
+            <p>
+              서버와의 통신을 줄이면:
+            </p>
+            <ul>
+              <li>⚡ 속도가 빨라집니다 (복사본은 내 컴퓨터에 있으니까!)</li>
+              <li>💰 서버 부담이 줄어듭니다</li>
+              <li>📱 데이터 사용량이 줄어듭니다</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="principle-card">
+      <h3>4️⃣ 계층화 시스템 (Layered System)</h3>
+      <div class="principle-content">
+        <p><strong>의미:</strong> 클라이언트는 직접 서버에 연결되었는지 중간 서버를 거쳤는지 알 수 없어야 합니다.</p>
+
+        <div class="easy-explanation">
+          <h4>🤔 쉽게 설명하면?</h4>
+          <p>
+            피자를 주문할 때, 주방에서 직접 받는지 아니면 중간에 배달 대행업체를 거치는지
+            손님은 몰라도 돼요. 그냥 "피자 주문했어요, 피자 받았어요"만 알면 됩니다!
+          </p>
+        </div>
+
+        <div class="principle-example">
+          <h4>📖 도서관 비유</h4>
+          <div class="story-box">
+            <p><strong>간단한 구조:</strong></p>
+            <p>이용자 → (바로) → 사서</p>
+            <p class="note">이용자가 사서에게 직접 요청</p>
+          </div>
+
+          <div class="story-box">
+            <p><strong>계층화된 구조:</strong></p>
+            <p>이용자 → 안내 데스크 → 담당 부서 → 실제 담당 사서</p>
+            <div class="layer-detail">
+              <p>1️⃣ 안내 데스크: "어느 부서로 안내할까요?"</p>
+              <p>2️⃣ 담당 부서: "지금 바쁘지 않은 사서에게 연결할게요"</p>
+              <p>3️⃣ 실제 담당 사서: 실제 업무 처리</p>
+            </div>
+            <p class="benefit">✅ 이용자는 중간 단계를 몰라도 됨. 요청만 하면 결과를 받아요!</p>
+          </div>
+
+          <div class="tech-terms">
+            <h5>💡 용어 설명 (웹 서버의 중간 계층들)</h5>
+            <ul>
+              <li>
+                <strong>Load Balancer (로드 밸런서):</strong> "업무 분배 담당자"
+                <p class="term-desc">
+                  여러 서버 중에서 지금 덜 바쁜 서버로 요청을 보내주는 역할.
+                  마치 은행에서 "2번 창구로 가세요"라고 안내하는 것처럼!
+                </p>
+              </li>
+              <li>
+                <strong>API Gateway (API 게이트웨이):</strong> "입구 경비원"
+                <p class="term-desc">
+                  모든 요청을 처음 받아서 확인하는 곳.
+                  "신분증 확인하고, 어느 부서로 갈지 안내해드릴게요" 같은 역할!
+                </p>
+              </li>
+              <li>
+                <strong>서버 (Server):</strong> "실제 일하는 사람"
+                <p class="term-desc">
+                  실제로 데이터를 처리하고 응답을 만드는 곳
+                </p>
+              </li>
+            </ul>
+          </div>
+
+          <div class="layer-benefit">
+            <h5>왜 이렇게 복잡하게 만들까요?</h5>
+            <ul>
+              <li>🛡️ <strong>보안:</strong> 입구 경비원(Gateway)이 위험한 요청을 막아줘요</li>
+              <li>⚖️ <strong>부하 분산:</strong> 한 서버가 너무 바쁘면 다른 서버로 분산</li>
+              <li>🔧 <strong>유연성:</strong> 중간 계층을 바꿔도 사용자는 모르고 계속 사용 가능</li>
+              <li>📈 <strong>확장성:</strong> 서버를 더 추가해도 사용자는 똑같이 사용</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="principle-card">
+      <h3>5️⃣ 인터페이스 일관성 (Uniform Interface)</h3>
+      <div class="principle-content">
+        <p><strong>의미:</strong> 일관된 인터페이스로 시스템 아키텍처를 단순화합니다.</p>
+
+        <div class="easy-explanation">
+          <h4>🤔 쉽게 설명하면?</h4>
+          <p>모든 도서관이 똑같은 방식으로 운영된다고 생각해보세요.</p>
+          <ul>
+            <li>어느 도서관을 가든 청구기호로 책을 찾고</li>
+            <li>대출증으로 책을 빌리고</li>
+            <li>반납함에 책을 반납합니다</li>
+          </ul>
+          <p>→ REST API도 마찬가지! <strong>어떤 서비스든 같은 규칙으로 작동</strong>하니까 배우기 쉬워요.</p>
+        </div>
+
+        <div class="principle-example">
+          <h4>4가지 제약 조건</h4>
+          <ul>
+            <li><strong>자원 식별:</strong> URI로 자원을 식별
+              <p class="sub-desc">→ 책의 청구기호처럼, 각 데이터에 고유한 주소가 있어요</p>
+            </li>
+            <li><strong>메시지를 통한 자원 조작:</strong> HTTP 메서드 사용
+              <p class="sub-desc">→ GET(조회), POST(생성), PUT(수정), DELETE(삭제) 같은 정해진 동작만 사용</p>
+            </li>
+            <li><strong>자기 서술적 메시지:</strong> 메시지만으로 이해 가능
+              <p class="sub-desc">→ 응답 자체에 "이건 JSON이고, 이렇게 읽으세요" 정보가 다 들어있어요</p>
+            </li>
+            <li><strong>HATEOAS:</strong> 하이퍼링크로 다음 가능한 행동 안내
+              <p class="sub-desc">→ 웹페이지의 링크처럼, "다음엔 이걸 할 수 있어요" 라고 알려줘요</p>
+            </li>
+          </ul>
+        </div>
+
+        <div class="tech-terms">
+          <h5>💡 HATEOAS 쉽게 이해하기</h5>
+          <p><strong>HATEOAS (Hypermedia As The Engine Of Application State)</strong></p>
+          <div class="story-box">
+            <p>웹 브라우저로 쇼핑몰을 생각해보세요:</p>
+            <ol>
+              <li>상품 페이지를 보면 → "장바구니에 담기", "바로 구매하기" 링크가 보여요</li>
+              <li>장바구니에 담으면 → "계속 쇼핑하기", "결제하기" 링크가 보여요</li>
+              <li>결제하면 → "주문 내역 보기", "영수증 출력" 링크가 보여요</li>
+            </ol>
+            <p>→ <strong>다음에 뭘 할 수 있는지 링크로 알려주는 것</strong>이 바로 HATEOAS입니다!</p>
+          </div>
+
+          <h5>예시: 도서 대출 API의 HATEOAS</h5>
+          <pre class="code-block">{
+  "bookId": 123,
+  "title": "도서관학 개론",
+  "status": "available",
+  "_links": {
+    "self": "/api/books/123",
+    "borrow": "/api/books/123/borrow",     ← 대출 가능!
+    "reserve": "/api/books/123/reserve"    ← 예약 가능!
+  }
+}</pre>
+          <p class="term-desc">→ API 응답에 "다음 단계" 링크가 포함되어 있어서, 클라이언트는 이 링크만 따라가면 됩니다.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="principle-card">
+      <h3>6️⃣ Code on Demand (선택사항)</h3>
+      <div class="principle-content">
+        <p><strong>의미:</strong> 서버가 클라이언트에 실행 가능한 코드를 전송할 수 있습니다.</p>
+        <div class="principle-example">
+          <h4>예시</h4>
+          <p>JavaScript 파일을 서버에서 다운로드하여 클라이언트에서 실행</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>3️⃣ HTTP 메서드: CRUD의 기본</h2>
+
+    <div class="method-intro">
+      <p>REST API는 HTTP 메서드를 사용하여 자원에 대한 작업을 정의합니다.</p>
+      <p><strong>CRUD</strong>: Create (생성), Read (조회), Update (수정), Delete (삭제)</p>
+    </div>
+
+    <div class="tech-terms">
+      <h4>💡 자주 나오는 용어 미리 알아두기</h4>
+      <div class="term-box">
+        <h5><strong>멱등성 (Idempotent)</strong></h5>
+        <div class="story-box">
+          <p>같은 요청을 1번 보내든 100번 보내든 <strong>결과가 똑같은</strong> 성질을 말해요.</p>
+
+          <p><strong>📚 도서관 비유:</strong></p>
+          <ul>
+            <li><strong>멱등성 O:</strong> "3층 A-123 서가의 책 목록을 보여주세요"
+              <p class="term-desc">→ 몇 번을 물어봐도 같은 목록이 나와요 (GET)</p>
+            </li>
+            <li><strong>멱등성 O:</strong> "도서 ID 123번을 삭제해주세요"
+              <p class="term-desc">→ 이미 삭제된 책을 다시 삭제해도 결과는 같아요 - "없음" (DELETE)</p>
+            </li>
+            <li><strong>멱등성 X:</strong> "새 도서를 등록해주세요"
+              <p class="term-desc">→ 요청할 때마다 새 책이 계속 추가돼요! (POST)</p>
+            </li>
+          </ul>
+
+          <p><strong>왜 중요한가요?</strong></p>
+          <p>네트워크가 불안정해서 같은 요청이 실수로 여러 번 전송될 수 있어요.
+          멱등성이 있으면 실수로 2번 보내도 안전하지만,
+          POST처럼 멱등성이 없으면 같은 데이터가 중복으로 생성될 수 있습니다.</p>
+        </div>
+      </div>
+
+      <div class="term-box">
+        <h5><strong>안전 (Safe)</strong></h5>
+        <p>서버의 데이터를 <strong>전혀 변경하지 않는</strong> 성질입니다.</p>
+        <ul>
+          <li><strong>안전 O:</strong> GET (조회만 하니까)</li>
+          <li><strong>안전 X:</strong> POST, PUT, DELETE (데이터를 변경하니까)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="method-card get">
+      <div class="method-header">
+        <span class="method-badge">GET</span>
+        <h3>데이터 조회 (Read)</h3>
+      </div>
+      <div class="method-content">
+        <p><strong>용도:</strong> 서버에서 데이터를 가져옵니다. 서버 상태를 변경하지 않습니다.</p>
+        <p><strong>특징:</strong> 안전(Safe), 멱등성(Idempotent), 캐시 가능</p>
+        
+        <h4>실제 예시 1: 도서 목록 조회</h4>
+        <div class="request-box">
+          <h5>📤 요청 (Request)</h5>
+          <pre class="http-request">GET /api/books HTTP/1.1
+Host: library.example.com
+Accept: application/json
+Authorization: Bearer abc123token</pre>
+        </div>
+
+        <div class="response-box">
+          <h5>📥 응답 (Response)</h5>
+          <pre class="http-response">HTTP/1.1 200 OK
+Content-Type: application/json
+Cache-Control: max-age=3600
+
+{
+  "books": [
+    {
+      "id": 1,
+      "title": "도서관학 개론",
+      "author": "김도서",
+      "isbn": "978-89-1234-567-8",
+      "status": "available"
+    },
+    {
+      "id": 2,
+      "title": "정보검색론",
+      "author": "이정보",
+      "isbn": "978-89-9876-543-2",
+      "status": "checked_out"
+    }
+  ],
+  "total": 2,
+  "page": 1
+}</pre>
+        </div>
+
+        <h4>실제 예시 2: 특정 도서 조회</h4>
+        <div class="request-box">
+          <h5>📤 요청</h5>
+          <pre class="http-request">GET /api/books/1 HTTP/1.1
+Host: library.example.com
+Accept: application/json</pre>
+        </div>
+
+        <div class="response-box">
+          <h5>📥 응답</h5>
+          <pre class="http-response">HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "id": 1,
+  "title": "도서관학 개론",
+  "author": "김도서",
+  "isbn": "978-89-1234-567-8",
+  "publisher": "학문사",
+  "published_date": "2024-01-15",
+  "status": "available",
+  "location": "3층 서고 A-123"
+}</pre>
+        </div>
+
+        <div class="method-note">
+          <p><strong>💡 주의:</strong> GET은 절대 데이터를 변경하면 안 됩니다!</p>
+          <p>❌ <code>GET /api/books/1/delete</code> ← 이렇게 하면 안 돼요!</p>
+          <p>✅ <code>DELETE /api/books/1</code> ← DELETE 메서드를 사용하세요!</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="method-card post">
+      <div class="method-header">
+        <span class="method-badge">POST</span>
+        <h3>데이터 생성 (Create)</h3>
+      </div>
+      <div class="method-content">
+        <p><strong>용도:</strong> 서버에 새로운 데이터를 생성합니다.</p>
+        <p><strong>특징:</strong> 안전하지 않음, 멱등성 없음</p>
+        
+        <h4>실제 예시: 새 도서 등록</h4>
+        <div class="request-box">
+          <h5>📤 요청</h5>
+          <pre class="http-request">POST /api/books HTTP/1.1
+Host: library.example.com
+Content-Type: application/json
+Authorization: Bearer abc123token
+
+{
+  "title": "메타데이터의 이해",
+  "author": "박메타",
+  "isbn": "978-89-5555-123-4",
+  "publisher": "정보출판사",
+  "published_date": "2024-12-01"
+}</pre>
+        </div>
+
+        <div class="response-box">
+          <h5>📥 응답</h5>
+          <pre class="http-response">HTTP/1.1 201 Created
+Content-Type: application/json
+Location: /api/books/3
+
+{
+  "id": 3,
+  "title": "메타데이터의 이해",
+  "author": "박메타",
+  "isbn": "978-89-5555-123-4",
+  "publisher": "정보출판사",
+  "published_date": "2024-12-01",
+  "status": "available",
+  "created_at": "2025-01-15T10:30:00Z"
+}</pre>
+        </div>
+
+        <div class="method-note">
+          <p><strong>💡 상태 코드:</strong> 성공 시 <code>201 Created</code> 반환</p>
+          <p><strong>Location 헤더:</strong> 생성된 자원의 URI 제공</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="method-card put">
+      <div class="method-header">
+        <span class="method-badge">PUT</span>
+        <h3>데이터 전체 수정 (Update/Replace)</h3>
+      </div>
+      <div class="method-content">
+        <p><strong>용도:</strong> 기존 데이터를 완전히 교체합니다.</p>
+        <p><strong>특징:</strong> 안전하지 않음, 멱등성 있음</p>
+        
+        <h4>실제 예시: 도서 정보 전체 수정</h4>
+        <div class="request-box">
+          <h5>📤 요청</h5>
+          <pre class="http-request">PUT /api/books/3 HTTP/1.1
+Host: library.example.com
+Content-Type: application/json
+Authorization: Bearer abc123token
+
+{
+  "title": "메타데이터의 이해 (개정판)",
+  "author": "박메타",
+  "isbn": "978-89-5555-123-4",
+  "publisher": "정보출판사",
+  "published_date": "2025-01-01",
+  "edition": "2nd"
+}</pre>
+        </div>
+
+        <div class="response-box">
+          <h5>📥 응답</h5>
+          <pre class="http-response">HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "id": 3,
+  "title": "메타데이터의 이해 (개정판)",
+  "author": "박메타",
+  "isbn": "978-89-5555-123-4",
+  "publisher": "정보출판사",
+  "published_date": "2025-01-01",
+  "edition": "2nd",
+  "status": "available",
+  "updated_at": "2025-01-15T11:00:00Z"
+}</pre>
+        </div>
+
+        <div class="method-note">
+          <p><strong>💡 멱등성:</strong> 같은 요청을 여러 번 보내도 결과가 동일</p>
+          <p><strong>⚠️ 주의:</strong> 모든 필드를 포함해야 함 (누락된 필드는 삭제될 수 있음)</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="method-card patch">
+      <div class="method-header">
+        <span class="method-badge">PATCH</span>
+        <h3>데이터 부분 수정 (Partial Update)</h3>
+      </div>
+      <div class="method-content">
+        <p><strong>용도:</strong> 기존 데이터의 일부만 수정합니다.</p>
+        <p><strong>특징:</strong> 안전하지 않음, 멱등성 있음</p>
+        
+        <h4>실제 예시: 도서 상태만 변경</h4>
+        <div class="request-box">
+          <h5>📤 요청</h5>
+          <pre class="http-request">PATCH /api/books/3 HTTP/1.1
+Host: library.example.com
+Content-Type: application/json
+Authorization: Bearer abc123token
+
+{
+  "status": "checked_out"
+}</pre>
+        </div>
+
+        <div class="response-box">
+          <h5>📥 응답</h5>
+          <pre class="http-response">HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "id": 3,
+  "title": "메타데이터의 이해 (개정판)",
+  "author": "박메타",
+  "isbn": "978-89-5555-123-4",
+  "publisher": "정보출판사",
+  "published_date": "2025-01-01",
+  "edition": "2nd",
+  "status": "checked_out",
+  "updated_at": "2025-01-15T14:30:00Z"
+}</pre>
+        </div>
+
+        <div class="method-note">
+          <p><strong>💡 PUT vs PATCH:</strong></p>
+          <ul>
+            <li>PUT: 전체 데이터 교체 → 모든 필드 필요</li>
+            <li>PATCH: 부분 수정 → 변경할 필드만 전송</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="method-card delete">
+      <div class="method-header">
+        <span class="method-badge">DELETE</span>
+        <h3>데이터 삭제 (Delete)</h3>
+      </div>
+      <div class="method-content">
+        <p><strong>용도:</strong> 서버에서 데이터를 삭제합니다.</p>
+        <p><strong>특징:</strong> 안전하지 않음, 멱등성 있음</p>
+        
+        <h4>실제 예시: 도서 삭제</h4>
+        <div class="request-box">
+          <h5>📤 요청</h5>
+          <pre class="http-request">DELETE /api/books/3 HTTP/1.1
+Host: library.example.com
+Authorization: Bearer abc123token</pre>
+        </div>
+
+        <div class="response-box">
+          <h5>📥 응답</h5>
+          <pre class="http-response">HTTP/1.1 204 No Content</pre>
+        </div>
+
+        <div class="method-note">
+          <p><strong>💡 상태 코드:</strong></p>
+          <ul>
+            <li><code>204 No Content</code>: 삭제 성공, 응답 본문 없음</li>
+            <li><code>200 OK</code>: 삭제 성공, 삭제된 자원 정보 반환</li>
+          </ul>
+          <p><strong>멱등성:</strong> 삭제된 자원을 다시 삭제해도 결과는 동일 (없음)</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="method-comparison">
+      <h3>📊 HTTP 메서드 비교표</h3>
+      <table class="comparison-table">
+        <tr>
+          <th>메서드</th>
+          <th>용도</th>
+          <th>안전성</th>
+          <th>멱등성</th>
+          <th>캐시 가능</th>
+          <th>요청 본문</th>
+        </tr>
+        <tr>
+          <td><strong>GET</strong></td>
+          <td>조회</td>
+          <td>✅ 안전</td>
+          <td>✅ 있음</td>
+          <td>✅ 가능</td>
+          <td>❌ 없음</td>
+        </tr>
+        <tr>
+          <td><strong>POST</strong></td>
+          <td>생성</td>
+          <td>❌ 불안전</td>
+          <td>❌ 없음</td>
+          <td>대부분 불가</td>
+          <td>✅ 있음</td>
+        </tr>
+        <tr>
+          <td><strong>PUT</strong></td>
+          <td>전체 수정</td>
+          <td>❌ 불안전</td>
+          <td>✅ 있음</td>
+          <td>❌ 불가</td>
+          <td>✅ 있음</td>
+        </tr>
+        <tr>
+          <td><strong>PATCH</strong></td>
+          <td>부분 수정</td>
+          <td>❌ 불안전</td>
+          <td>✅ 있음</td>
+          <td>❌ 불가</td>
+          <td>✅ 있음</td>
+        </tr>
+        <tr>
+          <td><strong>DELETE</strong></td>
+          <td>삭제</td>
+          <td>❌ 불안전</td>
+          <td>✅ 있음</td>
+          <td>❌ 불가</td>
+          <td>대부분 없음</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>4️⃣ HTTP 상태 코드: 서버의 응답 이해하기</h2>
+
+    <div class="status-intro">
+      <p>HTTP 상태 코드는 서버가 요청을 어떻게 처리했는지 알려주는 3자리 숫자입니다.</p>
+    </div>
+
+    <div class="status-category">
+      <h3>2xx: 성공 (Success)</h3>
+      <div class="status-grid">
+        <div class="status-card success">
+          <h4>200 OK</h4>
+          <p>요청이 성공적으로 처리됨</p>
+          <div class="status-example">
+            <p><strong>사용 시점:</strong> GET, PUT, PATCH 성공</p>
+            <pre class="code">GET /api/books/1 → 200 OK</pre>
+          </div>
+        </div>
+
+        <div class="status-card success">
+          <h4>201 Created</h4>
+          <p>새로운 자원이 생성됨</p>
+          <div class="status-example">
+            <p><strong>사용 시점:</strong> POST로 새 데이터 생성 성공</p>
+            <pre class="code">POST /api/books → 201 Created
+Location: /api/books/42</pre>
+          </div>
+        </div>
+
+        <div class="status-card success">
+          <h4>204 No Content</h4>
+          <p>요청은 성공했지만 반환할 내용 없음</p>
+          <div class="status-example">
+            <p><strong>사용 시점:</strong> DELETE 성공</p>
+            <pre class="code">DELETE /api/books/42 → 204 No Content</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="status-category">
+      <h3>3xx: 리다이렉션 (Redirection)</h3>
+      <div class="status-grid">
+        <div class="status-card redirect">
+          <h4>301 Moved Permanently</h4>
+          <p>자원이 영구적으로 이동됨</p>
+          <div class="status-example">
+            <pre class="code">GET /api/old-books → 301
+Location: /api/books</pre>
+          </div>
+        </div>
+
+        <div class="status-card redirect">
+          <h4>304 Not Modified</h4>
+          <p>캐시된 버전 사용 가능</p>
+          <div class="status-example">
+            <pre class="code">GET /api/books
+If-None-Match: "abc123"
+→ 304 Not Modified</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="status-category">
+      <h3>4xx: 클라이언트 오류 (Client Error)</h3>
+      <div class="status-grid">
+        <div class="status-card client-error">
+          <h4>400 Bad Request</h4>
+          <p>잘못된 요청 형식</p>
+          <div class="status-example">
+            <p><strong>원인:</strong> JSON 형식 오류, 필수 필드 누락</p>
+            <pre class="code">POST /api/books
+{ "titel": "오타!" }  ← title이 아님
+→ 400 Bad Request
+{
+  "error": "title 필드는 필수입니다"
+}</pre>
+          </div>
+        </div>
+
+        <div class="status-card client-error">
+          <h4>401 Unauthorized</h4>
+          <p>인증 필요</p>
+          <div class="status-example">
+            <p><strong>원인:</strong> 인증 토큰 없음 또는 만료</p>
+            <pre class="code">GET /api/books
+→ 401 Unauthorized
+{
+  "error": "인증이 필요합니다"
+}</pre>
+          </div>
+        </div>
+
+        <div class="status-card client-error">
+          <h4>403 Forbidden</h4>
+          <p>권한 없음</p>
+          <div class="status-example">
+            <p><strong>원인:</strong> 인증은 되었지만 권한 부족</p>
+            <pre class="code">DELETE /api/books/1
+→ 403 Forbidden
+{
+  "error": "관리자 권한이 필요합니다"
+}</pre>
+          </div>
+        </div>
+
+        <div class="status-card client-error">
+          <h4>404 Not Found</h4>
+          <p>자원을 찾을 수 없음</p>
+          <div class="status-example">
+            <p><strong>원인:</strong> 존재하지 않는 자원 요청</p>
+            <pre class="code">GET /api/books/999
+→ 404 Not Found
+{
+  "error": "도서를 찾을 수 없습니다"
+}</pre>
+          </div>
+        </div>
+
+        <div class="status-card client-error">
+          <h4>409 Conflict</h4>
+          <p>자원 충돌</p>
+          <div class="status-example">
+            <p><strong>원인:</strong> 중복된 데이터, 상태 충돌</p>
+            <pre class="code">POST /api/books
+{ "isbn": "이미-존재함" }
+→ 409 Conflict
+{
+  "error": "해당 ISBN이 이미 등록되어 있습니다"
+}</pre>
+          </div>
+        </div>
+
+        <div class="status-card client-error">
+          <h4>429 Too Many Requests</h4>
+          <p>요청 횟수 초과</p>
+          <div class="status-example">
+            <p><strong>원인:</strong> Rate limit 초과</p>
+            <pre class="code">GET /api/books
+→ 429 Too Many Requests
+Retry-After: 3600
+{
+  "error": "시간당 요청 한도 초과"
+}</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="status-category">
+      <h3>5xx: 서버 오류 (Server Error)</h3>
+      <div class="status-grid">
+        <div class="status-card server-error">
+          <h4>500 Internal Server Error</h4>
+          <p>서버 내부 오류</p>
+          <div class="status-example">
+            <p><strong>원인:</strong> 서버 코드 오류, DB 연결 실패</p>
+            <pre class="code">GET /api/books/1
+→ 500 Internal Server Error
+{
+  "error": "서버 오류가 발생했습니다"
+}</pre>
+          </div>
+        </div>
+
+        <div class="status-card server-error">
+          <h4>503 Service Unavailable</h4>
+          <p>서비스 일시 중단</p>
+          <div class="status-example">
+            <p><strong>원인:</strong> 서버 점검, 과부하</p>
+            <pre class="code">GET /api/books
+→ 503 Service Unavailable
+Retry-After: 3600</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="status-flowchart">
+      <h3>🔄 상태 코드 선택 가이드</h3>
+      <div class="flowchart">
+        <div class="flow-question">요청이 성공했나요?</div>
+        <div class="flow-branches">
+          <div class="flow-branch">
+            <div class="flow-answer">✅ 예</div>
+            <div class="flow-question">새 자원을 만들었나요?</div>
+            <div class="flow-sub-branches">
+              <div class="flow-result">✅ 예 → <strong>201 Created</strong></div>
+              <div class="flow-result">❌ 아니오 → <strong>200 OK</strong> 또는 <strong>204 No Content</strong></div>
+            </div>
+          </div>
+          <div class="flow-branch">
+            <div class="flow-answer">❌ 아니오</div>
+            <div class="flow-question">누구 잘못인가요?</div>
+            <div class="flow-sub-branches">
+              <div class="flow-result">클라이언트 → <strong>4xx</strong></div>
+              <div class="flow-result">서버 → <strong>5xx</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>5️⃣ URI 설계 원칙: 좋은 API 만들기</h2>
+
+    <div class="uri-principles">
+      <div class="principle-box">
+        <h3>1️⃣ 명사를 사용하고, 복수형을 선호</h3>
+        <div class="principle-examples">
+          <p>✅ <code>/api/books</code></p>
+          <p>✅ <code>/api/users</code></p>
+          <p>❌ <code>/api/book</code> (단수형)</p>
+          <p>❌ <code>/api/getBooks</code> (동사 사용)</p>
+        </div>
+      </div>
+
+      <div class="principle-box">
+        <h3>2️⃣ 계층 구조를 표현</h3>
+        <div class="principle-examples">
+          <p>✅ <code>/api/books/123/reviews</code> → 도서 123번의 리뷰 목록</p>
+          <p>✅ <code>/api/books/123/reviews/456</code> → 도서 123번의 리뷰 456번</p>
+          <p>✅ <code>/api/authors/789/books</code> → 저자 789번의 도서 목록</p>
+        </div>
+      </div>
+
+      <div class="principle-box">
+        <h3>3️⃣ 소문자와 하이픈 사용</h3>
+        <div class="principle-examples">
+          <p>✅ <code>/api/book-categories</code></p>
+          <p>✅ <code>/api/user-profiles</code></p>
+          <p>❌ <code>/api/bookCategories</code> (카멜케이스)</p>
+          <p>❌ <code>/api/book_categories</code> (언더스코어)</p>
+        </div>
+      </div>
+
+      <div class="principle-box">
+        <h3>4️⃣ 파일 확장자를 사용하지 않음</h3>
+        <div class="principle-examples">
+          <p>✅ <code>/api/books/123</code></p>
+          <p>❌ <code>/api/books/123.json</code></p>
+          <p class="note">대신 Accept 헤더 사용: <code>Accept: application/json</code></p>
+        </div>
+      </div>
+
+      <div class="principle-box">
+        <h3>5️⃣ 쿼리 파라미터로 필터링, 정렬, 페이징</h3>
+        <div class="principle-examples">
+          <p>✅ <code>/api/books?category=fiction&sort=title&page=2&limit=20</code></p>
+          <p>✅ <code>/api/books?author=김도서&status=available</code></p>
+          <p>❌ <code>/api/books/fiction/sorted-by-title/page-2</code></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="uri-examples">
+      <h3>📖 실전 URI 설계 예시</h3>
+      <table class="uri-table">
+        <tr>
+          <th>기능</th>
+          <th>HTTP 메서드</th>
+          <th>URI</th>
+          <th>설명</th>
+        </tr>
+        <tr>
+          <td>도서 목록 조회</td>
+          <td>GET</td>
+          <td><code>/api/books</code></td>
+          <td>모든 도서 목록</td>
+        </tr>
+        <tr>
+          <td>도서 검색</td>
+          <td>GET</td>
+          <td><code>/api/books?q=메타데이터</code></td>
+          <td>제목/저자 검색</td>
+        </tr>
+        <tr>
+          <td>특정 도서 조회</td>
+          <td>GET</td>
+          <td><code>/api/books/123</code></td>
+          <td>ID 123 도서 상세</td>
+        </tr>
+        <tr>
+          <td>새 도서 등록</td>
+          <td>POST</td>
+          <td><code>/api/books</code></td>
+          <td>새 도서 생성</td>
+        </tr>
+        <tr>
+          <td>도서 정보 수정</td>
+          <td>PUT/PATCH</td>
+          <td><code>/api/books/123</code></td>
+          <td>ID 123 도서 수정</td>
+        </tr>
+        <tr>
+          <td>도서 삭제</td>
+          <td>DELETE</td>
+          <td><code>/api/books/123</code></td>
+          <td>ID 123 도서 삭제</td>
+        </tr>
+        <tr>
+          <td>도서 리뷰 목록</td>
+          <td>GET</td>
+          <td><code>/api/books/123/reviews</code></td>
+          <td>ID 123 도서의 리뷰</td>
+        </tr>
+        <tr>
+          <td>리뷰 작성</td>
+          <td>POST</td>
+          <td><code>/api/books/123/reviews</code></td>
+          <td>새 리뷰 작성</td>
+        </tr>
+        <tr>
+          <td>저자의 도서 목록</td>
+          <td>GET</td>
+          <td><code>/api/authors/456/books</code></td>
+          <td>저자 456의 도서</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>6️⃣ 도서관 시스템의 REST API 활용</h2>
+
+    <div class="library-intro">
+      <p>도서관 시스템에서 REST API는 어떻게 활용될까요? 실제 사례를 살펴봅시다.</p>
+    </div>
+
+    <div class="library-case">
+      <h3>📚 사례 1: SUSHI 프로토콜</h3>
+      <div class="case-content">
+        <p>
+          <strong>SUSHI (Standardized Usage Statistics Harvesting Initiative)</strong>는 
+          전자저널 이용통계를 자동으로 수집하는 REST API입니다.
+        </p>
+
+        <h4>SUSHI API 요청 예시</h4>
+        <div class="request-box">
+          <pre class="http-request">GET /sushi/reports/tr_j1?customer_id=JBNU&begin_date=2024-12-01&end_date=2024-12-31 HTTP/1.1
+Host: api.elsevier.com
+Accept: application/json
+Authorization: Bearer abc123token</pre>
+        </div>
+
+        <div class="response-box">
+          <h5>JSON 응답 (COUNTER R5 보고서)</h5>
+          <pre class="http-response">{
+  "Report_Header": {
+    "Report_Name": "Title Master Report",
+    "Report_ID": "TR",
+    "Institution_Name": "Jeonbuk National University"
+  },
+  "Report_Items": [
+    {
+      "Title": "Nature",
+      "Performance": [
+        {
+          "Instance": [
+            {
+              "Metric_Type": "Total_Item_Requests",
+              "Count": 1523
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}</pre>
+        </div>
+
+        <div class="case-note">
+          <p><strong>💡 REST 원칙 적용:</strong></p>
+          <ul>
+            <li><strong>GET 메서드:</strong> 데이터 조회만 수행 (안전)</li>
+            <li><strong>쿼리 파라미터:</strong> 기간, 기관 필터링</li>
+            <li><strong>JSON 응답:</strong> 표준화된 데이터 형식</li>
+            <li><strong>무상태성:</strong> 매 요청마다 인증 토큰 전송</li>
+          </ul>
+          <p class="learn-more">
+            👉 SUSHI에 대해 더 알고 싶다면: 
+            <a href="/contents?category=search-protocol">SUSHI 프로토콜 학습하기</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="library-case">
+      <h3>📖 사례 2: 통합도서관 시스템 (ILS) API</h3>
+      <div class="case-content">
+        <p>최신 ILS는 REST API를 제공하여 외부 시스템과 통합이 가능합니다.</p>
+
+        <h4>도서 대출 API 예시</h4>
+        <div class="request-box">
+          <h5>대출 처리</h5>
+          <pre class="http-request">POST /api/checkouts HTTP/1.1
+Host: library.example.com
+Content-Type: application/json
+Authorization: Bearer librarian_token
+
+{
+  "user_id": 2024001,
+  "book_id": 123,
+  "due_date": "2025-02-15"
+}</pre>
+        </div>
+
+        <div class="response-box">
+          <h5>대출 완료 응답</h5>
+          <pre class="http-response">HTTP/1.1 201 Created
+Location: /api/checkouts/7890
+
+{
+  "checkout_id": 7890,
+  "user_id": 2024001,
+  "book_id": 123,
+  "checkout_date": "2025-01-15T14:30:00Z",
+  "due_date": "2025-02-15T23:59:59Z",
+  "status": "active"
+}</pre>
+        </div>
+
+        <h4>대출 현황 조회</h4>
+        <div class="request-box">
+          <pre class="http-request">GET /api/users/2024001/checkouts HTTP/1.1
+Host: library.example.com
+Authorization: Bearer user_token</pre>
+        </div>
+
+        <div class="response-box">
+          <pre class="http-response">HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "checkouts": [
+    {
+      "checkout_id": 7890,
+      "book": {
+        "id": 123,
+        "title": "도서관학 개론",
+        "author": "김도서"
+      },
+      "checkout_date": "2025-01-15T14:30:00Z",
+      "due_date": "2025-02-15T23:59:59Z",
+      "status": "active"
+    }
+  ],
+  "total": 1
+}</pre>
+        </div>
+
+        <h4>반납 처리</h4>
+        <div class="request-box">
+          <pre class="http-request">PATCH /api/checkouts/7890 HTTP/1.1
+Host: library.example.com
+Content-Type: application/json
+Authorization: Bearer librarian_token
+
+{
+  "status": "returned",
+  "return_date": "2025-02-10T10:00:00Z"
+}</pre>
+        </div>
+
+        <div class="response-box">
+          <pre class="http-response">HTTP/1.1 200 OK
+
+{
+  "checkout_id": 7890,
+  "status": "returned",
+  "return_date": "2025-02-10T10:00:00Z"
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="library-case">
+      <h3>🔍 사례 3: 오픈 API 활용</h3>
+      <div class="case-content">
+        <p>국립중앙도서관 API, 교보문고 API 등 공공 도서관 API 활용 예시</p>
+
+        <h4>국립중앙도서관 서지 검색 API</h4>
+        <div class="request-box">
+          <pre class="http-request">GET /api/search?query=메타데이터&type=title&page=1&per_page=10 HTTP/1.1
+Host: nl.go.kr
+Accept: application/json
+API-Key: your-api-key</pre>
+        </div>
+
+        <div class="response-box">
+          <pre class="http-response">{
+  "results": [
+    {
+      "title": "메타데이터의 이해",
+      "author": "박메타",
+      "publisher": "정보출판사",
+      "published_year": "2024",
+      "isbn": "978-89-5555-123-4",
+      "call_number": "025.3 박34ㅁ"
+    }
+  ],
+  "total_count": 42,
+  "page": 1,
+  "per_page": 10
+}</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>7️⃣ 실습: REST API 테스트하기</h2>
+
+    <div class="practice-intro">
+      <p>직접 REST API를 테스트해보면서 학습한 내용을 확인해봅시다!</p>
+    </div>
+
+    <div class="practice-tool">
+      <h3>🛠️ 도구: cURL (커맨드라인)</h3>
+      <p>터미널에서 바로 API를 테스트할 수 있는 도구입니다.</p>
+
+      <h4>1. GET 요청 보내기</h4>
+      <div class="code-example">
+        <pre class="code-block">curl https://api.github.com/users/octocat</pre>
+        <p class="code-desc">GitHub API로 사용자 정보 조회</p>
+      </div>
+
+      <h4>2. 헤더 포함하여 요청</h4>
+      <div class="code-example">
+        <pre class="code-block">curl -H "Accept: application/json" \
+     https://api.github.com/users/octocat</pre>
+        <p class="code-desc">Accept 헤더로 JSON 형식 요청</p>
+      </div>
+
+      <h4>3. POST 요청 보내기</h4>
+      <div class="code-example">
+        <pre class="code-block">curl -X POST \
+     -H "Content-Type: application/json" \
+     -d '{"title":"New Book","author":"Kim"}' \
+     https://api.example.com/books</pre>
+        <p class="code-desc">JSON 데이터를 포함한 POST 요청</p>
+      </div>
+
+      <h4>4. 인증 토큰 포함</h4>
+      <div class="code-example">
+        <pre class="code-block">curl -H "Authorization: Bearer YOUR_TOKEN" \
+     https://api.example.com/protected-resource</pre>
+        <p class="code-desc">Bearer 토큰으로 인증</p>
+      </div>
+    </div>
+
+    <div class="practice-tool">
+      <h3>🌐 도구: 브라우저 개발자 도구</h3>
+      <p>웹 브라우저의 개발자 도구(F12)로 네트워크 요청을 확인할 수 있습니다.</p>
+
+      <div class="browser-steps">
+        <div class="step">
+          <strong>1단계:</strong> F12 키를 눌러 개발자 도구 열기
+        </div>
+        <div class="step">
+          <strong>2단계:</strong> Network 탭 선택
+        </div>
+        <div class="step">
+          <strong>3단계:</strong> 웹페이지에서 액션 수행 (클릭, 검색 등)
+        </div>
+        <div class="step">
+          <strong>4단계:</strong> API 요청 확인 (Request Headers, Response 등)
+        </div>
+      </div>
+    </div>
+
+    <div class="practice-tool">
+      <h3>📮 도구: Postman</h3>
+      <p>GUI 기반 API 테스트 도구로, 가장 널리 사용됩니다.</p>
+      <p><strong>다운로드:</strong> <a href="https://www.postman.com/downloads/" target="_blank">https://www.postman.com/downloads/</a></p>
+      
+      <div class="postman-features">
+        <h4>주요 기능</h4>
+        <ul>
+          <li>직관적인 GUI로 요청 작성</li>
+          <li>요청 히스토리 저장</li>
+          <li>환경 변수 관리</li>
+          <li>자동 테스트 작성</li>
+          <li>팀 협업 기능</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="practice-exercise">
+      <h3>🎯 실습 과제</h3>
+      <div class="exercise-box">
+        <h4>과제: JSONPlaceholder API 테스트</h4>
+        <p>
+          <strong>JSONPlaceholder</strong>는 무료 REST API 테스트 서비스입니다.<br>
+          URL: <a href="https://jsonplaceholder.typicode.com/" target="_blank">https://jsonplaceholder.typicode.com/</a>
+        </p>
+
+        <div class="exercise-steps">
+          <div class="exercise-step">
+            <strong>1. 게시물 목록 조회</strong>
+            <pre class="code">GET https://jsonplaceholder.typicode.com/posts</pre>
+            <p>예상 결과: 100개의 게시물 배열</p>
+          </div>
+
+          <div class="exercise-step">
+            <strong>2. 특정 게시물 조회</strong>
+            <pre class="code">GET https://jsonplaceholder.typicode.com/posts/1</pre>
+            <p>예상 결과: ID 1번 게시물 객체</p>
+          </div>
+
+          <div class="exercise-step">
+            <strong>3. 새 게시물 생성</strong>
+            <pre class="code">POST https://jsonplaceholder.typicode.com/posts
+Content-Type: application/json
+
+{
+  "title": "My First Post",
+  "body": "This is my post content",
+  "userId": 1
+}</pre>
+            <p>예상 결과: 201 Created + 생성된 게시물 정보</p>
+          </div>
+
+          <div class="exercise-step">
+            <strong>4. 게시물 수정</strong>
+            <pre class="code">PUT https://jsonplaceholder.typicode.com/posts/1
+
+{
+  "id": 1,
+  "title": "Updated Title",
+  "body": "Updated content",
+  "userId": 1
+}</pre>
+            <p>예상 결과: 200 OK + 수정된 게시물</p>
+          </div>
+
+          <div class="exercise-step">
+            <strong>5. 게시물 삭제</strong>
+            <pre class="code">DELETE https://jsonplaceholder.typicode.com/posts/1</pre>
+            <p>예상 결과: 200 OK (실제로는 삭제되지 않음, 테스트 서버이므로)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>8️⃣ 보안과 인증</h2>
+
+    <div class="security-intro">
+      <p>REST API는 공개된 인터페이스이므로 보안이 매우 중요합니다.</p>
+    </div>
+
+    <div class="security-method">
+      <h3>1️⃣ API 키 (API Key)</h3>
+      <div class="method-content">
+        <p><strong>사용 방법:</strong> 요청 헤더 또는 쿼리 파라미터에 포함</p>
+        
+        <h4>헤더 방식</h4>
+        <pre class="code-block">GET /api/data HTTP/1.1
+X-API-Key: abc123xyz789</pre>
+
+        <h4>쿼리 파라미터 방식</h4>
+        <pre class="code-block">GET /api/data?api_key=abc123xyz789 HTTP/1.1</pre>
+
+        <div class="security-note">
+          <p><strong>✅ 장점:</strong> 간단하고 구현 쉬움</p>
+          <p><strong>❌ 단점:</strong> 키가 노출되면 보안 위험, 사용자별 권한 관리 어려움</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="security-method">
+      <h3>2️⃣ OAuth 2.0</h3>
+      <div class="method-content">
+        <p><strong>사용 방법:</strong> 토큰 기반 인증, 가장 널리 사용되는 방식</p>
+        
+        <h4>인증 흐름</h4>
+        <div class="oauth-flow">
+          <div class="oauth-step">
+            <strong>1. 클라이언트:</strong> 인증 요청
+          </div>
+          <div class="oauth-step">
+            <strong>2. 인증 서버:</strong> 사용자 로그인 페이지 표시
+          </div>
+          <div class="oauth-step">
+            <strong>3. 사용자:</strong> 로그인 및 권한 승인
+          </div>
+          <div class="oauth-step">
+            <strong>4. 인증 서버:</strong> Access Token 발급
+          </div>
+          <div class="oauth-step">
+            <strong>5. 클라이언트:</strong> Access Token으로 API 요청
+          </div>
+        </div>
+
+        <h4>토큰 사용 예시</h4>
+        <pre class="code-block">GET /api/user/profile HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</pre>
+
+        <div class="security-note">
+          <p><strong>✅ 장점:</strong> 안전하고 표준화됨, 세밀한 권한 제어 가능</p>
+          <p><strong>❌ 단점:</strong> 구현 복잡도 높음</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="security-method">
+      <h3>3️⃣ JWT (JSON Web Token)</h3>
+      <div class="method-content">
+        <p><strong>사용 방법:</strong> 자체 포함형 토큰, 서버 상태 저장 불필요</p>
+        
+        <h4>JWT 구조</h4>
+        <div class="jwt-structure">
+          <div class="jwt-part header">
+            <strong>Header</strong><br>
+            <code>{"alg": "HS256", "typ": "JWT"}</code>
+          </div>
+          <div class="jwt-separator">.</div>
+          <div class="jwt-part payload">
+            <strong>Payload</strong><br>
+            <code>{"userId": 123, "role": "admin"}</code>
+          </div>
+          <div class="jwt-separator">.</div>
+          <div class="jwt-part signature">
+            <strong>Signature</strong><br>
+            <code>암호화된 서명</code>
+          </div>
+        </div>
+
+        <h4>실제 JWT</h4>
+        <pre class="code-block">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
+eyJ1c2VySWQiOjEyMywicm9sZSI6ImFkbWluIn0.
+SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</pre>
+
+        <div class="security-note">
+          <p><strong>✅ 장점:</strong> 무상태성, 서버 부하 감소, 다양한 시스템 간 공유 가능</p>
+          <p><strong>❌ 단점:</strong> 토큰 크기가 큼, 토큰 무효화 어려움</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="security-best-practices">
+      <h3>🔒 보안 Best Practices</h3>
+      <ul>
+        <li>✅ <strong>HTTPS 사용 필수:</strong> 모든 API 통신은 암호화</li>
+        <li>✅ <strong>Rate Limiting:</strong> API 남용 방지</li>
+        <li>✅ <strong>입력 검증:</strong> SQL Injection, XSS 방지</li>
+        <li>✅ <strong>CORS 설정:</strong> 허용된 도메인만 접근 가능</li>
+        <li>✅ <strong>민감 정보 제외:</strong> 비밀번호, 개인정보는 로그에 남기지 않음</li>
+        <li>✅ <strong>버전 관리:</strong> API 버전을 명시 (<code>/api/v1/</code>)</li>
+      </ul>
+
+      <div class="tech-terms">
+        <h4>💡 보안 용어 쉽게 이해하기</h4>
+
+        <div class="term-box">
+          <h5><strong>Rate Limiting (사용량 제한)</strong></h5>
+          <div class="story-box">
+            <p><strong>📚 도서관 비유:</strong></p>
+            <p>도서관에서 한 사람이 책을 하루에 10권까지만 대출할 수 있게 제한하는 것처럼,
+            API도 <strong>일정 시간 동안 요청 횟수를 제한</strong>합니다.</p>
+
+            <p><strong>예시:</strong></p>
+            <ul>
+              <li>한 사용자가 1분에 60번까지만 API를 호출할 수 있음</li>
+              <li>초과하면 <code>429 Too Many Requests</code> 에러 응답</li>
+            </ul>
+
+            <p><strong>왜 필요한가요?</strong></p>
+            <ul>
+              <li>🛡️ <strong>서버 보호:</strong> 악의적인 공격(DoS)이나 실수로 너무 많은 요청을 막아요</li>
+              <li>⚖️ <strong>공평한 사용:</strong> 한 사람이 서버 자원을 독점하지 못하게 해요</li>
+              <li>💰 <strong>비용 관리:</strong> 클라우드 서비스는 요청 횟수로 과금되기도 해요</li>
+            </ul>
+
+            <p><strong>실제 응답 예시:</strong></p>
+            <pre class="code-block">HTTP/1.1 429 Too Many Requests
+X-RateLimit-Limit: 60          ← 1분에 60번까지 가능
+X-RateLimit-Remaining: 0       ← 남은 횟수: 0
+X-RateLimit-Reset: 1640000000  ← 다시 가능한 시각
+
+{
+  "error": "요청 한도를 초과했습니다. 60초 후 다시 시도하세요."
+}</pre>
+          </div>
+        </div>
+
+        <div class="term-box">
+          <h5><strong>CORS (Cross-Origin Resource Sharing)</strong></h5>
+          <div class="story-box">
+            <p><strong>📚 도서관 비유:</strong></p>
+            <p>우리 도서관 회원증으로는 우리 도서관 자료만 이용할 수 있고,
+            다른 도서관 자료는 이용할 수 없는 것처럼,
+            웹사이트도 <strong>"어느 웹사이트에서 내 API를 호출할 수 있는지"</strong> 제한합니다.</p>
+
+            <p><strong>상황 설명:</strong></p>
+            <ul>
+              <li><strong>출처(Origin):</strong> 도메인 + 포트 조합
+                <p class="term-desc">예: <code>https://library.com:443</code></p>
+              </li>
+              <li><strong>같은 출처:</strong> <code>library.com</code> → <code>library.com</code> ✅ OK</li>
+              <li><strong>다른 출처:</strong> <code>evil-site.com</code> → <code>library.com</code> ❌ 차단!</li>
+            </ul>
+
+            <p><strong>왜 필요한가요?</strong></p>
+            <p>악의적인 웹사이트가 사용자 모르게 여러분의 로그인 정보를 훔쳐서
+            은행 API나 도서관 API를 몰래 호출하는 것을 막기 위해서입니다.</p>
+
+            <p><strong>서버 설정 예시:</strong></p>
+            <pre class="code-block"># 응답 헤더에 허용할 도메인 명시
+Access-Control-Allow-Origin: https://library.com
+Access-Control-Allow-Methods: GET, POST, PUT, DELETE
+Access-Control-Allow-Headers: Content-Type, Authorization
+
+# 모든 도메인 허용 (공개 API의 경우)
+Access-Control-Allow-Origin: *</pre>
+
+            <p class="term-desc">→ 지정된 도메인만 API를 호출할 수 있게 됩니다.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>9️⃣ 학습 자료 및 참고 링크</h2>
+
+    <div class="resources-grid">
+      <div class="resource-card official">
+        <h3>📚 공식 문서 및 표준</h3>
+        <ul>
+          <li>
+            <a href="https://restfulapi.net/" target="_blank">
+              RESTful API Tutorial
+            </a>
+            <p class="link-desc">REST API 개념과 best practice</p>
+          </li>
+          <li>
+            <a href="https://www.ietf.org/rfc/rfc2616.txt" target="_blank">
+              RFC 2616 - HTTP/1.1
+            </a>
+            <p class="link-desc">HTTP 프로토콜 공식 명세</p>
+          </li>
+          <li>
+            <a href="https://www.ietf.org/rfc/rfc6749.txt" target="_blank">
+              RFC 6749 - OAuth 2.0
+            </a>
+            <p class="link-desc">OAuth 2.0 인증 표준</p>
+          </li>
+          <li>
+            <a href="https://jwt.io/" target="_blank">
+              JWT.io
+            </a>
+            <p class="link-desc">JWT 토큰 디코더 및 문서</p>
+          </li>
+        </ul>
+      </div>
+
+      <div class="resource-card tutorial">
+        <h3>🎓 학습 자료</h3>
+        <ul>
+          <li>
+            <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP" target="_blank">
+              MDN Web Docs - HTTP
+            </a>
+            <p class="link-desc">HTTP 메서드, 상태 코드 상세 설명</p>
+          </li>
+          <li>
+            <a href="https://www.redhat.com/en/topics/api/what-is-a-rest-api" target="_blank">
+              Red Hat - What is a REST API?
+            </a>
+            <p class="link-desc">REST API 초보자 가이드</p>
+          </li>
+          <li>
+            <a href="https://swagger.io/resources/articles/best-practices-in-api-design/" target="_blank">
+              Swagger - API Design Best Practices
+            </a>
+            <p class="link-desc">API 설계 모범 사례</p>
+          </li>
+        </ul>
+      </div>
+
+      <div class="resource-card tools">
+        <h3>🛠️ 도구 및 테스트</h3>
+        <ul>
+          <li>
+            <a href="https://www.postman.com/" target="_blank">
+              Postman
+            </a>
+            <p class="link-desc">API 개발 및 테스트 도구</p>
+          </li>
+          <li>
+            <a href="https://jsonplaceholder.typicode.com/" target="_blank">
+              JSONPlaceholder
+            </a>
+            <p class="link-desc">무료 REST API 테스트 서비스</p>
+          </li>
+          <li>
+            <a href="https://httpbin.org/" target="_blank">
+              httpbin
+            </a>
+            <p class="link-desc">HTTP 요청 테스트 서비스</p>
+          </li>
+          <li>
+            <a href="https://reqres.in/" target="_blank">
+              ReqRes
+            </a>
+            <p class="link-desc">실제 응답을 제공하는 테스트 API</p>
+          </li>
+        </ul>
+      </div>
+
+      <div class="resource-card examples">
+        <h3>💡 실제 API 예시</h3>
+        <ul>
+          <li>
+            <a href="https://docs.github.com/en/rest" target="_blank">
+              GitHub REST API
+            </a>
+            <p class="link-desc">잘 설계된 REST API의 대표 사례</p>
+          </li>
+          <li>
+            <a href="https://developer.twitter.com/en/docs/twitter-api" target="_blank">
+              Twitter API
+            </a>
+            <p class="link-desc">소셜 미디어 API 예시</p>
+          </li>
+          <li>
+            <a href="https://openweathermap.org/api" target="_blank">
+              OpenWeather API
+            </a>
+            <p class="link-desc">날씨 데이터 REST API</p>
+          </li>
+        </ul>
+      </div>
+
+      <div class="resource-card books">
+        <h3>📖 추천 도서</h3>
+        <ul>
+          <li>
+            <strong>"RESTful Web APIs"</strong> by Leonard Richardson
+            <p class="link-desc">REST API 설계의 바이블</p>
+          </li>
+          <li>
+            <strong>"API Design Patterns"</strong> by JJ Geewax
+            <p class="link-desc">실무 API 설계 패턴</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="summary">
+    <h2>✨ 핵심 요약</h2>
+
+    <div class="summary-grid">
+      <div class="summary-item">
+        <h3>🎯 REST란?</h3>
+        <p>웹의 장점을 활용하는 <strong>아키텍처 스타일</strong></p>
+      </div>
+
+      <div class="summary-item">
+        <h3>📏 6가지 원칙</h3>
+        <ul>
+          <li>클라이언트-서버</li>
+          <li>무상태성</li>
+          <li>캐시 가능</li>
+          <li>계층화 시스템</li>
+          <li>인터페이스 일관성</li>
+          <li>Code on Demand</li>
+        </ul>
+      </div>
+
+      <div class="summary-item">
+        <h3>🔧 HTTP 메서드</h3>
+        <ul>
+          <li>GET: 조회</li>
+          <li>POST: 생성</li>
+          <li>PUT: 전체 수정</li>
+          <li>PATCH: 부분 수정</li>
+          <li>DELETE: 삭제</li>
+        </ul>
+      </div>
+
+      <div class="summary-item">
+        <h3>📊 상태 코드</h3>
+        <ul>
+          <li>2xx: 성공</li>
+          <li>3xx: 리다이렉션</li>
+          <li>4xx: 클라이언트 오류</li>
+          <li>5xx: 서버 오류</li>
+        </ul>
+      </div>
+
+      <div class="summary-item">
+        <h3>📚 도서관 활용</h3>
+        <ul>
+          <li>SUSHI (이용통계)</li>
+          <li>ILS API (대출/반납)</li>
+          <li>서지검색 API</li>
+        </ul>
+      </div>
+
+      <div class="summary-item">
+        <h3>🔒 보안</h3>
+        <ul>
+          <li>HTTPS 필수</li>
+          <li>OAuth 2.0</li>
+          <li>JWT</li>
+          <li>Rate Limiting</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="final-note">
+      <p>
+        <strong>💡 기억하세요:</strong><br>
+        REST API는 단순히 데이터를 주고받는 것이 아닙니다.
+        <strong>표준화되고 확장 가능한 웹 서비스</strong>를 만드는 설계 철학입니다!
+      </p>
+      <p class="practice-note">
+        실제 API를 테스트해보면서 학습한 내용을 확인하세요. 
+        <a href="https://jsonplaceholder.typicode.com/" target="_blank">JSONPlaceholder</a>로 
+        지금 바로 시작할 수 있습니다!
+      </p>
+    </div>
+  </div>
+</div>
+
+<style>
+.rest-api-tutorial {
+  line-height: 1.8;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.intro-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.section {
+  margin: 3rem 0;
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.definition-box {
+  background: #e7f3ff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  border-left: 4px solid #007bff;
+}
+
+.analogy-box {
+  background: #fff3e0;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.analogy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 1.5rem 0;
+}
+
+.analogy-item {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid #ff9800;
+}
+
+.key-points {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.concept-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.concept-item {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  border-top: 3px solid #667eea;
+}
+
+.concept-item code {
+  display: block;
+  background: #2d2d2d;
+  color: #f8f8f2;
+  padding: 0.5rem;
+  border-radius: 4px;
+  margin: 1rem 0;
+  font-size: 0.9em;
+}
+
+.concept-item .example {
+  color: #666;
+  font-size: 0.9em;
+  margin-top: 0.5rem;
+}
+
+.principle-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.principle-card h3 {
+  color: #667eea;
+  margin-bottom: 1rem;
+}
+
+.principle-content {
+  margin-top: 1rem;
+}
+
+.principle-example {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.code-block {
+  background: #2d2d2d;
+  color: #f8f8f2;
+  padding: 1.5rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 0.9em;
+  line-height: 1.6;
+  margin: 1rem 0;
+}
+
+.insight {
+  background: #fff3cd;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+.method-intro {
+  background: #e7f3ff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.method-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2.5rem 0;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.method-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid #e0e0e0;
+}
+
+.method-badge {
+  background: #667eea;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 1.1em;
+  min-width: 80px;
+  text-align: center;
+}
+
+.method-card.post .method-badge {
+  background: #28a745;
+}
+
+.method-card.put .method-badge {
+  background: #ffc107;
+  color: #333;
+}
+
+.method-card.patch .method-badge {
+  background: #17a2b8;
+}
+
+.method-card.delete .method-badge {
+  background: #dc3545;
+}
+
+.method-content h4 {
+  color: #333;
+  margin: 2rem 0 1rem 0;
+}
+
+.request-box {
+  background: #f0f8ff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  border-left: 4px solid #007bff;
+}
+
+.response-box {
+  background: #f0fff4;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  border-left: 4px solid #28a745;
+}
+
+.http-request,
+.http-response {
+  background: #2d2d2d;
+  color: #f8f8f2;
+  padding: 1.5rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 0.9em;
+  line-height: 1.8;
+  margin: 0;
+}
+
+.method-note {
+  background: #fff3cd;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  border-left: 4px solid #ffc107;
+}
+
+.method-comparison {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+}
+
+.comparison-table th,
+.comparison-table td {
+  padding: 1rem;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.comparison-table th {
+  background: #667eea;
+  color: white;
+}
+
+.comparison-table tr:hover {
+  background: #f5f5f5;
+}
+
+.status-intro {
+  background: #e7f3ff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.status-category {
+  margin: 3rem 0;
+}
+
+.status-category h3 {
+  color: #667eea;
+  margin-bottom: 1.5rem;
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.status-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.status-card.success {
+  border-left: 5px solid #28a745;
+}
+
+.status-card.redirect {
+  border-left: 5px solid #17a2b8;
+}
+
+.status-card.client-error {
+  border-left: 5px solid #ffc107;
+}
+
+.status-card.server-error {
+  border-left: 5px solid #dc3545;
+}
+
+.status-card h4 {
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.status-example {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+}
+
+.status-example .code {
+  background: #2d2d2d;
+  color: #f8f8f2;
+  padding: 0.75rem;
+  border-radius: 4px;
+  font-size: 0.85em;
+  display: block;
+  margin: 0.5rem 0;
+  white-space: pre-wrap;
+}
+
+.status-flowchart {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.flowchart {
+  margin: 2rem 0;
+}
+
+.flow-question {
+  background: #667eea;
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: bold;
+  margin: 1rem 0;
+}
+
+.flow-branches {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.flow-branch {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.flow-answer {
+  background: #007bff;
+  color: white;
+  padding: 0.75rem;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.flow-sub-branches {
+  margin-top: 1rem;
+}
+
+.flow-result {
+  background: white;
+  padding: 1rem;
+  border-radius: 4px;
+  margin: 0.5rem 0;
+  border-left: 3px solid #28a745;
+}
+
+.uri-principles {
+  margin: 2rem 0;
+}
+
+.principle-box {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.principle-box h3 {
+  color: #667eea;
+  margin-bottom: 1rem;
+}
+
+.principle-examples {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.principle-examples code {
+  background: #2d2d2d;
+  color: #f8f8f2;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.principle-examples .note {
+  color: #666;
+  font-size: 0.9em;
+  margin-top: 0.5rem;
+}
+
+.uri-examples {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.uri-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.9em;
+}
+
+.uri-table th,
+.uri-table td {
+  padding: 1rem;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.uri-table th {
+  background: #667eea;
+  color: white;
+}
+
+.uri-table code {
+  background: #f0f0f0;
+  padding: 0.3rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+.library-intro {
+  background: #e7f3ff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.library-case {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2.5rem 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.library-case h3 {
+  color: #667eea;
+  margin-bottom: 1.5rem;
+}
+
+.case-content {
+  margin-top: 1.5rem;
+}
+
+.case-note {
+  background: #fff3e0;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  border-left: 4px solid #ff9800;
+}
+
+.learn-more {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px solid #ff9800;
+}
+
+.learn-more a {
+  color: #667eea;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.practice-intro {
+  background: #e7f3ff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.practice-tool {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2.5rem 0;
+}
+
+.practice-tool h3 {
+  color: #667eea;
+  margin-bottom: 1.5rem;
+}
+
+.code-example {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+.code-desc {
+  color: #666;
+  font-size: 0.9em;
+  margin-top: 0.5rem;
+}
+
+.browser-steps {
+  margin: 1.5rem 0;
+}
+
+.step {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 4px;
+  margin: 0.75rem 0;
+  border-left: 3px solid #667eea;
+}
+
+.postman-features {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+.practice-exercise {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.exercise-box {
+  background: #fff3e0;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+.exercise-steps {
+  margin: 2rem 0;
+}
+
+.exercise-step {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  border-left: 4px solid #ff9800;
+}
+
+.exercise-step .code {
+  background: #2d2d2d;
+  color: #f8f8f2;
+  padding: 1rem;
+  border-radius: 4px;
+  font-size: 0.9em;
+  margin: 1rem 0;
+  white-space: pre-wrap;
+  display: block;
+}
+
+.security-intro {
+  background: #e7f3ff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.security-method {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2.5rem 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.security-method h3 {
+  color: #667eea;
+  margin-bottom: 1.5rem;
+}
+
+.security-note {
+  background: #fff3cd;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  border-left: 4px solid #ffc107;
+}
+
+.oauth-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.oauth-step {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 4px;
+  border-left: 3px solid #28a745;
+}
+
+.jwt-structure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+
+.jwt-part {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  flex: 1;
+  min-width: 150px;
+}
+
+.jwt-part.header {
+  border-top: 3px solid #dc3545;
+}
+
+.jwt-part.payload {
+  border-top: 3px solid #ffc107;
+}
+
+.jwt-part.signature {
+  border-top: 3px solid #28a745;
+}
+
+.jwt-separator {
+  font-size: 2em;
+  font-weight: bold;
+  color: #667eea;
+}
+
+.security-best-practices {
+  background: #d4edda;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+  border-left: 4px solid #28a745;
+}
+
+.resources-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.resource-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.resource-card.official {
+  border-top: 4px solid #667eea;
+}
+
+.resource-card.tutorial {
+  border-top: 4px solid #28a745;
+}
+
+.resource-card.tools {
+  border-top: 4px solid #ff9800;
+}
+
+.resource-card.examples {
+  border-top: 4px solid #17a2b8;
+}
+
+.resource-card.books {
+  border-top: 4px solid #dc3545;
+}
+
+.resource-card h3 {
+  margin-bottom: 1.5rem;
+}
+
+.resource-card ul {
+  list-style: none;
+  padding: 0;
+}
+
+.resource-card li {
+  margin: 1.5rem 0;
+}
+
+.resource-card a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.05em;
+}
+
+.resource-card a:hover {
+  text-decoration: underline;
+}
+
+.link-desc {
+  color: #666;
+  font-size: 0.9em;
+  font-weight: normal;
+  margin: 0.5rem 0 0 0;
+}
+
+.summary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 2rem;
+  border-radius: 8px;
+}
+
+.summary h2 {
+  color: white;
+  margin-bottom: 2rem;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.summary-item {
+  background: rgba(255,255,255,0.2);
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.summary-item h3 {
+  color: white;
+  margin-bottom: 1rem;
+  font-size: 1.1em;
+}
+
+.summary-item ul {
+  margin-left: 1.5rem;
+}
+
+.final-note {
+  background: rgba(255,255,255,0.3);
+  padding: 2rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 1.1em;
+}
+
+.practice-note {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px solid rgba(255,255,255,0.5);
+}
+
+.practice-note a {
+  color: #ffd89b;
+  font-weight: bold;
+}
+
+/* Beginner-friendly explanation boxes */
+.easy-explanation {
+  background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+  border-left: 5px solid #00acc1;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 8px;
+}
+
+.easy-explanation h4 {
+  color: #00838f;
+  margin-bottom: 1rem;
+  font-size: 1.1em;
+}
+
+.easy-explanation ul {
+  margin: 1rem 0 1rem 1.5rem;
+}
+
+.easy-explanation p {
+  line-height: 1.8;
+  color: #004d40;
+}
+
+/* Technical terms explanation boxes */
+.tech-terms {
+  background: #fff8e1;
+  border: 2px solid #ffc107;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.tech-terms h4,
+.tech-terms h5 {
+  color: #f57f17;
+  margin-bottom: 1rem;
+}
+
+.tech-terms ul {
+  margin-left: 1.5rem;
+}
+
+/* Story/analogy boxes */
+.story-box {
+  background: #f3e5f5;
+  border-left: 4px solid #9c27b0;
+  padding: 1.2rem;
+  margin: 1rem 0;
+  border-radius: 6px;
+}
+
+.story-box p {
+  margin: 0.8rem 0;
+  line-height: 1.7;
+  color: #4a148c;
+}
+
+.story-box ol,
+.story-box ul {
+  margin: 1rem 0 1rem 1.5rem;
+}
+
+.story-box li {
+  margin: 0.5rem 0;
+}
+
+.story-box strong {
+  color: #6a1b9a;
+}
+
+/* Term description text */
+.term-desc {
+  color: #666;
+  font-size: 0.95em;
+  margin: 0.5rem 0 0.5rem 1.5rem;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+/* Sub-description under list items */
+.sub-desc {
+  color: #555;
+  font-size: 0.9em;
+  margin: 0.3rem 0 0.3rem 1.5rem;
+  font-weight: normal;
+  line-height: 1.5;
+}
+
+/* Individual term boxes */
+.term-box {
+  background: white;
+  border-radius: 6px;
+  padding: 1.2rem;
+  margin: 1rem 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.term-box h5 {
+  color: #d84315;
+  margin-bottom: 0.8rem;
+  font-size: 1.05em;
+}
+
+.term-box ul {
+  margin-left: 1.5rem;
+}
+
+.term-box li {
+  margin: 0.6rem 0;
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 1rem;
+  }
+
+  .analogy-grid,
+  .concept-grid,
+  .status-grid,
+  .flow-branches,
+  .resources-grid,
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .jwt-structure {
+    flex-direction: column;
+  }
+
+  .jwt-separator {
+    transform: rotate(90deg);
+  }
+
+  .method-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+</style>

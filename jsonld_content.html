@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON-LD: 웹 개발자를 위한 RDF</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+            line-height: 1.8;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #2c3e50;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 4px solid #27ae60;
+            padding-bottom: 15px;
+            margin-top: 30px;
+        }
+        h2 {
+            color: #27ae60;
+            margin-top: 35px;
+            padding-left: 10px;
+            border-left: 5px solid #27ae60;
+        }
+        h3 {
+            color: #34495e;
+            margin-top: 25px;
+        }
+        .intro-box {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .intro-box h2 {
+            color: white;
+            border-left: 5px solid white;
+            margin-top: 0;
+        }
+        .concept-box {
+            background-color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 5px solid #27ae60;
+        }
+        .example-box {
+            background-color: #fff9e6;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 5px solid #f39c12;
+        }
+        .comparison-box {
+            background-color: #e8f8f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 5px solid #1abc9c;
+        }
+        .warning-box {
+            background-color: #ffe6e6;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 5px solid #e74c3c;
+        }
+        .success-box {
+            background-color: #e8f8f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 5px solid #27ae60;
+        }
+        .code-block {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        .code-block .keyword {
+            color: #3498db;
+            font-weight: bold;
+        }
+        .code-block .prefix {
+            color: #e74c3c;
+        }
+        .code-block .uri {
+            color: #9b59b6;
+        }
+        .code-block .string {
+            color: #2ecc71;
+        }
+        .code-block .comment {
+            color: #95a5a6;
+            font-style: italic;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .comparison-table th {
+            background-color: #27ae60;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        .comparison-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        .comparison-table tr:hover {
+            background-color: #e8f8f5;
+        }
+        .highlight {
+            background-color: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 500;
+        }
+        .side-by-side {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        @media (max-width: 768px) {
+            .side-by-side {
+                grid-template-columns: 1fr;
+            }
+        }
+        ul {
+            padding-left: 25px;
+        }
+        li {
+            margin: 10px 0;
+        }
+        strong {
+            color: #2c3e50;
+        }
+        a {
+            color: #27ae60;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<h1>JSON-LD: 웹 개발자를 위한 RDF</h1>
+
+<div class="intro-box">
+    <h2>JSON-LD란?</h2>
+    <p><strong>JSON-LD (JSON for Linking Data)</strong>는 JSON 형식으로 Linked Data를 표현하는 방법입니다.</p>
+    <p>기존 JSON에 <strong>@context</strong>라는 특별한 키를 추가하여 시맨틱 의미를 부여합니다. 웹 개발자에게 가장 친숙한 RDF 직렬화 형식입니다.</p>
+    <ul>
+        <li><strong>개발:</strong> 2010년 Manu Sporny 등</li>
+        <li><strong>표준화:</strong> 2014년 W3C 권고안, 2020년 JSON-LD 1.1</li>
+        <li><strong>특징:</strong> JSON과 100% 호환, 웹 개발자 친화적</li>
+        <li><strong>활용:</strong> Schema.org, Google 검색, SEO, 웹 API</li>
+    </ul>
+</div>
+
+<h2>1. 왜 JSON-LD인가?</h2>
+
+<h3>1.1 웹 개발자의 고민</h3>
+
+<div class="warning-box">
+    <h4>RDF는 어렵다?</h4>
+    <p>많은 웹 개발자들이 RDF를 접하면서 겪는 어려움:</p>
+    <ul>
+        <li>Turtle, XML/RDF는 낯선 문법</li>
+        <li>기존 웹 개발 도구와 호환되지 않음</li>
+        <li>JavaScript에서 직접 다루기 어려움</li>
+        <li>학습 곡선이 가파름</li>
+    </ul>
+</div>
+
+<h3>1.2 JSON-LD의 해결책</h3>
+
+<div class="success-box">
+    <h4>JSON으로 RDF를 표현하자!</h4>
+    <p>JSON-LD는 웹 개발자들이 이미 알고 있는 JSON 문법을 그대로 사용합니다:</p>
+    <ul>
+        <li>기존 JSON 파서로 그대로 읽을 수 있음</li>
+        <li>JavaScript에서 바로 사용 가능</li>
+        <li>웹 API, REST API와 자연스럽게 통합</li>
+        <li>학습 비용이 낮음</li>
+    </ul>
+</div>
+
+<h2>2. JSON-LD 기본 문법</h2>
+
+<h3>2.1 일반 JSON vs JSON-LD</h3>
+
+<div class="comparison-box">
+    <h4>일반 JSON</h4>
+    <div class="code-block">
+{
+  <span class="string">"name"</span>: <span class="string">"Alice"</span>,
+  <span class="string">"age"</span>: <span class="string">30</span>,
+  <span class="string">"email"</span>: <span class="string">"alice@example.org"</span>
+}
+    </div>
+    <p>문제: "name"이 무엇을 의미하는지 컴퓨터가 알 수 없습니다.</p>
+</div>
+
+<div class="success-box">
+    <h4>JSON-LD</h4>
+    <div class="code-block">
+{
+  <span class="keyword">"@context"</span>: <span class="string">"https://schema.org"</span>,
+  <span class="keyword">"@type"</span>: <span class="string">"Person"</span>,
+  <span class="string">"name"</span>: <span class="string">"Alice"</span>,
+  <span class="string">"age"</span>: <span class="string">30</span>,
+  <span class="string">"email"</span>: <span class="string">"alice@example.org"</span>
+}
+    </div>
+    <p>@context를 추가하여 "name"이 Schema.org의 name 속성임을 명시합니다.</p>
+</div>
+
+<h3>2.2 @context: 의미를 정의하는 맥락</h3>
+
+<div class="concept-box">
+    <h4>@context란?</h4>
+    <p><strong>@context</strong>는 JSON 키(key)에 시맨틱 의미를 부여하는 사전(dictionary)입니다.</p>
+    <p>각 속성이 어떤 온톨로지의 어떤 용어인지 정의합니다.</p>
+    <div class="code-block">
+{
+  <span class="keyword">"@context"</span>: {
+    <span class="string">"name"</span>: <span class="string">"http://xmlns.com/foaf/0.1/name"</span>,
+    <span class="string">"age"</span>: <span class="string">"http://xmlns.com/foaf/0.1/age"</span>,
+    <span class="string">"email"</span>: <span class="string">"http://xmlns.com/foaf/0.1/mbox"</span>
+  },
+  <span class="string">"name"</span>: <span class="string">"Alice"</span>,
+  <span class="string">"age"</span>: <span class="string">30</span>,
+  <span class="string">"email"</span>: <span class="string">"alice@example.org"</span>
+}
+    </div>
+</div>
+
+<div class="example-box">
+    <h4>외부 @context 참조</h4>
+    <p>매번 @context를 작성하는 대신, 공개된 @context를 참조할 수 있습니다:</p>
+    <div class="code-block">
+{
+  <span class="keyword">"@context"</span>: <span class="string">"https://schema.org"</span>,
+  <span class="keyword">"@type"</span>: <span class="string">"Person"</span>,
+  <span class="string">"name"</span>: <span class="string">"Alice"</span>
+}
+    </div>
+    <p>Schema.org의 @context가 자동으로 적용됩니다.</p>
+</div>
+
+<h3>2.3 @id: 리소스 식별자</h3>
+
+<div class="concept-box">
+    <h4>@id로 리소스에 URI 부여</h4>
+    <p><strong>@id</strong>는 RDF의 주어(Subject)에 해당하는 URI를 지정합니다.</p>
+    <div class="code-block">
+{
+  <span class="keyword">"@context"</span>: <span class="string">"https://schema.org"</span>,
+  <span class="keyword">"@id"</span>: <span class="string">"http://example.org/person/alice"</span>,
+  <span class="keyword">"@type"</span>: <span class="string">"Person"</span>,
+  <span class="string">"name"</span>: <span class="string">"Alice"</span>
+}
+    </div>
+</div>
+
+<h3>2.4 @type: 타입 지정</h3>
+
+<div class="concept-box">
+    <h4>@type으로 클래스 정의</h4>
+    <p><strong>@type</strong>은 리소스의 클래스(rdf:type)를 지정합니다.</p>
+    <div class="code-block">
+{
+  <span class="keyword">"@context"</span>: <span class="string">"https://schema.org"</span>,
+  <span class="keyword">"@type"</span>: <span class="string">"Book"</span>,
+  <span class="string">"name"</span>: <span class="string">"도서관 정보학 입문"</span>,
+  <span class="string">"author"</span>: <span class="string">"김철수"</span>
+}
+    </div>
+    <p>이 객체가 Schema.org의 Book 타입임을 명시합니다.</p>
+</div>
+
+<h3>2.5 @graph: 여러 리소스 그룹화</h3>
+
+<div class="concept-box">
+    <h4>@graph로 여러 Triple 묶기</h4>
+    <p><strong>@graph</strong>는 여러 리소스를 하나의 JSON 문서에 담을 때 사용합니다.</p>
+    <div class="code-block">
+{
+  <span class="keyword">"@context"</span>: <span class="string">"https://schema.org"</span>,
+  <span class="keyword">"@graph"</span>: [
+    {
+      <span class="keyword">"@id"</span>: <span class="string">"http://example.org/person/alice"</span>,
+      <span class="keyword">"@type"</span>: <span class="string">"Person"</span>,
+      <span class="string">"name"</span>: <span class="string">"Alice"</span>
+    },
+    {
+      <span class="keyword">"@id"</span>: <span class="string">"http://example.org/person/bob"</span>,
+      <span class="keyword">"@type"</span>: <span class="string">"Person"</span>,
+      <span class="string">"name"</span>: <span class="string">"Bob"</span>
+    }
+  ]
+}
+    </div>
+</div>
+
+<h2>3. Schema.org 구조화 데이터</h2>
+
+<div class="success-box">
+    <h4>Schema.org란?</h4>
+    <p>Google, Microsoft, Yahoo가 공동 개발한 구조화 데이터 표준입니다.</p>
+    <p>JSON-LD로 웹페이지에 메타데이터를 추가하면 검색엔진이 더 잘 이해합니다.</p>
+</div>
+
+<h3>3.1 웹사이트에 JSON-LD 추가</h3>
+
+<div class="example-box">
+    <h4>HTML에 JSON-LD 삽입</h4>
+    <div class="code-block">
+<span class="comment">&lt;!-- HTML 문서의 &lt;head&gt; 또는 &lt;body&gt;에 추가 --&gt;</span>
+&lt;script type=<span class="string">"application/ld+json"</span>&gt;
+{
+  <span class="keyword">"@context"</span>: <span class="string">"https://schema.org"</span>,
+  <span class="keyword">"@type"</span>: <span class="string">"Organization"</span>,
+  <span class="string">"name"</span>: <span class="string">"서울대학교 중앙도서관"</span>,
+  <span class="string">"url"</span>: <span class="string">"https://library.snu.ac.kr"</span>,
+  <span class="string">"logo"</span>: <span class="string">"https://library.snu.ac.kr/logo.png"</span>,
+  <span class="string">"contactPoint"</span>: {
+    <span class="keyword">"@type"</span>: <span class="string">"ContactPoint"</span>,
+    <span class="string">"telephone"</span>: <span class="string">"+82-2-880-5114"</span>,
+    <span class="string">"contactType"</span>: <span class="string">"customer service"</span>
+  }
+}
+&lt;/script&gt;
+    </div>
+</div>
+
+<h3>3.2 책 정보 구조화</h3>
+
+<div class="example-box">
+    <h4>Schema.org Book 예시</h4>
+    <div class="code-block">
+{
+  <span class="keyword">"@context"</span>: <span class="string">"https://schema.org"</span>,
+  <span class="keyword">"@type"</span>: <span class="string">"Book"</span>,
+  <span class="string">"name"</span>: <span class="string">"도서관 정보학 입문"</span>,
+  <span class="string">"author"</span>: {
+    <span class="keyword">"@type"</span>: <span class="string">"Person"</span>,
+    <span class="string">"name"</span>: <span class="string">"김철수"</span>
+  },
+  <span class="string">"publisher"</span>: {
+    <span class="keyword">"@type"</span>: <span class="string">"Organization"</span>,
+    <span class="string">"name"</span>: <span class="string">"한국출판사"</span>
+  },
+  <span class="string">"datePublished"</span>: <span class="string">"2023-03-15"</span>,
+  <span class="string">"isbn"</span>: <span class="string">"978-89-1234-567-8"</span>,
+  <span class="string">"numberOfPages"</span>: <span class="string">350</span>,
+  <span class="string">"inLanguage"</span>: <span class="string">"ko"</span>
+}
+    </div>
+</div>
+
+<h3>3.3 이벤트 정보 구조화</h3>
+
+<div class="example-box">
+    <h4>도서관 행사 정보</h4>
+    <div class="code-block">
+{
+  <span class="keyword">"@context"</span>: <span class="string">"https://schema.org"</span>,
+  <span class="keyword">"@type"</span>: <span class="string">"Event"</span>,
+  <span class="string">"name"</span>: <span class="string">"정보 리터러시 특강"</span>,
+  <span class="string">"description"</span>: <span class="string">"대학생을 위한 정보 검색 및 활용 교육"</span>,
+  <span class="string">"startDate"</span>: <span class="string">"2024-04-15T14:00:00+09:00"</span>,
+  <span class="string">"endDate"</span>: <span class="string">"2024-04-15T16:00:00+09:00"</span>,
+  <span class="string">"location"</span>: {
+    <span class="keyword">"@type"</span>: <span class="string">"Place"</span>,
+    <span class="string">"name"</span>: <span class="string">"중앙도서관 세미나실"</span>,
+    <span class="string">"address"</span>: {
+      <span class="keyword">"@type"</span>: <span class="string">"PostalAddress"</span>,
+      <span class="string">"addressLocality"</span>: <span class="string">"서울"</span>,
+      <span class="string">"addressCountry"</span>: <span class="string">"KR"</span>
+    }
+  },
+  <span class="string">"organizer"</span>: {
+    <span class="keyword">"@type"</span>: <span class="string">"Organization"</span>,
+    <span class="string">"name"</span>: <span class="string">"중앙도서관"</span>
+  }
+}
+    </div>
+</div>
+
+<h2>4. JSON vs JSON-LD 비교</h2>
+
+<div class="side-by-side">
+    <div>
+        <div class="comparison-box">
+            <h4>일반 JSON</h4>
+            <div class="code-block" style="font-size: 0.85em;">
+{
+  "title": "Python 입문",
+  "author": "홍길동",
+  "year": 2023
+}
+            </div>
+            <ul>
+                <li>단순한 데이터 교환</li>
+                <li>의미는 문서화에 의존</li>
+                <li>기계가 의미를 이해 못함</li>
+            </ul>
+        </div>
+    </div>
+    <div>
+        <div class="success-box">
+            <h4>JSON-LD</h4>
+            <div class="code-block" style="font-size: 0.85em;">
+{
+  "@context": "https://schema.org",
+  "@type": "Book",
+  "name": "Python 입문",
+  "author": {
+    "@type": "Person",
+    "name": "홍길동"
+  },
+  "datePublished": "2023"
+}
+            </div>
+            <ul>
+                <li>시맨틱 데이터 교환</li>
+                <li>의미가 명확히 정의됨</li>
+                <li>기계가 의미를 이해함</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<h2>5. 도서관에서의 JSON-LD 활용</h2>
+
+<h3>5.1 BIBFRAME을 JSON-LD로</h3>
+
+<div class="example-box">
+    <h4>BIBFRAME Work 표현</h4>
+    <div class="code-block">
+{
+  <span class="keyword">"@context"</span>: <span class="string">"http://bibframe.org/context.json"</span>,
+  <span class="keyword">"@id"</span>: <span class="string">"http://example.org/work/123"</span>,
+  <span class="keyword">"@type"</span>: <span class="string">"bf:Work"</span>,
+  <span class="string">"bf:title"</span>: {
+    <span class="keyword">"@type"</span>: <span class="string">"bf:Title"</span>,
+    <span class="string">"bf:mainTitle"</span>: <span class="string">"시맨틱 웹 기술"</span>
+  },
+  <span class="string">"bf:contribution"</span>: {
+    <span class="keyword">"@type"</span>: <span class="string">"bf:Contribution"</span>,
+    <span class="string">"bf:agent"</span>: {
+      <span class="keyword">"@type"</span>: <span class="string">"bf:Person"</span>,
+      <span class="string">"bf:name"</span>: <span class="string">"이순신"</span>
+    },
+    <span class="string">"bf:role"</span>: <span class="string">"author"</span>
+  },
+  <span class="string">"bf:subject"</span>: [
+    <span class="string">"시맨틱 웹"</span>,
+    <span class="string">"RDF"</span>,
+    <span class="string">"온톨로지"</span>
+  ]
+}
+    </div>
+</div>
+
+<h3>5.2 도서관 컬렉션 API</h3>
+
+<div class="example-box">
+    <h4>JSON-LD API 응답</h4>
+    <div class="code-block">
+<span class="comment">// GET /api/books/12345</span>
+{
+  <span class="keyword">"@context"</span>: <span class="string">"https://schema.org"</span>,
+  <span class="keyword">"@id"</span>: <span class="string">"http://library.example.org/books/12345"</span>,
+  <span class="keyword">"@type"</span>: <span class="string">"Book"</span>,
+  <span class="string">"name"</span>: <span class="string">"Linked Data 실무"</span>,
+  <span class="string">"author"</span>: {
+    <span class="keyword">"@id"</span>: <span class="string">"http://library.example.org/authors/456"</span>,
+    <span class="keyword">"@type"</span>: <span class="string">"Person"</span>,
+    <span class="string">"name"</span>: <span class="string">"박지성"</span>
+  },
+  <span class="string">"isbn"</span>: <span class="string">"978-89-9999-999-9"</span>,
+  <span class="string">"numberOfPages"</span>: <span class="string">420</span>,
+  <span class="string">"offers"</span>: {
+    <span class="keyword">"@type"</span>: <span class="string">"Offer"</span>,
+    <span class="string">"availability"</span>: <span class="string">"https://schema.org/InStock"</span>,
+    <span class="string">"inventoryLevel"</span>: <span class="string">3</span>
+  }
+}
+    </div>
+    <p>이 JSON-LD 응답은 일반 JSON처럼 사용하면서도 RDF로 자동 변환 가능합니다.</p>
+</div>
+
+<h2>6. JSON-LD의 장단점</h2>
+
+<table class="comparison-table">
+    <thead>
+        <tr>
+            <th>장점</th>
+            <th>단점</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>웹 개발자에게 친숙한 JSON 문법</td>
+            <td>파일 크기가 다른 형식보다 클 수 있음</td>
+        </tr>
+        <tr>
+            <td>JavaScript에서 바로 사용 가능</td>
+            <td>@context 이해가 필요함</td>
+        </tr>
+        <tr>
+            <td>기존 JSON API와 호환</td>
+            <td>복잡한 구조는 표현이 장황함</td>
+        </tr>
+        <tr>
+            <td>웹 표준 (W3C 권고안)</td>
+            <td>완전한 RDF 기능 일부 제한</td>
+        </tr>
+        <tr>
+            <td>Schema.org와 완벽 통합</td>
+            <td>대용량 데이터엔 N-Triples가 효율적</td>
+        </tr>
+        <tr>
+            <td>SEO 최적화에 유리</td>
+            <td>사람이 직접 읽기엔 Turtle이 더 나음</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>7. 실무 도구 및 라이브러리</h2>
+
+<div class="concept-box">
+    <h4>JSON-LD 처리 도구</h4>
+    <ul>
+        <li><strong>jsonld.js:</strong> JavaScript용 JSON-LD 프로세서</li>
+        <li><strong>PyLD:</strong> Python용 JSON-LD 라이브러리</li>
+        <li><strong>JSON-LD Playground:</strong> 온라인 테스트 도구 (json-ld.org/playground)</li>
+        <li><strong>Google Rich Results Test:</strong> Schema.org JSON-LD 검증</li>
+        <li><strong>Apache Jena:</strong> JSON-LD를 다른 RDF 형식으로 변환</li>
+    </ul>
+</div>
+
+<div class="example-box">
+    <h4>Python 예시</h4>
+    <div class="code-block">
+<span class="keyword">from</span> pyld <span class="keyword">import</span> jsonld
+<span class="keyword">import</span> json
+
+<span class="comment"># JSON-LD 문서</span>
+doc = {
+    <span class="string">"@context"</span>: <span class="string">"https://schema.org"</span>,
+    <span class="string">"@type"</span>: <span class="string">"Person"</span>,
+    <span class="string">"name"</span>: <span class="string">"Alice"</span>
+}
+
+<span class="comment"># N-Quads로 변환</span>
+nquads = jsonld.to_rdf(doc, {<span class="string">'format'</span>: <span class="string">'application/n-quads'</span>})
+print(nquads)
+
+<span class="comment"># 확장 (expand)</span>
+expanded = jsonld.expand(doc)
+print(json.dumps(expanded, indent=2))
+    </div>
+</div>
+
+<h2>8. JSON-LD 변환</h2>
+
+<h3>8.1 JSON-LD → Turtle</h3>
+
+<div class="comparison-box">
+    <h4>JSON-LD</h4>
+    <div class="code-block">
+{
+  "@context": "http://xmlns.com/foaf/0.1/",
+  "@id": "http://example.org/alice",
+  "@type": "Person",
+  "name": "Alice"
+}
+    </div>
+    <h4>Turtle</h4>
+    <div class="code-block">
+@prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt; .
+
+&lt;http://example.org/alice&gt;
+    a foaf:Person ;
+    foaf:name "Alice" .
+    </div>
+</div>
+
+<h2>9. 실전 체크리스트</h2>
+
+<div class="success-box">
+    <h3>JSON-LD 작성 체크리스트</h3>
+    <ul>
+        <li>@context는 문서 최상위에 포함했나?</li>
+        <li>@type으로 리소스 타입을 명시했나?</li>
+        <li>URI가 필요한 리소스에 @id를 추가했나?</li>
+        <li>Schema.org 타입을 최대한 활용했나?</li>
+        <li>JSON 문법이 유효한가? (쉼표, 중괄호 확인)</li>
+        <li>Google Rich Results Test로 검증했나?</li>
+    </ul>
+</div>
+
+<h2>10. 핵심 정리</h2>
+
+<div class="success-box">
+    <h3>JSON-LD를 배우고 나면</h3>
+    <ul>
+        <li>JSON 형식으로 RDF 데이터를 표현할 수 있습니다</li>
+        <li>@context, @id, @type, @graph의 역할을 이해합니다</li>
+        <li>Schema.org 구조화 데이터를 웹페이지에 추가할 수 있습니다</li>
+        <li>웹 API를 시맨틱하게 설계할 수 있습니다</li>
+        <li>도서관 메타데이터를 JSON-LD로 표현할 수 있습니다</li>
+        <li>SEO 최적화를 위한 구조화 데이터를 작성할 수 있습니다</li>
+    </ul>
+</div>
+
+<div class="concept-box">
+    <h3>핵심 키워드</h3>
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th>키워드</th>
+                <th>의미</th>
+                <th>예시</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>@context</code></td>
+                <td>용어의 의미 정의</td>
+                <td><code>"@context": "https://schema.org"</code></td>
+            </tr>
+            <tr>
+                <td><code>@id</code></td>
+                <td>리소스 URI</td>
+                <td><code>"@id": "http://example.org/alice"</code></td>
+            </tr>
+            <tr>
+                <td><code>@type</code></td>
+                <td>리소스 타입 (클래스)</td>
+                <td><code>"@type": "Person"</code></td>
+            </tr>
+            <tr>
+                <td><code>@graph</code></td>
+                <td>여러 리소스 그룹화</td>
+                <td><code>"@graph": [...]</code></td>
+            </tr>
+            <tr>
+                <td><code>@language</code></td>
+                <td>언어 지정</td>
+                <td><code>"@language": "ko"</code></td>
+            </tr>
+            <tr>
+                <td><code>@value</code></td>
+                <td>리터럴 값</td>
+                <td><code>{"@value": "30", "@type": "xsd:integer"}</code></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="intro-box">
+    <h3>마무리</h3>
+    <p>JSON-LD는 <strong>웹 개발자를 위한 RDF</strong>입니다. 익숙한 JSON 문법을 사용하면서도 시맨틱 웹의 강력함을 그대로 활용할 수 있습니다.</p>
+    <p>특히 <strong>Schema.org</strong>와의 통합으로 검색엔진 최적화(SEO)에도 큰 도움이 됩니다. 도서관 웹사이트나 API를 구축할 때 JSON-LD를 활용하면 데이터의 발견성과 재사용성을 크게 높일 수 있습니다.</p>
+    <p>문과생도 쉽게 이해할 수 있는 JSON-LD, 지금 바로 시작해보세요!</p>
+</div>
+
+</body>
+</html>

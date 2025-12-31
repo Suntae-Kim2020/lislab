@@ -1,0 +1,1860 @@
+<div class="reference-system-tutorial">
+  <h1>참조체계: 정보를 연결하는 보이지 않는 규칙</h1>
+
+  <div class="intro-section">
+    <h2>📚 학습 목표</h2>
+    <ul>
+      <li>참조체계(Reference System)의 개념과 역할 완벽하게 이해하기</li>
+      <li>식별자와 참조체계의 차이점 명확히 구분하기</li>
+      <li>도서관, 웹, 학술 세계의 다양한 참조체계 사례 학습하기</li>
+      <li>왜 참조체계가 정보 시스템의 핵심인지 이해하기</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>1️⃣ 참조체계란 무엇인가?</h2>
+
+    <div class="definition-box">
+      <h3>📖 한 줄 정의</h3>
+      <p>
+        <strong>참조체계(Reference System)</strong>란
+        어떤 대상을 <strong>일관된 방식으로 가리키고(식별)</strong>,
+        다른 대상이나 정보가 <strong>그것을 다시 찾아 연결할 수 있게 하는</strong>
+        <strong>규칙과 장치의 집합</strong>입니다.
+      </p>
+    </div>
+
+    <div class="easy-explanation">
+      <h3>🤔 쉽게 설명하면?</h3>
+      <div class="story-box">
+        <p>친구에게 약속 장소를 알려준다고 생각해보세요.</p>
+
+        <div class="comparison-scenario">
+          <div class="scenario bad">
+            <h4>❌ 참조체계 없이</h4>
+            <p>"빨간 건물 옆에 있는 카페야!"</p>
+            <p class="problem">→ 빨간 건물이 어디? 카페 이름이 뭔데?</p>
+            <p class="result">🤷 못 찾음</p>
+          </div>
+
+          <div class="scenario good">
+            <h4>✅ 참조체계 있으면</h4>
+            <p>"서울시 종로구 세종대로 209번지 카페 A"</p>
+            <p class="solution">→ 도로명 주소 체계를 따라 누구나 찾을 수 있음</p>
+            <p class="result">✅ 정확히 도착!</p>
+          </div>
+        </div>
+
+        <p class="key-insight">
+          💡 <strong>참조체계는 "약속된 방식으로 찾아가는 전체 시스템"입니다.</strong>
+        </p>
+      </div>
+    </div>
+
+    <div class="key-concept">
+      <h3>🎯 핵심 이해</h3>
+      <div class="concept-comparison">
+        <div class="concept-item identifier">
+          <h4>식별자 (Identifier)</h4>
+          <p class="role">이름표</p>
+          <div class="examples">
+            <p>URI, DOI, ISBN</p>
+            <p>주민등록번호, 학번</p>
+          </div>
+          <p class="metaphor">→ 한 개의 <strong>점</strong></p>
+        </div>
+
+        <div class="plus">+</div>
+
+        <div class="concept-item rules">
+          <h4>규칙과 시스템</h4>
+          <p class="role">해석 방법</p>
+          <div class="examples">
+            <p>DNS, 검색 시스템</p>
+            <p>주소록, 데이터베이스</p>
+          </div>
+          <p class="metaphor">→ 점을 잇는 <strong>선과 지도</strong></p>
+        </div>
+
+        <div class="equals">=</div>
+
+        <div class="concept-item system">
+          <h4>참조체계</h4>
+          <p class="role">완전한 시스템</p>
+          <div class="examples">
+            <p>웹 주소 시스템</p>
+            <p>도서관 목록 체계</p>
+          </div>
+          <p class="metaphor">→ <strong>네비게이션 전체</strong></p>
+        </div>
+      </div>
+
+      <div class="summary-note">
+        <p><strong>식별자는 부품, 참조체계는 시스템입니다!</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>2️⃣ 직관적인 비유로 이해하기</h2>
+
+    <div class="metaphor-section">
+      <div class="metaphor-card">
+        <div class="metaphor-header">
+          <span class="number">1️⃣</span>
+          <h3>도서관 청구기호 시스템</h3>
+        </div>
+        <div class="metaphor-content">
+          <div class="identifier-part">
+            <h4>식별자 부분</h4>
+            <code>020.1 김12ㄷ</code>
+            <p>→ 이 책의 고유한 번호</p>
+          </div>
+
+          <div class="system-part">
+            <h4>참조체계 부분</h4>
+            <ul>
+              <li><strong>분류표:</strong> 020.1은 도서관학을 의미</li>
+              <li><strong>저자 기호 규칙:</strong> 김 씨 성의 책은 "김12"</li>
+              <li><strong>서가 배치 규칙:</strong> 번호 순서대로 정리</li>
+              <li><strong>찾아가는 방법:</strong> 층 → 구역 → 서가</li>
+            </ul>
+          </div>
+
+          <div class="workflow-example">
+            <h4>📖 실제 작동 과정</h4>
+            <div class="workflow-steps">
+              <div class="step">
+                <strong>1단계</strong>
+                <p>사서가 청구기호 부여</p>
+                <code>020.1 김12ㄷ</code>
+              </div>
+              <div class="arrow">→</div>
+              <div class="step">
+                <strong>2단계</strong>
+                <p>분류표에 따라 해석</p>
+                <p>"도서관학 자료"</p>
+              </div>
+              <div class="arrow">→</div>
+              <div class="step">
+                <strong>3단계</strong>
+                <p>배치 규칙에 따라 서가에 꽂음</p>
+                <p>"3층 A서가"</p>
+              </div>
+              <div class="arrow">→</div>
+              <div class="step">
+                <strong>4단계</strong>
+                <p>이용자가 청구기호로 검색</p>
+                <p>→ 위치를 안내받음</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-box">
+            <p><strong>💡 핵심:</strong> 청구기호(식별자)만으로는 안 돼요!
+            분류표, 배치 규칙, 서가 시스템 전체(참조체계)가 있어야 책을 찾을 수 있습니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="metaphor-card">
+        <div class="metaphor-header">
+          <span class="number">2️⃣</span>
+          <h3>주소 체계</h3>
+        </div>
+        <div class="metaphor-content">
+          <div class="identifier-part">
+            <h4>식별자 부분</h4>
+            <code>서울시 종로구 세종대로 209</code>
+            <p>→ 이 건물의 고유한 주소</p>
+          </div>
+
+          <div class="system-part">
+            <h4>참조체계 부분</h4>
+            <ul>
+              <li><strong>도로명주소 제도:</strong> 2014년부터 시행</li>
+              <li><strong>행정구역:</strong> 시 → 구 → 동 체계</li>
+              <li><strong>번호 부여 규칙:</strong> 도로 기준으로 순서대로</li>
+              <li><strong>지도 시스템:</strong> 네이버·구글 지도</li>
+              <li><strong>표지판:</strong> 도로명판, 건물번호판</li>
+            </ul>
+          </div>
+
+          <div class="insight-box">
+            <p><strong>💡 핵심:</strong> 주소(식별자)가 있어도, 지도 시스템(참조체계)이 없으면 찾아갈 수 없어요!</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="metaphor-card">
+        <div class="metaphor-header">
+          <span class="number">3️⃣</span>
+          <h3>웹에서 링크</h3>
+        </div>
+        <div class="metaphor-content">
+          <div class="identifier-part">
+            <h4>식별자 부분</h4>
+            <code>https://library.example.com/book/123</code>
+            <p>→ 이 웹페이지의 고유한 주소</p>
+          </div>
+
+          <div class="system-part">
+            <h4>참조체계 부분</h4>
+            <ul>
+              <li><strong>DNS:</strong> 도메인 이름을 IP 주소로 변환</li>
+              <li><strong>HTTP 프로토콜:</strong> 웹 서버와 통신 방법</li>
+              <li><strong>브라우저:</strong> URL을 해석하고 페이지를 표시</li>
+              <li><strong>웹 서버:</strong> 요청받은 페이지를 찾아서 전송</li>
+            </ul>
+          </div>
+
+          <div class="workflow-example">
+            <h4>🌐 URL 클릭하면 일어나는 일</h4>
+            <div class="workflow-steps">
+              <div class="step">
+                <strong>1단계</strong>
+                <p>브라우저가 URL 해석</p>
+              </div>
+              <div class="arrow">→</div>
+              <div class="step">
+                <strong>2단계</strong>
+                <p>DNS가 서버 찾기</p>
+              </div>
+              <div class="arrow">→</div>
+              <div class="step">
+                <strong>3단계</strong>
+                <p>HTTP로 요청 전송</p>
+              </div>
+              <div class="arrow">→</div>
+              <div class="step">
+                <strong>4단계</strong>
+                <p>서버가 페이지 전송</p>
+              </div>
+              <div class="arrow">→</div>
+              <div class="step">
+                <strong>5단계</strong>
+                <p>브라우저가 화면에 표시</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="insight-box">
+            <p><strong>💡 핵심:</strong> URL(식별자)을 클릭하면 화면이 나오는 게 당연해 보이지만,
+            실제로는 DNS, HTTP, 서버, 브라우저 등 복잡한 참조체계가 작동하고 있어요!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>3️⃣ 도서관·정보학에서의 참조체계</h2>
+
+    <div class="lis-systems">
+      <div class="system-card web">
+        <div class="system-header">
+          <h3>🌐 웹 참조체계</h3>
+          <p class="system-purpose">전 세계 웹 자원을 동일하게 참조</p>
+        </div>
+        <div class="system-body">
+          <h4>핵심 구성 요소</h4>
+          <ul>
+            <li><strong>URI / URL / URN:</strong> 웹 자원 식별자</li>
+            <li><strong>DNS:</strong> 도메인 이름 해석 시스템</li>
+            <li><strong>HTTP/HTTPS:</strong> 통신 프로토콜</li>
+            <li><strong>웹 표준 (W3C):</strong> 규칙과 권고사항</li>
+          </ul>
+
+          <h4>📌 실제 예시</h4>
+          <div class="example-scenario">
+            <p><strong>상황:</strong> 전 세계 어디서든 같은 웹페이지 보기</p>
+            <pre class="code-block">URL: https://www.naver.com
+
+1. DNS가 "www.naver.com"을 IP 주소로 변환
+   → 223.130.200.107
+2. HTTP로 해당 서버에 접속
+3. 서버가 메인 페이지 HTML 전송
+4. 브라우저가 화면에 렌더링
+
+→ 한국에서든 미국에서든 같은 페이지를 봅니다!</pre>
+          </div>
+
+          <div class="benefit-box">
+            <p><strong>✨ 덕분에 가능한 것:</strong></p>
+            <ul>
+              <li>전 세계 누구나 같은 URL로 같은 자료에 접근</li>
+              <li>웹 페이지 간 링크로 자유롭게 이동</li>
+              <li>검색 엔진이 모든 웹을 색인화</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="system-card scholarly">
+        <div class="system-header">
+          <h3>🎓 학술 참조체계</h3>
+          <p class="system-purpose">학술 자료를 안정적으로 연결</p>
+        </div>
+        <div class="system-body">
+          <h4>핵심 구성 요소</h4>
+          <ul>
+            <li><strong>DOI:</strong> 디지털 객체 식별자</li>
+            <li><strong>DOI Resolver (doi.org):</strong> DOI를 URL로 변환</li>
+            <li><strong>CrossRef:</strong> DOI 등록 및 메타데이터 관리</li>
+            <li><strong>출판사 시스템:</strong> 실제 논문 호스팅</li>
+          </ul>
+
+          <h4>📌 실제 예시</h4>
+          <div class="example-scenario">
+            <p><strong>상황:</strong> 10년 전 논문을 지금도 정확히 찾기</p>
+            <pre class="code-block">논문 DOI: 10.1234/jlis.2014.001
+
+2014년: 저널 A가 논문 출판
+→ URL: http://journalA.com/2014/vol1/article1
+
+2020년: 저널 B가 저널 A 인수
+→ URL: http://journalB.com/archives/jlis-2014-001
+
+2024년: DOI로 검색
+→ DOI resolver가 자동으로 최신 URL로 연결!
+→ http://journalB.com/archives/jlis-2014-001
+
+→ URL은 바뀌었지만 DOI는 그대로!</pre>
+          </div>
+
+          <div class="benefit-box">
+            <p><strong>✨ 덕분에 가능한 것:</strong></p>
+            <ul>
+              <li>논문 URL이 변경되어도 DOI로 계속 찾을 수 있음</li>
+              <li>참고문헌 링크가 영구적으로 유효</li>
+              <li>학술 인용 추적이 정확해짐</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="system-card library">
+        <div class="system-header">
+          <h3>📚 도서관 참조체계</h3>
+          <p class="system-purpose">저자·작품·주제를 안정적으로 연결</p>
+        </div>
+        <div class="system-body">
+          <h4>핵심 구성 요소</h4>
+          <ul>
+            <li><strong>ISBN / ISSN:</strong> 도서·정기간행물 식별자</li>
+            <li><strong>전거 파일 (Authority File):</strong> 표준 이름 관리</li>
+            <li><strong>통제어 (Controlled Vocabulary):</strong> 주제어 표준화</li>
+            <li><strong>분류 체계:</strong> 자료 조직 방법 (DDC, KDC 등)</li>
+          </ul>
+
+          <h4>📌 실제 예시 1: 전거 제어</h4>
+          <div class="example-scenario">
+            <p><strong>문제 상황:</strong> 같은 저자를 다른 사람으로 인식</p>
+            <pre class="code-block">도서 1: 저자 "이정보"
+도서 2: 저자 "李情報"
+도서 3: 저자 "Lee, Jeong-Bo"
+도서 4: 저자 "이정보 (1980-)"
+
+→ 시스템이 4명의 다른 사람으로 인식! 😱</pre>
+
+            <p><strong>✅ 전거 제어로 해결:</strong></p>
+            <pre class="code-block">표준 표목 설정: "이정보, 1980-"
+
+도서 1: 저자 "이정보" → 전거 레코드로 연결
+도서 2: 저자 "李情報" → 전거 레코드로 연결
+도서 3: 저자 "Lee, Jeong-Bo" → 전거 레코드로 연결
+도서 4: 저자 "이정보 (1980-)" → 전거 레코드로 연결
+
+→ 모든 도서가 같은 저자로 묶임! ✅</pre>
+          </div>
+
+          <h4>📌 실제 예시 2: ISBN 시스템</h4>
+          <div class="example-scenario">
+            <pre class="code-block">ISBN: 978-89-1234-567-8
+
+978: 도서를 의미하는 접두어
+89: 한국 출판사 코드
+1234: 특정 출판사 번호
+567: 해당 출판사에서 발행한 책 번호
+8: 오류 검증 코드
+
+→ 전 세계 어느 서점·도서관에서나 같은 책으로 인식!</pre>
+          </div>
+
+          <div class="benefit-box">
+            <p><strong>✨ 덕분에 가능한 것:</strong></p>
+            <ul>
+              <li>저자의 모든 저작을 한 번에 검색</li>
+              <li>같은 주제의 자료를 일관되게 찾기</li>
+              <li>도서관 간 자료 공유 및 상호대차</li>
+              <li>전 세계 도서 유통 시스템</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="system-card linkeddata">
+        <div class="system-header">
+          <h3>🔗 링크드 데이터 참조체계</h3>
+          <p class="system-purpose">서로 다른 데이터를 "같은 것"으로 연결</p>
+        </div>
+        <div class="system-body">
+          <h4>핵심 구성 요소</h4>
+          <ul>
+            <li><strong>RDF URI:</strong> 개체의 고유 식별자</li>
+            <li><strong>온톨로지:</strong> 개체 간 관계 정의</li>
+            <li><strong>SPARQL:</strong> 연결된 데이터 질의 언어</li>
+            <li><strong>LOD (Linked Open Data):</strong> 공개 데이터 연결망</li>
+          </ul>
+
+          <h4>📌 실제 예시</h4>
+          <div class="example-scenario">
+            <p><strong>상황:</strong> 세 기관의 데이터를 하나로 연결</p>
+            <pre class="code-block"># 국립중앙도서관 데이터
+&lt;http://nl.go.kr/person/12345&gt;
+  이름: "이순신"
+  생년: 1545
+
+# Wikipedia 데이터
+&lt;http://ko.wikipedia.org/wiki/이순신&gt;
+  이름: "李舜臣"
+  직업: "장군"
+
+# DBpedia 데이터
+&lt;http://dbpedia.org/resource/Yi_Sun-sin&gt;
+  name: "Yi Sun-sin"
+  birth: 1545
+
+→ 세 개의 다른 URI가 같은 사람을 가리킴!</pre>
+
+            <p><strong>✅ 링크드 데이터로 연결:</strong></p>
+            <pre class="code-block">&lt;http://nl.go.kr/person/12345&gt;
+  owl:sameAs &lt;http://ko.wikipedia.org/wiki/이순신&gt; .
+  owl:sameAs &lt;http://dbpedia.org/resource/Yi_Sun-sin&gt; .
+
+→ "이 세 URI는 같은 인물입니다!"라고 명시
+→ 세 기관의 데이터를 통합 검색·활용 가능!</pre>
+          </div>
+
+          <div class="benefit-box">
+            <p><strong>✨ 덕분에 가능한 것:</strong></p>
+            <ul>
+              <li>기관별로 따로 관리하던 데이터를 연결</li>
+              <li>한 번 검색으로 여러 기관 자료 통합 조회</li>
+              <li>AI가 서로 다른 데이터베이스의 정보를 하나로 이해</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>4️⃣ 왜 참조체계가 중요한가?</h2>
+
+    <div class="importance-section">
+      <div class="main-problem">
+        <h3>🎯 핵심 문제</h3>
+        <div class="problem-statement">
+          <p class="big-text">
+            데이터를 <strong>'모으는 것'</strong>보다<br>
+            <strong>'같은 대상을 같은 것으로 인식하게 하는 것'</strong>이<br>
+            훨씬 더 어렵다!
+          </p>
+        </div>
+      </div>
+
+      <div class="problem-cases">
+        <h3>❌ 참조체계가 없으면 생기는 문제들</h3>
+
+        <div class="problem-card">
+          <h4>문제 1: 같은 저자 → 다른 사람으로 인식</h4>
+          <div class="problem-example">
+            <p><strong>검색:</strong> "김영희" 저자의 모든 논문</p>
+            <div class="results">
+              <div class="result-bad">
+                <p><strong>결과 1:</strong> "김영희" (3편)</p>
+                <p><strong>결과 2:</strong> "Kim, Young-Hee" (5편)</p>
+                <p><strong>결과 3:</strong> "金英姬" (2편)</p>
+                <p><strong>결과 4:</strong> "김영희 (1985-)" (4편)</p>
+              </div>
+              <p class="impact">→ 실제로는 같은 사람의 논문 14편인데, 4명의 다른 사람으로 보임!</p>
+              <p class="consequence">📉 연구 실적 제대로 집계 안 됨</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="problem-card">
+          <h4>문제 2: 같은 논문 → 여러 개로 중복</h4>
+          <div class="problem-example">
+            <p><strong>상황:</strong> 한 논문이 여러 데이터베이스에 수록됨</p>
+            <div class="results">
+              <div class="result-bad">
+                <p><strong>DB A:</strong> "도서관 정보학의 미래" (2023)</p>
+                <p><strong>DB B:</strong> "The Future of Library and Information Science" (2023)</p>
+                <p><strong>DB C:</strong> "図書館情報学の未来" (2023)</p>
+              </div>
+              <p class="impact">→ 시스템이 3개의 다른 논문으로 인식!</p>
+              <p class="consequence">📊 중복 집계, 인용 분석 왜곡</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="problem-card">
+          <h4>문제 3: 시스템 간 연결 불가</h4>
+          <div class="problem-example">
+            <p><strong>상황:</strong> 도서관 목록, 학술DB, Wikipedia의 정보를 함께 보고 싶음</p>
+            <div class="results">
+              <div class="result-bad">
+                <p>도서관: "이순신" (청구기호: 991.1 이51ㄱ)</p>
+                <p>학술DB: "李舜臣" (저자 ID: A12345)</p>
+                <p>Wikipedia: "Yi Sun-sin" (페이지: /wiki/Yi_Sun-sin)</p>
+              </div>
+              <p class="impact">→ 세 시스템이 같은 인물을 다른 방식으로 표현!</p>
+              <p class="consequence">🔌 자동 연결 불가, 일일이 수작업 필요</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="solution-section">
+        <h3>✅ 참조체계가 있으면</h3>
+
+        <div class="solution-card">
+          <h4>해결 1: 전거 제어로 통합</h4>
+          <pre class="code-block">표준 전거 레코드:
+  표목: 김영희, 1985-
+  이형: Kim, Young-Hee; 金英姬; 김영희
+
+→ 모든 표기를 하나의 표준 표목으로 연결
+→ 14편의 논문이 모두 같은 저자로 집계됨! ✅</pre>
+        </div>
+
+        <div class="solution-card">
+          <h4>해결 2: DOI로 유일 식별</h4>
+          <pre class="code-block">논문 DOI: 10.1234/jlis.2023.001
+
+DB A, B, C 모두 같은 DOI 사용
+→ 시스템이 자동으로 같은 논문임을 인식
+→ 중복 제거, 정확한 인용 추적! ✅</pre>
+        </div>
+
+        <div class="solution-card">
+          <h4>해결 3: 링크드 데이터로 연결</h4>
+          <pre class="code-block">&lt;http://library/person/123&gt; owl:sameAs &lt;http://scholar/author/A12345&gt; .
+&lt;http://library/person/123&gt; owl:sameAs &lt;http://wikipedia/Yi_Sun-sin&gt; .
+
+→ "이 세 URI는 모두 같은 사람입니다"
+→ 세 시스템의 정보를 통합해서 보여줄 수 있음! ✅</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>5️⃣ 참조체계와 AI·LLM</h2>
+
+    <div class="ai-section">
+      <div class="ai-problem">
+        <h3>🤖 참조체계가 없으면 AI도 헷갈린다</h3>
+
+        <div class="ai-scenario">
+          <h4>시나리오: ChatGPT에게 질문</h4>
+          <div class="chat-example">
+            <div class="user-message">
+              <p><strong>사용자:</strong> "이순신 장군에 대해 알려줘"</p>
+            </div>
+            <div class="ai-response confused">
+              <p><strong>AI (참조체계 없이):</strong></p>
+              <p>"이순신이라는 이름을 가진 사람이 여러 명 있습니다."</p>
+              <ul>
+                <li>조선시대 장군 이순신 (1545-1598)</li>
+                <li>현대 축구선수 이순신</li>
+                <li>소설 속 등장인물 이순신</li>
+                <li>...어떤 이순신을 말씀하시는 건가요?</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="chat-example with-reference">
+            <div class="user-message">
+              <p><strong>사용자:</strong> "DBpedia의 http://dbpedia.org/resource/Yi_Sun-sin에 대해 알려줘"</p>
+            </div>
+            <div class="ai-response clear">
+              <p><strong>AI (참조체계 있으면):</strong></p>
+              <p>"네, 명확합니다. 조선시대 장군 이순신(1545-1598)이시군요."</p>
+              <ul>
+                <li>Wikipedia, DBpedia, Wikidata의 동일 URI 참조</li>
+                <li>생몰년: 1545-1598</li>
+                <li>직업: 장군, 전략가</li>
+                <li>유명한 전투: 명량대첩, 한산도대첩</li>
+                <li>관련 문화재: 현충사, 이순신 동상</li>
+              </ul>
+              <p>→ 여러 데이터 소스의 정보를 <strong>같은 인물</strong>로 정확히 통합!</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="insight-box">
+          <p><strong>💡 핵심:</strong> AI도 참조체계가 있어야 "같은 것"을 정확히 인식하고 정보를 통합할 수 있습니다.</p>
+        </div>
+      </div>
+
+      <div class="ai-benefits">
+        <h3>✨ 참조체계가 AI에게 주는 이점</h3>
+        <div class="benefit-grid">
+          <div class="benefit-item">
+            <h4>1. 모호성 제거</h4>
+            <p>"김철수"가 누구인지 명확히 구분</p>
+          </div>
+          <div class="benefit-item">
+            <h4>2. 정보 통합</h4>
+            <p>여러 데이터 소스의 정보를 하나로 합침</p>
+          </div>
+          <div class="benefit-item">
+            <h4>3. 정확한 추론</h4>
+            <p>관계를 정확히 파악해서 올바른 답변</p>
+          </div>
+          <div class="benefit-item">
+            <h4>4. 지식 확장</h4>
+            <p>연결된 정보를 따라가며 더 많은 것을 학습</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>6️⃣ 종합 정리</h2>
+
+    <div class="comprehensive-table">
+      <h3>📊 참조체계 한눈에 보기</h3>
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>구분</th>
+            <th>식별자 예시</th>
+            <th>참조체계 구성</th>
+            <th>역할</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>웹</strong></td>
+            <td>URI, URL, URN</td>
+            <td>DNS, HTTP, 웹 표준</td>
+            <td>전 세계 웹 자원 접근</td>
+          </tr>
+          <tr>
+            <td><strong>학술</strong></td>
+            <td>DOI</td>
+            <td>DOI Resolver, CrossRef</td>
+            <td>논문 영구 식별·연결</td>
+          </tr>
+          <tr>
+            <td><strong>도서관</strong></td>
+            <td>ISBN, 청구기호</td>
+            <td>전거 파일, 분류 체계</td>
+            <td>자료 조직·검색</td>
+          </tr>
+          <tr>
+            <td><strong>링크드 데이터</strong></td>
+            <td>RDF URI</td>
+            <td>온톨로지, SPARQL</td>
+            <td>이질적 데이터 통합</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="key-takeaways">
+      <h3>🎯 핵심 메시지</h3>
+      <div class="takeaway-grid">
+        <div class="takeaway-item">
+          <div class="number">1</div>
+          <p><strong>참조체계는 "가리키는 규칙"</strong></p>
+          <p class="detail">식별자만으로는 부족. 해석·연결하는 시스템이 필요</p>
+        </div>
+        <div class="takeaway-item">
+          <div class="number">2</div>
+          <p><strong>식별자는 점, 참조체계는 지도</strong></p>
+          <p class="detail">점들을 이어주는 전체 네비게이션 시스템</p>
+        </div>
+        <div class="takeaway-item">
+          <div class="number">3</div>
+          <p><strong>같은 것을 같게 인식하는 힘</strong></p>
+          <p class="detail">데이터 중복·모호성 문제를 해결하는 핵심</p>
+        </div>
+        <div class="takeaway-item">
+          <div class="number">4</div>
+          <p><strong>링크드 데이터의 출발점</strong></p>
+          <p class="detail">URI·온톨로지·메타데이터를 관통하는 기반</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>7️⃣ 더 깊이 알아보기</h2>
+
+    <div class="deep-dive">
+      <div class="question-card">
+        <h3>🤔 Q1: 전거 제어는 참조체계인가?</h3>
+        <div class="answer">
+          <p><strong>A: 네, 맞습니다!</strong></p>
+          <p>전거 제어(Authority Control)는 <strong>도서관의 참조체계</strong>입니다.</p>
+          <ul>
+            <li><strong>식별자:</strong> 표준 표목 (예: "이순신, 1545-1598")</li>
+            <li><strong>참조체계:</strong> 전거 파일 + 이형 관리 규칙 + 연결 시스템</li>
+          </ul>
+          <p>전거 제어 덕분에 저자·주제·단체를 일관되게 식별하고 연결할 수 있습니다.</p>
+        </div>
+      </div>
+
+      <div class="question-card">
+        <h3>🤔 Q2: 참조체계가 없으면 AI는 왜 헷갈리나?</h3>
+        <div class="answer">
+          <p><strong>A: 같은 이름이 다른 대상을 가리킬 수 있기 때문입니다.</strong></p>
+          <p>예: "사과"</p>
+          <ul>
+            <li>과일 사과 🍎</li>
+            <li>사과하다 (apologize) 🙏</li>
+            <li>Apple 회사 🍏</li>
+          </ul>
+          <p>참조체계(고유 URI, 온톨로지)가 있으면 AI는 맥락과 관계를 파악해 정확히 구분할 수 있습니다.</p>
+        </div>
+      </div>
+
+      <div class="question-card">
+        <h3>🤔 Q3: 참조체계는 누가 만드나?</h3>
+        <div class="answer">
+          <p><strong>A: 표준 기관, 학술 단체, 도서관 협회 등이 협력해서 만듭니다.</strong></p>
+          <ul>
+            <li><strong>W3C:</strong> 웹 표준 (URI, HTTP 등)</li>
+            <li><strong>DOI 재단:</strong> DOI 시스템</li>
+            <li><strong>ISBN 국제기구:</strong> ISBN 체계</li>
+            <li><strong>국립중앙도서관:</strong> 한국 전거 파일</li>
+            <li><strong>LC (미국 의회도서관):</strong> LCSH, LCNAF</li>
+          </ul>
+          <p>→ 참조체계는 혼자 만드는 게 아니라 <strong>협력과 표준화</strong>의 결과입니다!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>8️⃣ 학습 자료 및 참고 링크</h2>
+
+    <div class="resources-grid">
+      <div class="resource-card official">
+        <h3>📚 공식 문서 및 표준</h3>
+        <ul>
+          <li>
+            <a href="https://www.w3.org/standards/" target="_blank">
+              W3C 웹 표준
+            </a>
+            <p class="link-desc">URI, HTTP 등 웹 참조체계 표준</p>
+          </li>
+          <li>
+            <a href="https://www.doi.org/" target="_blank">
+              DOI 공식 사이트
+            </a>
+            <p class="link-desc">학술 참조체계의 핵심</p>
+          </li>
+          <li>
+            <a href="https://www.loc.gov/aba/cyac/authagency.html" target="_blank">
+              LC 전거 파일 (LCNAF)
+            </a>
+            <p class="link-desc">도서관 전거 참조체계</p>
+          </li>
+        </ul>
+      </div>
+
+      <div class="resource-card tutorial">
+        <h3>🎓 학습 자료</h3>
+        <ul>
+          <li>
+            <a href="https://www.w3.org/DesignIssues/LinkedData.html" target="_blank">
+              Tim Berners-Lee: Linked Data
+            </a>
+            <p class="link-desc">링크드 데이터 참조체계의 원리</p>
+          </li>
+          <li>
+            <a href="https://lod-cloud.net/" target="_blank">
+              Linked Open Data Cloud
+            </a>
+            <p class="link-desc">연결된 데이터 시각화</p>
+          </li>
+        </ul>
+      </div>
+
+      <div class="resource-card korean">
+        <h3>🇰🇷 한국 기관</h3>
+        <ul>
+          <li>
+            <a href="https://www.nl.go.kr/seoji/index.do" target="_blank">
+              국립중앙도서관 서지정보유통지원시스템
+            </a>
+            <p class="link-desc">한국의 전거 파일 및 서지 참조체계</p>
+          </li>
+          <li>
+            <a href="https://www.isbn.co.kr/" target="_blank">
+              한국문헌번호센터 (ISBN 한국 센터)
+            </a>
+            <p class="link-desc">ISBN 부여 및 관리</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="summary">
+    <h2>🎯 최종 정리</h2>
+    <div class="summary-content">
+      <div class="summary-box">
+        <h3>참조체계란?</h3>
+        <p>대상을 <strong>일관되게 식별</strong>하고 <strong>다시 찾아 연결</strong>할 수 있게 하는 <strong>규칙과 시스템</strong></p>
+      </div>
+
+      <div class="summary-box">
+        <h3>왜 중요한가?</h3>
+        <p>"<strong>같은 것을 같게 인식</strong>"하게 해줌<br>
+        → 데이터 중복·모호성 해결<br>
+        → 시스템 간 연결 가능</p>
+      </div>
+
+      <div class="summary-box">
+        <h3>실제 사례</h3>
+        <p>웹(URI+DNS), 학술(DOI), 도서관(전거 파일), 링크드 데이터(RDF URI)</p>
+      </div>
+
+      <div class="summary-box">
+        <h3>기억할 것</h3>
+        <p><strong>식별자는 점, 참조체계는 지도</strong><br>
+        점만으로는 길을 찾을 수 없다!</p>
+      </div>
+    </div>
+
+    <div class="final-message">
+      <p><strong>참조체계를 이해하면, URI·메타데이터·온톨로지·링크드데이터가 한 번에 정리됩니다!</strong></p>
+      <p>이 모든 것의 기반이 바로 <strong>"어떻게 가리키고, 어떻게 연결할 것인가?"</strong>입니다.</p>
+    </div>
+  </div>
+</div>
+
+<style>
+.reference-system-tutorial {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+h1 {
+  font-size: 2.5em;
+  color: #1a237e;
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 4px solid #3f51b5;
+}
+
+h2 {
+  font-size: 2em;
+  color: #283593;
+  margin: 3rem 0 1.5rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #5c6bc0;
+}
+
+h3 {
+  font-size: 1.5em;
+  color: #3949ab;
+  margin: 2rem 0 1rem 0;
+}
+
+h4 {
+  font-size: 1.2em;
+  color: #5e35b1;
+  margin: 1.5rem 0 0.8rem 0;
+}
+
+.intro-section {
+  background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%);
+  padding: 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+}
+
+.intro-section ul {
+  margin: 1rem 0 0 2rem;
+  font-size: 1.1em;
+}
+
+.intro-section li {
+  margin: 0.8rem 0;
+}
+
+.section {
+  margin: 3rem 0;
+}
+
+.definition-box {
+  background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);
+  border-left: 5px solid #0277bd;
+  padding: 2rem;
+  margin: 1.5rem 0;
+  border-radius: 8px;
+}
+
+.definition-box h3 {
+  color: #01579b;
+  margin-top: 0;
+}
+
+.definition-box p {
+  font-size: 1.15em;
+  line-height: 1.9;
+  color: #004d40;
+}
+
+.easy-explanation {
+  background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+  border-left: 5px solid #00acc1;
+  padding: 2rem;
+  margin: 2rem 0;
+  border-radius: 8px;
+}
+
+.easy-explanation h3 {
+  color: #00838f;
+  margin-top: 0;
+}
+
+.story-box {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+.comparison-scenario {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.scenario {
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.scenario.bad {
+  background: #ffebee;
+  border-left: 4px solid #f44336;
+}
+
+.scenario.good {
+  background: #e8f5e9;
+  border-left: 4px solid #4caf50;
+}
+
+.scenario h4 {
+  margin-top: 0;
+  font-size: 1.1em;
+}
+
+.problem,
+.solution {
+  font-weight: bold;
+  margin: 1rem 0;
+}
+
+.problem {
+  color: #d32f2f;
+}
+
+.solution {
+  color: #2e7d32;
+}
+
+.result {
+  font-size: 1.3em;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.key-insight {
+  background: #fff3e0;
+  border: 2px solid #ff9800;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+  font-size: 1.05em;
+  text-align: center;
+}
+
+.key-concept {
+  background: #fafafa;
+  padding: 2rem;
+  border-radius: 12px;
+  margin: 2rem 0;
+}
+
+.concept-comparison {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.concept-item {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  min-width: 200px;
+  flex: 1;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.concept-item.identifier {
+  border-top: 4px solid #4caf50;
+}
+
+.concept-item.rules {
+  border-top: 4px solid #2196f3;
+}
+
+.concept-item.system {
+  border-top: 4px solid #9c27b0;
+}
+
+.concept-item h4 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+}
+
+.role {
+  color: #666;
+  font-size: 0.9em;
+  margin: 0.5rem 0;
+}
+
+.examples {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #f5f5f5;
+  border-radius: 4px;
+}
+
+.examples p {
+  margin: 0.3rem 0;
+  font-size: 0.9em;
+  color: #555;
+}
+
+.metaphor {
+  font-style: italic;
+  color: #7b1fa2;
+  margin-top: 1rem;
+  font-size: 0.95em;
+}
+
+.plus,
+.equals {
+  font-size: 2em;
+  color: #666;
+  font-weight: bold;
+  padding: 0 1rem;
+}
+
+.summary-note {
+  background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.summary-note p {
+  margin: 0;
+  font-size: 1.2em;
+  color: #4a148c;
+  font-weight: bold;
+}
+
+.metaphor-section {
+  margin: 2rem 0;
+}
+
+.metaphor-card {
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  margin: 2rem 0;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.metaphor-header {
+  background: linear-gradient(135deg, #5c6bc0 0%, #3f51b5 100%);
+  color: white;
+  padding: 1.5rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.metaphor-header .number {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.metaphor-header h3 {
+  margin: 0;
+  color: white;
+  font-size: 1.5em;
+}
+
+.metaphor-content {
+  padding: 2rem;
+}
+
+.identifier-part {
+  background: #e8f5e9;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #4caf50;
+}
+
+.identifier-part h4 {
+  color: #2e7d32;
+  margin-top: 0;
+}
+
+.identifier-part code {
+  display: block;
+  background: white;
+  padding: 1rem;
+  border-radius: 4px;
+  font-size: 1.1em;
+  color: #c62828;
+  margin: 1rem 0;
+}
+
+.system-part {
+  background: #e3f2fd;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #2196f3;
+}
+
+.system-part h4 {
+  color: #1565c0;
+  margin-top: 0;
+}
+
+.system-part ul {
+  margin: 1rem 0 1rem 2rem;
+}
+
+.system-part li {
+  margin: 0.8rem 0;
+  line-height: 1.7;
+}
+
+.workflow-example {
+  background: #f5f5f5;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+.workflow-example h4 {
+  margin-top: 0;
+  color: #5e35b1;
+}
+
+.workflow-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+}
+
+.step {
+  background: white;
+  padding: 1.2rem;
+  border-radius: 8px;
+  border: 2px solid #9c27b0;
+  text-align: center;
+  min-width: 150px;
+  flex-shrink: 0;
+}
+
+.step strong {
+  display: block;
+  color: #7b1fa2;
+  font-size: 1em;
+  margin-bottom: 0.5rem;
+}
+
+.step p {
+  margin: 0.5rem 0 0 0;
+  font-size: 0.9em;
+  color: #666;
+}
+
+.step code {
+  display: block;
+  background: #f5f5f5;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.85em;
+}
+
+.arrow {
+  font-size: 2em;
+  color: #9c27b0;
+  margin: 0 0.5rem;
+  font-weight: bold;
+}
+
+.insight-box {
+  background: #fff3e0;
+  border: 2px solid #ff9800;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.insight-box p {
+  margin: 0;
+  color: #e65100;
+  font-size: 1.05em;
+  line-height: 1.7;
+}
+
+.lis-systems {
+  margin: 2rem 0;
+}
+
+.system-card {
+  background: white;
+  border-radius: 12px;
+  margin: 2rem 0;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.system-card.web .system-header {
+  background: linear-gradient(135deg, #4db6ac 0%, #26a69a 100%);
+}
+
+.system-card.scholarly .system-header {
+  background: linear-gradient(135deg, #ba68c8 0%, #ab47bc 100%);
+}
+
+.system-card.library .system-header {
+  background: linear-gradient(135deg, #ff8a65 0%, #ff7043 100%);
+}
+
+.system-card.linkeddata .system-header {
+  background: linear-gradient(135deg, #7986cb 0%, #5c6bc0 100%);
+}
+
+.system-header {
+  color: white;
+  padding: 2rem;
+}
+
+.system-header h3 {
+  margin: 0 0 0.5rem 0;
+  color: white;
+  font-size: 1.6em;
+}
+
+.system-purpose {
+  margin: 0;
+  font-size: 1.05em;
+  opacity: 0.95;
+}
+
+.system-body {
+  padding: 2rem;
+}
+
+.system-body h4 {
+  color: #5e35b1;
+  margin: 2rem 0 1rem 0;
+}
+
+.system-body ul {
+  margin: 1rem 0 1rem 2rem;
+}
+
+.system-body li {
+  margin: 0.8rem 0;
+  line-height: 1.7;
+}
+
+.example-scenario {
+  background: #f5f5f5;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+.example-scenario p {
+  margin: 0.8rem 0;
+}
+
+.code-block {
+  background: #263238;
+  color: #aed581;
+  padding: 1.5rem;
+  border-radius: 6px;
+  font-family: 'Courier New', monospace;
+  overflow-x: auto;
+  margin: 1rem 0;
+  line-height: 1.8;
+  font-size: 0.95em;
+}
+
+.benefit-box {
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  border-left: 4px solid #4caf50;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 1.5rem;
+}
+
+.benefit-box p {
+  margin: 0.8rem 0;
+  font-weight: bold;
+  color: #2e7d32;
+}
+
+.benefit-box ul {
+  margin: 1rem 0 0 2rem;
+}
+
+.benefit-box li {
+  margin: 0.6rem 0;
+  color: #1b5e20;
+}
+
+.importance-section {
+  margin: 2rem 0;
+}
+
+.main-problem {
+  background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
+  padding: 3rem 2rem;
+  border-radius: 12px;
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.main-problem h3 {
+  margin-top: 0;
+  color: #c2185b;
+}
+
+.problem-statement {
+  margin: 2rem 0;
+}
+
+.big-text {
+  font-size: 1.4em;
+  line-height: 1.8;
+  color: #880e4f;
+  font-weight: bold;
+  margin: 0;
+}
+
+.problem-cases {
+  margin: 3rem 0;
+}
+
+.problem-cases h3 {
+  color: #d32f2f;
+  font-size: 1.7em;
+}
+
+.problem-card {
+  background: white;
+  border: 2px solid #ef5350;
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.problem-card h4 {
+  color: #c62828;
+  margin-top: 0;
+}
+
+.problem-example {
+  margin: 1.5rem 0;
+}
+
+.results {
+  background: #ffebee;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.result-bad {
+  background: white;
+  padding: 1rem;
+  border-radius: 6px;
+  margin: 1rem 0;
+  border-left: 4px solid #f44336;
+}
+
+.result-bad p {
+  margin: 0.5rem 0;
+  color: #333;
+}
+
+.impact {
+  color: #d32f2f;
+  font-weight: bold;
+  margin: 1.5rem 0 1rem 0;
+  font-size: 1.05em;
+}
+
+.consequence {
+  font-size: 1.2em;
+  text-align: center;
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #ffcdd2;
+  border-radius: 6px;
+  color: #b71c1c;
+  font-weight: bold;
+}
+
+.solution-section {
+  margin: 3rem 0;
+}
+
+.solution-section h3 {
+  color: #2e7d32;
+  font-size: 1.7em;
+}
+
+.solution-card {
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  border: 2px solid #4caf50;
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem 0;
+}
+
+.solution-card h4 {
+  color: #1b5e20;
+  margin-top: 0;
+}
+
+.ai-section {
+  margin: 2rem 0;
+}
+
+.ai-problem {
+  background: #f3e5f5;
+  padding: 2rem;
+  border-radius: 12px;
+  margin: 2rem 0;
+}
+
+.ai-problem h3 {
+  color: #6a1b9a;
+  margin-top: 0;
+}
+
+.ai-scenario {
+  margin: 2rem 0;
+}
+
+.ai-scenario h4 {
+  color: #7b1fa2;
+}
+
+.chat-example {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  border: 2px solid #e0e0e0;
+}
+
+.chat-example.with-reference {
+  border-color: #4caf50;
+}
+
+.user-message {
+  background: #e3f2fd;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.user-message p {
+  margin: 0;
+}
+
+.ai-response {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.ai-response.confused {
+  background: #ffebee;
+  border-left: 4px solid #f44336;
+}
+
+.ai-response.clear {
+  background: #e8f5e9;
+  border-left: 4px solid #4caf50;
+}
+
+.ai-response p {
+  margin: 0.5rem 0;
+}
+
+.ai-response ul {
+  margin: 1rem 0 1rem 2rem;
+}
+
+.ai-benefits {
+  margin: 3rem 0;
+}
+
+.ai-benefits h3 {
+  color: #1976d2;
+}
+
+.benefit-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.benefit-item {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-top: 4px solid #2196f3;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.benefit-item h4 {
+  color: #1565c0;
+  margin-top: 0;
+}
+
+.benefit-item p {
+  color: #666;
+  margin: 0.5rem 0 0 0;
+}
+
+.comprehensive-table {
+  margin: 2rem 0;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.comparison-table th {
+  background: linear-gradient(135deg, #5c6bc0 0%, #3f51b5 100%);
+  color: white;
+  padding: 1.2rem;
+  text-align: left;
+  font-weight: bold;
+  font-size: 1.05em;
+}
+
+.comparison-table td {
+  padding: 1.2rem;
+  border-bottom: 1px solid #e0e0e0;
+  vertical-align: top;
+}
+
+.comparison-table tbody tr:hover {
+  background: #f5f5f5;
+}
+
+.key-takeaways {
+  background: linear-gradient(135deg, #ede7f6 0%, #d1c4e9 100%);
+  padding: 3rem 2rem;
+  border-radius: 12px;
+  margin: 3rem 0;
+}
+
+.key-takeaways h3 {
+  text-align: center;
+  color: #4a148c;
+  margin-top: 0;
+  font-size: 1.8em;
+}
+
+.takeaway-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.takeaway-item {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.takeaway-item .number {
+  background: linear-gradient(135deg, #7b1fa2 0%, #6a1b9a 100%);
+  color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.takeaway-item p {
+  margin: 1rem 0;
+  line-height: 1.7;
+}
+
+.takeaway-item p:first-of-type {
+  font-size: 1.15em;
+  color: #4a148c;
+}
+
+.detail {
+  font-size: 0.95em;
+  color: #666;
+}
+
+.deep-dive {
+  margin: 2rem 0;
+}
+
+.question-card {
+  background: white;
+  border: 2px solid #9c27b0;
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.question-card h3 {
+  color: #7b1fa2;
+  margin-top: 0;
+}
+
+.answer {
+  background: #f3e5f5;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.answer p {
+  margin: 1rem 0;
+  line-height: 1.7;
+}
+
+.answer ul {
+  margin: 1rem 0 1rem 2rem;
+}
+
+.answer li {
+  margin: 0.6rem 0;
+}
+
+.resources-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.resource-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.resource-card.official {
+  border-top: 4px solid #1976d2;
+}
+
+.resource-card.tutorial {
+  border-top: 4px solid #388e3c;
+}
+
+.resource-card.korean {
+  border-top: 4px solid #f57c00;
+}
+
+.resource-card h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.resource-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.resource-card li {
+  margin: 1.5rem 0;
+}
+
+.resource-card a {
+  color: #1976d2;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.05em;
+}
+
+.resource-card a:hover {
+  text-decoration: underline;
+}
+
+.link-desc {
+  color: #666;
+  font-size: 0.9em;
+  font-weight: normal;
+  margin: 0.5rem 0 0 0;
+}
+
+.summary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 3rem;
+  border-radius: 12px;
+  margin-top: 4rem;
+}
+
+.summary h2 {
+  color: white;
+  border-bottom: 2px solid rgba(255,255,255,0.5);
+  margin-bottom: 2rem;
+}
+
+.summary-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.summary-box {
+  background: rgba(255,255,255,0.2);
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.summary-box h3 {
+  color: white;
+  margin: 0 0 1rem 0;
+  font-size: 1.3em;
+}
+
+.summary-box p {
+  margin: 0.8rem 0;
+  line-height: 1.7;
+  font-size: 1.05em;
+}
+
+.final-message {
+  background: rgba(255,255,255,0.3);
+  padding: 2rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 1.15em;
+}
+
+.final-message p {
+  margin: 1rem 0;
+  line-height: 1.8;
+}
+
+@media (max-width: 768px) {
+  .reference-system-tutorial {
+    padding: 1rem;
+  }
+
+  h1 {
+    font-size: 1.8em;
+  }
+
+  h2 {
+    font-size: 1.5em;
+  }
+
+  .comparison-scenario {
+    grid-template-columns: 1fr;
+  }
+
+  .concept-comparison {
+    flex-direction: column;
+  }
+
+  .plus,
+  .equals {
+    transform: rotate(90deg);
+    margin: 1rem 0;
+  }
+
+  .workflow-steps {
+    flex-direction: column;
+  }
+
+  .arrow {
+    transform: rotate(90deg);
+    margin: 1rem 0;
+  }
+
+  .benefit-grid,
+  .takeaway-grid,
+  .summary-content,
+  .resources-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

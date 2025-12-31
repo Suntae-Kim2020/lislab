@@ -1,0 +1,13 @@
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import UserViewSet, MailingPreferenceViewSet
+from .statistics import admin_statistics
+
+router = DefaultRouter()
+router.register(r'users', UserViewSet, basename='user')
+router.register(r'mailing-preferences', MailingPreferenceViewSet, basename='mailing-preference')
+
+urlpatterns = [
+    path('', include(router.urls)),
+    path('statistics/', admin_statistics, name='admin-statistics'),
+]
