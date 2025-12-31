@@ -58,6 +58,17 @@ export default function ContentDetailPage() {
       // Scope the inline styles to only apply within .custom-content-wrapper
       // This prevents styles like "body", "h1" from affecting the entire page
       if (inlineStyles) {
+        // Remove color-related properties from .code-block to allow global CSS to apply
+        inlineStyles = inlineStyles.replace(/\.code-block\s*\{[^}]*\}/g, (match) => {
+          // Remove background-color and color properties
+          return match
+            .replace(/background-color:\s*[^;]+;/g, '')
+            .replace(/color:\s*[^;]+;/g, '');
+        });
+
+        // Remove colors from code syntax highlighting classes
+        inlineStyles = inlineStyles.replace(/\.code-block\s+\.(keyword|string|prefix|uri|comment)\s*\{[^}]*\}/g, '');
+
         // Replace body selector with .custom-content-wrapper
         inlineStyles = inlineStyles.replace(/\bbody\b/g, '.custom-content-wrapper');
         // Prefix all other selectors with .custom-content-wrapper
@@ -67,8 +78,8 @@ export default function ContentDetailPage() {
 
       return {
         content: bodyContent,
-        hasInlineStyles: inlineStyles.length > 0,
-        inlineStyles: inlineStyles
+        hasInlineStyles: false, // Disable inline styles to use global CSS
+        inlineStyles: ''
       };
     }
     return {

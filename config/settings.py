@@ -11,7 +11,7 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-change-this-in-produc
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,api.lislab.kr').split(',')
 
 # Cloud Run HTTPS proxy settings
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -169,7 +169,7 @@ SIMPLE_JWT = {
 # CORS Settings
 CORS_ALLOWED_ORIGINS = config(
     'CORS_ALLOWED_ORIGINS',
-    default='http://localhost:3000,http://127.0.0.1:3000,https://lislab-frontend-326272454487.asia-northeast3.run.app'
+    default='http://localhost:3000,http://127.0.0.1:3000,https://lislab.kr,https://www.lislab.kr,https://lislab-frontend-326272454487.asia-northeast3.run.app'
 ).split(',')
 
 CORS_ALLOW_CREDENTIALS = True

@@ -273,20 +273,18 @@ export default function MailingSettingsPage() {
 
               {!preferences.all_categories && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {categories
-                    .filter(cat => cat.parent === null)
-                    .map((category) => (
-                      <div key={category.id} className="flex items-center space-x-2">
-                        <Checkbox
-                          id={`cat-${category.id}`}
-                          checked={preferences.selected_categories.some(c => c.id === category.id)}
-                          onCheckedChange={() => toggleCategory(category)}
-                        />
-                        <Label htmlFor={`cat-${category.id}`} className="cursor-pointer">
-                          {category.name}
-                        </Label>
-                      </div>
-                    ))}
+                  {categories.map((category) => (
+                    <div key={category.id} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`cat-${category.id}`}
+                        checked={preferences.selected_categories.some(c => c.id === category.id)}
+                        onCheckedChange={() => toggleCategory(category)}
+                      />
+                      <Label htmlFor={`cat-${category.id}`} className="cursor-pointer">
+                        {category.name}
+                      </Label>
+                    </div>
+                  ))}
                 </div>
               )}
 

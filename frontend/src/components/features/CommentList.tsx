@@ -56,7 +56,7 @@ export function CommentList({ contentId }: CommentListProps) {
 
   const handleDelete = (id: number) => {
     if (window.confirm('정말 삭제하시겠습니까?')) {
-      deleteCommentMutation.mutate(id);
+      deleteCommentMutation.mutate({ id, contentId });
     }
   };
 
