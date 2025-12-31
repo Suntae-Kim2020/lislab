@@ -5,7 +5,7 @@ import { FileText } from 'lucide-react';
 
 interface PDFSaveButtonProps {
   title: string;
-  contentRef: React.RefObject<HTMLDivElement>;
+  contentRef: React.RefObject<HTMLDivElement | null>;
 }
 
 export function PDFSaveButton({ title, contentRef }: PDFSaveButtonProps) {
