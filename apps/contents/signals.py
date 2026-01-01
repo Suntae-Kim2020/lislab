@@ -65,10 +65,14 @@ def send_immediate_notifications(sender, instance, created, **kwargs):
                 print(f"[Signal] 이메일 발송 완료: {user.username} <- {instance.title}")
 
                 # 카카오 메시지 발송 (카카오 로그인 사용자 + 알림 활성화된 경우)
+                print(f"[Signal] 카카오 체크 - User: {user.username}, Provider: {user.social_provider}, Kakao enabled: {pref.kakao_notification_enabled}")
                 if user.social_provider == User.SocialProvider.KAKAO and pref.kakao_notification_enabled:
+                    print(f"[Signal] 카카오 메시지 발송 시도: {user.username}")
                     kakao_sent = send_kakao_message_notification(user, instance)
                     if kakao_sent:
                         print(f"[Signal] 카카오 메시지 발송 완료: {user.username} <- {instance.title}")
+                    else:
+                        print(f"[Signal] 카카오 메시지 발송 실패: {user.username}")
 
         except Exception as e:
             print(f"[Signal] 알림 발송 실패 ({user.username}): {e}")
