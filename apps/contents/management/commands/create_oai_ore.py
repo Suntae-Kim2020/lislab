@@ -48,268 +48,402 @@ class Command(BaseCommand):
     </ul>
   </div>
 
-  <section class="mb-8">
-    <h2 class="text-3xl font-bold mb-4">1. OAI-ORE란 무엇인가?</h2>
+  <h2>❓ OAI-ORE는 무엇인가요?</h2>
 
-    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
-      <p class="font-semibold">⚠️ 중요한 분류 이해</p>
-      <p class="mt-2">OAI-ORE는 <strong>프로토콜이 아닙니다</strong>. 이것은 RDF 기반의 <strong>데이터 모델</strong>이자 <strong>어휘(Vocabulary)</strong>입니다.</p>
+  <div class="bg-yellow-50 p-6 rounded-lg my-6">
+    <h3 class="font-bold text-lg mb-3">🔍 정확한 분류</h3>
+    <p class="mb-3"><strong>OAI-ORE</strong>는 다음과 같이 정의됩니다:</p>
+    <div class="bg-white p-4 rounded-lg">
+      <p class="font-semibold text-blue-800">
+        "복합 디지털 객체의 집합과 관계를 표현하기 위해 정의된 <strong>RDF 기반의 경량 데이터 모델(Vocabulary)</strong>"
+      </p>
     </div>
-
-    <h3 class="text-2xl font-semibold mb-3">OAI-ORE의 정확한 분류</h3>
-    <ul class="list-disc pl-6 space-y-2 mb-6">
-      <li><strong>RDF Vocabulary (어휘)</strong>: 복합 디지털 객체를 표현하기 위한 용어와 개념을 정의</li>
-      <li><strong>Data Model (데이터 모델)</strong>: 여러 웹 리소스를 하나의 집합으로 표현하는 구조적 프레임워크</li>
-      <li><strong>NOT a Protocol (프로토콜이 아님)</strong>: OAI-PMH와 달리 통신 규약이 아닙니다</li>
-      <li><strong>NOT an Ontology (온톨로지가 아님)</strong>: 개념 간의 복잡한 관계보다는 구조적 표현에 집중</li>
-    </ul>
-
-    <h3 class="text-2xl font-semibold mb-3">OAI-ORE의 탄생 배경</h3>
-    <p class="mb-4">
-      현대 웹에서는 하나의 학술 자료가 여러 파일로 구성되는 경우가 많습니다:
-    </p>
-    <ul class="list-disc pl-6 space-y-2 mb-6">
-      <li>논문 PDF 본문</li>
-      <li>보충 데이터셋 (CSV, Excel)</li>
-      <li>관련 이미지와 그래프</li>
-      <li>영상 자료나 발표 슬라이드</li>
-      <li>메타데이터 파일</li>
-    </ul>
-
-    <p class="mb-4">
-      이러한 여러 리소스를 <strong>"하나의 논리적 객체"</strong>로 묶어서 표현하고 관리하기 위해 OAI-ORE가 개발되었습니다.
-    </p>
-  </section>
-
-  <section class="mb-8">
-    <h2 class="text-3xl font-bold mb-4">2. 핵심 개념: Aggregation과 ResourceMap</h2>
-
-    <div class="grid md:grid-cols-2 gap-6 mb-6">
-      <div class="bg-green-50 p-6 rounded-lg">
-        <h3 class="text-xl font-bold mb-3">📦 Aggregation (집합)</h3>
-        <p class="mb-3">
-          여러 웹 리소스를 하나로 묶은 논리적 집합입니다.
-        </p>
-        <p class="text-sm italic">
-          예: "2024년 AI 연구 논문"이라는 Aggregation은 PDF, 데이터셋, 이미지를 포함할 수 있습니다.
-        </p>
-      </div>
-
-      <div class="bg-purple-50 p-6 rounded-lg">
-        <h3 class="text-xl font-bold mb-3">🗺️ ResourceMap (리소스 맵)</h3>
-        <p class="mb-3">
-          Aggregation을 RDF 형식으로 기술한 메타데이터 문서입니다.
-        </p>
-        <p class="text-sm italic">
-          ResourceMap은 "어떤 리소스들이 포함되어 있고, 어떤 관계인지"를 명시합니다.
-        </p>
-      </div>
+    <div class="mt-4 text-sm">
+      <p><strong>OAI-ORE는:</strong></p>
+      <ul class="list-disc pl-6 mt-2">
+        <li>✅ RDF Vocabulary</li>
+        <li>✅ 데이터 모델 명세</li>
+        <li>✅ 경량 온톨로지적 성격</li>
+        <li>❌ 프로토콜이 아님</li>
+        <li>❌ 메타데이터 스키마가 아님</li>
+        <li>❌ 완전한 도메인 온톨로지가 아님</li>
+      </ul>
     </div>
+  </div>
 
-    <h3 class="text-2xl font-semibold mb-3">관계 다이어그램</h3>
-    <pre class="bg-gray-100 p-4 rounded-lg overflow-x-auto mb-6">
-ResourceMap (RDF 문서)
-    │
-    ├── describes → Aggregation
-    │                  │
-    │                  ├── aggregates → Resource 1 (PDF)
-    │                  ├── aggregates → Resource 2 (Dataset)
-    │                  └── aggregates → Resource 3 (Image)
-    </pre>
-  </section>
+  <p><strong>OAI-ORE (Open Archives Initiative - Object Reuse and Exchange)</strong>는 디지털 자원들을 하나의 논리적 단위로 묶어서 설명하고 공유하기 위한 RDF 기반 데이터 모델입니다.</p>
 
-  <section class="mb-8">
-    <h2 class="text-3xl font-bold mb-4">3. 실제 RDF 예제</h2>
+  <div class="bg-gray-100 p-4 rounded-lg my-6">
+    <p class="font-semibold">🎓 학생 눈높이로 설명하면...</p>
+    <p>여러분이 과제를 제출할 때 워드 파일 1개만 내지 않죠? 보고서 본문 + 참고자료 PDF + 데이터 엑셀 + 발표 PPT를 함께 제출합니다. 이 여러 파일들을 "이것들은 모두 한 과제의 부분입니다"라고 명시적으로 연결해주는 것, 그것이 OAI-ORE의 역할입니다.</p>
+  </div>
 
-    <p class="mb-4">
-      다음은 논문 하나를 Aggregation으로 표현한 ResourceMap 예제입니다:
-    </p>
+  <h2>🌟 왜 OAI-ORE가 필요한가요?</h2>
 
-    <pre class="bg-gray-900 text-green-400 p-6 rounded-lg overflow-x-auto mb-6"><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+  <h3>1. 디지털 세상의 현실</h3>
+  <p>예전에는 하나의 자료 = 하나의 파일이었습니다. 하지만 지금은:</p>
+
+  <ul class="list-disc pl-6 space-y-2 my-4">
+    <li><strong>연구 논문</strong>: 논문 PDF + 실험 데이터 + 분석 코드 + 그래프 이미지</li>
+    <li><strong>온라인 전시</strong>: 작품 설명 + 고해상도 이미지 + 3D 모델 + 오디오 가이드</li>
+    <li><strong>학습 자료</strong>: 강의 영상 + 슬라이드 + 읽기 자료 + 퀴즈</li>
+  </ul>
+
+  <p>이렇게 여러 파일이 하나의 "작품"을 이루는 경우가 많아졌습니다.</p>
+
+  <h3>2. 문제: 어떻게 묶을까?</h3>
+
+  <div class="bg-red-50 p-4 rounded-lg my-4">
+    <p class="font-semibold mb-2">⚠️ 단순히 폴더에 넣으면?</p>
+    <ul class="list-disc pl-6">
+      <li>각 파일 간의 관계를 알 수 없음</li>
+      <li>다른 시스템과 공유하기 어려움</li>
+      <li>"이 이미지는 3페이지에 들어가는 그림" 같은 구조 정보 손실</li>
+    </ul>
+  </div>
+
+  <h3>3. 해결책: OAI-ORE</h3>
+
+  <p>OAI-ORE는 <strong>표준화된 방법</strong>으로 여러 파일의 관계를 기술합니다. 마치 "설명서"처럼요!</p>
+
+  <h2>🔍 OAI-ORE의 핵심 개념 3가지</h2>
+
+  <h3>1️⃣ Aggregation (집합)</h3>
+
+  <div class="bg-blue-50 p-4 rounded-lg my-4">
+    <p><strong>정의:</strong> 여러 자원을 하나로 묶은 논리적 단위</p>
+    <p class="mt-2"><strong>비유:</strong> "2024학년도 1학기 데이터베이스 기말과제"라는 이름의 폴더</p>
+    <p class="mt-2"><strong>특징:</strong> 실제 파일이 아니라 "개념적 묶음"</p>
+  </div>
+
+  <div class="bg-gray-50 p-4 rounded-lg my-4">
+    <p class="font-semibold mb-2">📦 예시: 졸업논문 Aggregation</p>
+    <ul class="list-disc pl-6">
+      <li>논문 본문 (PDF)</li>
+      <li>설문조사 원본 데이터 (Excel)</li>
+      <li>통계 분석 결과 (CSV)</li>
+      <li>그래프 이미지 (PNG 10개)</li>
+    </ul>
+    <p class="mt-2 text-sm text-gray-600">→ 이 모든 것이 "김철수 졸업논문"이라는 하나의 Aggregation</p>
+  </div>
+
+  <h3>2️⃣ Aggregated Resource (집합된 자원)</h3>
+
+  <div class="bg-green-50 p-4 rounded-lg my-4">
+    <p><strong>정의:</strong> Aggregation에 포함된 개별 자원</p>
+    <p class="mt-2"><strong>비유:</strong> 폴더 안의 각 파일</p>
+    <p class="mt-2"><strong>특징:</strong> 각각 고유한 주소(URI)를 가짐</p>
+  </div>
+
+  <h3>3️⃣ Resource Map (자원 지도)</h3>
+
+  <div class="bg-purple-50 p-4 rounded-lg my-4">
+    <p><strong>정의:</strong> Aggregation의 구조를 설명하는 메타데이터 문서</p>
+    <p class="mt-2"><strong>비유:</strong> 폴더 안의 "README.txt" 파일</p>
+    <p class="mt-2"><strong>내용:</strong> "어떤 파일들이 있고, 서로 어떤 관계인지" 설명</p>
+    <p class="mt-2"><strong>형식:</strong> RDF (기계가 읽을 수 있는 형식)</p>
+  </div>
+
+  <h2>🏗️ OAI-ORE의 구조 (한눈에 보기)</h2>
+
+  <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-lg my-6">
+<pre class="text-sm">
+📋 Resource Map (자원 지도)
+   ↓ describes (설명함)
+📦 Aggregation (집합체)
+   ├─ aggregates (포함함) → 📄 Resource 1 (논문.pdf)
+   ├─ aggregates (포함함) → 📊 Resource 2 (데이터.xlsx)
+   └─ aggregates (포함함) → 📈 Resource 3 (그래프.png)
+</pre>
+  </div>
+
+  <h2>💻 실제 OAI-ORE 예제</h2>
+
+  <p>대학생이 제출한 "기후변화 연구 과제"를 OAI-ORE로 표현하면:</p>
+
+  <div class="code-block my-6">
+<pre><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
          xmlns:ore="http://www.openarchives.org/ore/terms/"
          xmlns:dcterms="http://purl.org/dc/terms/"&gt;
 
-  &lt;!-- ResourceMap 자체 --&gt;
-  &lt;rdf:Description rdf:about="http://example.org/rem/1"&gt;
+  &lt;!-- 1. Resource Map: 이 문서는 "설명서"입니다 --&gt;
+  &lt;rdf:Description rdf:about="http://university.edu/assignments/map-12345"&gt;
     &lt;rdf:type rdf:resource="http://www.openarchives.org/ore/terms/ResourceMap"/&gt;
-    &lt;ore:describes rdf:resource="http://example.org/aggregation/1"/&gt;
-    &lt;dcterms:created&gt;2024-01-15T10:30:00Z&lt;/dcterms:created&gt;
+    &lt;ore:describes rdf:resource="http://university.edu/assignments/12345"/&gt;
+    &lt;dcterms:created&gt;2024-06-15T14:30:00Z&lt;/dcterms:created&gt;
+    &lt;dcterms:creator&gt;시스템 자동 생성&lt;/dcterms:creator&gt;
   &lt;/rdf:Description&gt;
 
-  &lt;!-- Aggregation --&gt;
-  &lt;rdf:Description rdf:about="http://example.org/aggregation/1"&gt;
+  &lt;!-- 2. Aggregation: "기후변화 연구 과제" 전체 --&gt;
+  &lt;rdf:Description rdf:about="http://university.edu/assignments/12345"&gt;
     &lt;rdf:type rdf:resource="http://www.openarchives.org/ore/terms/Aggregation"/&gt;
-    &lt;dcterms:title&gt;AI 윤리에 관한 연구&lt;/dcterms:title&gt;
-    &lt;dcterms:creator&gt;홍길동&lt;/dcterms:creator&gt;
+    &lt;dcterms:title&gt;기후변화가 생물다양성에 미치는 영향 연구&lt;/dcterms:title&gt;
+    &lt;dcterms:creator&gt;김학생&lt;/dcterms:creator&gt;
+    &lt;dcterms:created&gt;2024-06-15&lt;/dcterms:created&gt;
 
-    &lt;!-- 포함된 리소스들 --&gt;
-    &lt;ore:aggregates rdf:resource="http://example.org/paper.pdf"/&gt;
-    &lt;ore:aggregates rdf:resource="http://example.org/dataset.csv"/&gt;
-    &lt;ore:aggregates rdf:resource="http://example.org/figure1.png"/&gt;
+    &lt;!-- 이 과제에 포함된 파일들 --&gt;
+    &lt;ore:aggregates rdf:resource="http://university.edu/files/report.pdf"/&gt;
+    &lt;ore:aggregates rdf:resource="http://university.edu/files/data.csv"/&gt;
+    &lt;ore:aggregates rdf:resource="http://university.edu/files/presentation.pptx"/&gt;
   &lt;/rdf:Description&gt;
 
-  &lt;!-- 각 리소스에 대한 상세 정보 --&gt;
-  &lt;rdf:Description rdf:about="http://example.org/paper.pdf"&gt;
+  &lt;!-- 3. Aggregated Resource들: 각 파일의 상세 정보 --&gt;
+
+  &lt;!-- 파일 1: 보고서 본문 --&gt;
+  &lt;rdf:Description rdf:about="http://university.edu/files/report.pdf"&gt;
     &lt;dcterms:format&gt;application/pdf&lt;/dcterms:format&gt;
-    &lt;dcterms:extent&gt;2.5 MB&lt;/dcterms:extent&gt;
+    &lt;dcterms:title&gt;연구 보고서 본문&lt;/dcterms:title&gt;
+    &lt;dcterms:extent&gt;1.8 MB&lt;/dcterms:extent&gt;
+    &lt;dcterms:description&gt;15페이지 분량의 연구 결과 보고서&lt;/dcterms:description&gt;
   &lt;/rdf:Description&gt;
 
-  &lt;rdf:Description rdf:about="http://example.org/dataset.csv"&gt;
+  &lt;!-- 파일 2: 실험 데이터 --&gt;
+  &lt;rdf:Description rdf:about="http://university.edu/files/data.csv"&gt;
     &lt;dcterms:format&gt;text/csv&lt;/dcterms:format&gt;
-    &lt;dcterms:description&gt;실험 데이터셋&lt;/dcterms:description&gt;
+    &lt;dcterms:title&gt;관측 데이터&lt;/dcterms:title&gt;
+    &lt;dcterms:description&gt;2020-2024년 지역별 종 다양성 측정 데이터 500건&lt;/dcterms:description&gt;
   &lt;/rdf:Description&gt;
 
-&lt;/rdf:RDF&gt;</code></pre>
+  &lt;!-- 파일 3: 발표 자료 --&gt;
+  &lt;rdf:Description rdf:about="http://university.edu/files/presentation.pptx"&gt;
+    &lt;dcterms:format&gt;application/vnd.openxmlformats-officedocument.presentationml.presentation&lt;/dcterms:format&gt;
+    &lt;dcterms:title&gt;연구 결과 발표 슬라이드&lt;/dcterms:title&gt;
+    &lt;dcterms:description&gt;20슬라이드 분량의 발표 자료&lt;/dcterms:description&gt;
+  &lt;/rdf:Description&gt;
 
+&lt;/rdf:RDF&gt;
+</code></pre>
+  </div>
+
+  <div class="bg-blue-50 p-6 rounded-lg my-6">
+    <h4 class="font-bold mb-2">📖 코드 해설</h4>
+    <ul class="list-disc pl-6 space-y-2">
+      <li><strong>Resource Map</strong>: 이 XML 문서 자체. "설명서" 역할</li>
+      <li><strong>Aggregation</strong>: "기후변화 연구 과제"라는 논리적 묶음</li>
+      <li><strong>ore:aggregates</strong>: 이 과제에 포함된 3개 파일을 나열</li>
+      <li><strong>각 파일의 메타데이터</strong>: 파일 형식, 제목, 크기, 설명</li>
+    </ul>
+    <p class="mt-4 text-sm"><strong>핵심:</strong> 이 XML 파일만 보면 "어떤 파일들이 하나의 과제를 구성하는지" 정확히 알 수 있습니다!</p>
+  </div>
+
+  <h2>📊 분류표: OAI-ORE는 무엇인가?</h2>
+
+  <div class="overflow-x-auto my-6">
+    <table class="min-w-full border-collapse border border-gray-300">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="border border-gray-300 px-4 py-2">구분</th>
+          <th class="border border-gray-300 px-4 py-2">해당 여부</th>
+          <th class="border border-gray-300 px-4 py-2">설명</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="border border-gray-300 px-4 py-2 font-semibold">메타데이터 요소 집합</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">✖</td>
+          <td class="border border-gray-300 px-4 py-2">Dublin Core 같은 것이 아님</td>
+        </tr>
+        <tr class="bg-gray-50">
+          <td class="border border-gray-300 px-4 py-2 font-semibold">프로토콜</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">✖</td>
+          <td class="border border-gray-300 px-4 py-2">통신 규약이 아님 (OAI-PMH가 프로토콜)</td>
+        </tr>
+        <tr>
+          <td class="border border-gray-300 px-4 py-2 font-semibold">데이터 모델</td>
+          <td class="border border-gray-300 px-4 py-2 text-center text-green-600">✔</td>
+          <td class="border border-gray-300 px-4 py-2">자원 간 관계를 표현하는 구조</td>
+        </tr>
+        <tr class="bg-gray-50">
+          <td class="border border-gray-300 px-4 py-2 font-semibold">RDF Vocabulary</td>
+          <td class="border border-gray-300 px-4 py-2 text-center text-green-600">✔</td>
+          <td class="border border-gray-300 px-4 py-2">RDF로 표현된 용어 집합</td>
+        </tr>
+        <tr>
+          <td class="border border-gray-300 px-4 py-2 font-semibold">경량 온톨로지적 성격</td>
+          <td class="border border-gray-300 px-4 py-2 text-center text-green-600">✔</td>
+          <td class="border border-gray-300 px-4 py-2">클래스·관계 정의, 추론은 제한적</td>
+        </tr>
+        <tr class="bg-gray-50">
+          <td class="border border-gray-300 px-4 py-2 font-semibold">완전한 도메인 온톨로지</td>
+          <td class="border border-gray-300 px-4 py-2 text-center">✖</td>
+          <td class="border border-gray-300 px-4 py-2">FOAF, SKOS 같은 포괄적 온톨로지는 아님</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>🆚 비교: 비슷해 보이는 것들과 어떻게 다른가요?</h2>
+
+  <h3>1. OAI-PMH vs OAI-ORE</h3>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
     <div class="bg-blue-50 p-4 rounded-lg">
-      <h4 class="font-semibold mb-2">📖 코드 설명</h4>
-      <ul class="list-disc pl-6 space-y-1 text-sm">
-        <li><code>ore:ResourceMap</code>: 메타데이터 문서 자체</li>
-        <li><code>ore:describes</code>: ResourceMap이 어떤 Aggregation을 설명하는지 표시</li>
-        <li><code>ore:Aggregation</code>: 논리적으로 묶인 리소스 집합</li>
-        <li><code>ore:aggregates</code>: Aggregation에 포함된 개별 리소스</li>
+      <h4 class="font-bold mb-2">📡 OAI-PMH</h4>
+      <ul class="list-disc pl-6 text-sm">
+        <li><strong>종류:</strong> 프로토콜 (통신 규약)</li>
+        <li><strong>목적:</strong> 메타데이터 수집</li>
+        <li><strong>대상:</strong> 단일 자원</li>
+        <li><strong>비유:</strong> "도서관 카탈로그 복사하기"</li>
       </ul>
     </div>
-  </section>
 
-  <section class="mb-8">
-    <h2 class="text-3xl font-bold mb-4">4. OAI-ORE의 실제 활용 사례</h2>
-
-    <div class="space-y-4">
-      <div class="border-l-4 border-blue-500 pl-4">
-        <h3 class="font-bold">학술 리포지터리</h3>
-        <p class="text-sm">논문 본문, 데이터셋, 보충 자료를 하나의 Aggregation으로 관리</p>
-      </div>
-
-      <div class="border-l-4 border-green-500 pl-4">
-        <h3 class="font-bold">디지털 도서관</h3>
-        <p class="text-sm">고서의 이미지 스캔, 텍스트 전사본, 주석을 통합 관리</p>
-      </div>
-
-      <div class="border-l-4 border-purple-500 pl-4">
-        <h3 class="font-bold">멀티미디어 아카이브</h3>
-        <p class="text-sm">영상, 자막, 메타데이터, 섬네일을 하나의 객체로 표현</p>
-      </div>
-
-      <div class="border-l-4 border-red-500 pl-4">
-        <h3 class="font-bold">연구 데이터 관리</h3>
-        <p class="text-sm">실험 데이터, 분석 스크립트, 결과 그래프를 연결</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="mb-8">
-    <h2 class="text-3xl font-bold mb-4">5. OAI-PMH와의 차이점</h2>
-
-    <div class="overflow-x-auto">
-      <table class="min-w-full border-collapse border border-gray-300">
-        <thead class="bg-gray-100">
-          <tr>
-            <th class="border border-gray-300 px-4 py-2">구분</th>
-            <th class="border border-gray-300 px-4 py-2">OAI-PMH</th>
-            <th class="border border-gray-300 px-4 py-2">OAI-ORE</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="border border-gray-300 px-4 py-2 font-semibold">분류</td>
-            <td class="border border-gray-300 px-4 py-2">프로토콜 (Protocol)</td>
-            <td class="border border-gray-300 px-4 py-2">데이터 모델 / RDF 어휘</td>
-          </tr>
-          <tr>
-            <td class="border border-gray-300 px-4 py-2 font-semibold">목적</td>
-            <td class="border border-gray-300 px-4 py-2">메타데이터 수집 (Harvesting)</td>
-            <td class="border border-gray-300 px-4 py-2">복합 객체 표현 (Aggregation)</td>
-          </tr>
-          <tr>
-            <td class="border border-gray-300 px-4 py-2 font-semibold">기술 형식</td>
-            <td class="border border-gray-300 px-4 py-2">XML (Dublin Core 등)</td>
-            <td class="border border-gray-300 px-4 py-2">RDF (Turtle, RDF/XML, JSON-LD)</td>
-          </tr>
-          <tr>
-            <td class="border border-gray-300 px-4 py-2 font-semibold">주요 용도</td>
-            <td class="border border-gray-300 px-4 py-2">리포지터리 간 메타데이터 동기화</td>
-            <td class="border border-gray-300 px-4 py-2">여러 리소스를 논리적 단위로 묶기</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <section class="mb-8">
-    <h2 class="text-3xl font-bold mb-4">6. 학습 정리 및 핵심 요점</h2>
-
-    <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-lg">
-      <h3 class="text-xl font-bold mb-4">✅ 핵심 요약</h3>
-      <ul class="space-y-3">
-        <li class="flex items-start">
-          <span class="text-2xl mr-3">1️⃣</span>
-          <div>
-            <strong>OAI-ORE는 프로토콜이 아닌 RDF 기반 데이터 모델입니다</strong>
-            <p class="text-sm text-gray-600">복합 디지털 객체를 표현하기 위한 어휘와 구조를 제공합니다</p>
-          </div>
-        </li>
-        <li class="flex items-start">
-          <span class="text-2xl mr-3">2️⃣</span>
-          <div>
-            <strong>Aggregation은 여러 웹 리소스를 하나로 묶는 논리적 집합입니다</strong>
-            <p class="text-sm text-gray-600">논문, 데이터, 이미지 등을 하나의 단위로 관리할 수 있습니다</p>
-          </div>
-        </li>
-        <li class="flex items-start">
-          <span class="text-2xl mr-3">3️⃣</span>
-          <div>
-            <strong>ResourceMap은 Aggregation을 RDF로 기술한 메타데이터입니다</strong>
-            <p class="text-sm text-gray-600">기계가 읽을 수 있는 형식으로 구조와 관계를 명시합니다</p>
-          </div>
-        </li>
-        <li class="flex items-start">
-          <span class="text-2xl mr-3">4️⃣</span>
-          <div>
-            <strong>Linked Data와 Semantic Web 기술을 활용합니다</strong>
-            <p class="text-sm text-gray-600">웹 표준을 따르며 상호운용성이 높습니다</p>
-          </div>
-        </li>
+    <div class="bg-purple-50 p-4 rounded-lg">
+      <h4 class="font-bold mb-2">📦 OAI-ORE</h4>
+      <ul class="list-disc pl-6 text-sm">
+        <li><strong>종류:</strong> 데이터 모델</li>
+        <li><strong>목적:</strong> 복합 객체 구조 표현</li>
+        <li><strong>대상:</strong> 여러 자원의 묶음</li>
+        <li><strong>비유:</strong> "세트 상품 포장 설명서"</li>
       </ul>
     </div>
-  </section>
+  </div>
 
-  <section class="mb-8">
-    <h2 class="text-3xl font-bold mb-4">7. 더 알아보기</h2>
+  <h3>2. Dublin Core vs OAI-ORE</h3>
 
-    <div class="bg-gray-50 p-6 rounded-lg">
-      <h3 class="font-bold mb-3">📚 참고 자료</h3>
-      <ul class="space-y-2">
-        <li>
-          <a href="https://www.openarchives.org/ore/1.0/primer" class="text-blue-600 hover:underline" target="_blank">
-            OAI-ORE Primer (공식 문서)
-          </a>
-        </li>
-        <li>
-          <a href="https://www.openarchives.org/ore/1.0/vocabulary" class="text-blue-600 hover:underline" target="_blank">
-            OAI-ORE Vocabulary Specification
-          </a>
-        </li>
-        <li>
-          <a href="http://www.openarchives.org/ore/1.0/datamodel" class="text-blue-600 hover:underline" target="_blank">
-            OAI-ORE Data Model
-          </a>
-        </li>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+    <div class="bg-green-50 p-4 rounded-lg">
+      <h4 class="font-bold mb-2">🏷️ Dublin Core</h4>
+      <ul class="list-disc pl-6 text-sm">
+        <li><strong>종류:</strong> 메타데이터 요소 집합</li>
+        <li><strong>내용:</strong> title, creator, date 등 15개 요소</li>
+        <li><strong>목적:</strong> 자원의 속성 기술</li>
+        <li><strong>비유:</strong> "책 날개의 기본 정보"</li>
       </ul>
     </div>
-  </section>
 
-  <div class="bg-yellow-50 border-l-4 border-yellow-400 p-6 mt-8">
-    <h3 class="font-bold text-lg mb-2">💡 실습 과제</h3>
+    <div class="bg-purple-50 p-4 rounded-lg">
+      <h4 class="font-bold mb-2">📦 OAI-ORE</h4>
+      <ul class="list-disc pl-6 text-sm">
+        <li><strong>종류:</strong> RDF Vocabulary / 데이터 모델</li>
+        <li><strong>내용:</strong> Aggregation, ResourceMap 등 관계 표현</li>
+        <li><strong>목적:</strong> 자원 간 구조 기술</li>
+        <li><strong>비유:</strong> "시리즈 전집의 구성 안내"</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>🌐 실제 활용 사례</h2>
+
+  <h3>1. Europeana (유럽 디지털 도서관)</h3>
+  <p>고서 한 권을 다음과 같이 표현:</p>
+  <ul class="list-disc pl-6">
+    <li>표지 이미지</li>
+    <li>각 페이지 스캔 (200장)</li>
+    <li>OCR 텍스트</li>
+    <li>라틴어 → 영어 번역본</li>
+    <li>해설 오디오</li>
+  </ul>
+  <p class="mt-2">→ 하나의 Aggregation으로 묶어서 제공</p>
+
+  <h3>2. 대학 연구 데이터 저장소</h3>
+  <p>박사논문 1편을:</p>
+  <ul class="list-disc pl-6">
+    <li>논문 PDF</li>
+    <li>실험 원시 데이터 (10GB)</li>
+    <li>분석 Python 코드</li>
+    <li>시각화 Jupyter Notebook</li>
+    <li>보충 자료 동영상</li>
+  </ul>
+  <p class="mt-2">→ 패키지로 묶어 장기 보존</p>
+
+  <h3>3. 온라인 박물관 전시</h3>
+  <p>"조선시대 도자기" 전시를:</p>
+  <ul class="list-disc pl-6">
+    <li>전시 소개 HTML</li>
+    <li>유물 고해상도 사진 (각 유물당 20장)</li>
+    <li>3D 회전 모델</li>
+    <li>큐레이터 해설 MP3</li>
+    <li>연표 인포그래픽</li>
+  </ul>
+  <p class="mt-2">→ 하나의 가상 전시로 통합</p>
+
+  <h2>🎓 학습 확인 문제</h2>
+
+  <div class="bg-yellow-50 p-6 rounded-lg my-6">
+    <h4 class="font-bold mb-4">✏️ 다음 중 OAI-ORE에 대한 설명으로 <strong>틀린</strong> 것은?</h4>
+
     <ol class="list-decimal pl-6 space-y-2">
-      <li>자신의 연구 자료나 프로젝트를 OAI-ORE Aggregation으로 설계해보세요</li>
-      <li>위 예제를 참고하여 간단한 ResourceMap RDF 문서를 작성해보세요</li>
-      <li>OAI-PMH와 OAI-ORE가 함께 사용될 수 있는 시나리오를 생각해보세요</li>
+      <li>OAI-ORE는 메타데이터 수집을 위한 프로토콜이다. <strong>(❌)</strong></li>
+      <li>OAI-ORE는 RDF 기반의 데이터 모델이다. <strong>(✅)</strong></li>
+      <li>Aggregation은 여러 자원을 하나로 묶은 논리적 단위이다. <strong>(✅)</strong></li>
+      <li>Resource Map은 Aggregation의 구조를 설명하는 문서이다. <strong>(✅)</strong></li>
     </ol>
+
+    <p class="mt-4 p-3 bg-white rounded"><strong>정답: 1번</strong> - OAI-ORE는 프로토콜이 아니라 데이터 모델입니다. 메타데이터 수집 프로토콜은 OAI-PMH입니다.</p>
+  </div>
+
+  <div class="bg-yellow-50 p-6 rounded-lg my-6">
+    <h4 class="font-bold mb-4">✏️ 실습 문제</h4>
+    <p class="mb-2">여러분이 "한국 전통음악 아카이브" 웹사이트를 만든다면, 다음 자료를 OAI-ORE로 어떻게 구성할까요?</p>
+
+    <div class="bg-white p-4 rounded my-3">
+      <p class="font-semibold mb-2">자료: 판소리 "춘향가" 공연 기록</p>
+      <ul class="list-disc pl-6">
+        <li>공연 실황 동영상 (MP4, 2시간)</li>
+        <li>소리 음원만 추출 (MP3, 120분)</li>
+        <li>사설(가사) 전문 (PDF)</li>
+        <li>공연 프로그램북 스캔 (PDF, 30페이지)</li>
+        <li>명창 인터뷰 (MP3, 30분)</li>
+        <li>무대 사진 (JPG, 50장)</li>
+      </ul>
+    </div>
+
+    <p class="mt-4"><strong>해답:</strong></p>
+    <ul class="list-disc pl-6 mt-2">
+      <li><strong>Aggregation</strong>: "2024년 국립국악원 춘향가 공연"</li>
+      <li><strong>Aggregated Resources</strong>: 위의 6종류 파일들</li>
+      <li><strong>Resource Map</strong>: 이들의 관계를 설명하는 RDF XML 문서</li>
+      <li><strong>관계 기술 예</strong>: "사설PDF는 동영상의 텍스트 버전", "사진들은 공연 중 촬영" 등</li>
+    </ul>
+  </div>
+
+  <h2>📝 핵심 요약</h2>
+
+  <div class="bg-purple-50 p-6 rounded-lg my-6">
+    <ol class="list-decimal pl-6 space-y-3">
+      <li><strong>OAI-ORE는 "RDF Vocabulary / 데이터 모델"</strong>이다. 프로토콜이나 메타데이터 스키마가 아니다.</li>
+      <li><strong>목적:</strong> 복합 디지털 객체의 구조를 표준화된 방법으로 표현</li>
+      <li><strong>핵심 3요소:</strong>
+        <ul class="list-disc pl-6 mt-1">
+          <li>Aggregation (여러 자원의 논리적 묶음)</li>
+          <li>Aggregated Resource (묶음에 포함된 개별 자원)</li>
+          <li>Resource Map (구조를 설명하는 RDF 문서)</li>
+        </ul>
+      </li>
+      <li><strong>RDF 기반</strong>이므로 기계가 읽고 처리할 수 있음</li>
+      <li><strong>온톨로지와의 관계:</strong> 경량 온톨로지적 성격은 있으나, 완전한 도메인 온톨로지는 아님</li>
+      <li><strong>활용:</strong> 디지털 도서관, 연구 데이터 저장소, 온라인 전시 등</li>
+    </ol>
+  </div>
+
+  <h2>🔑 시험에 나올 핵심 개념</h2>
+
+  <div class="bg-gradient-to-r from-yellow-50 to-orange-50 p-6 rounded-lg my-6">
+    <ul class="list-disc pl-6 space-y-2">
+      <li><strong>OAI-ORE =</strong> RDF Vocabulary / 데이터 모델 명세</li>
+      <li><strong>Aggregation =</strong> 논리적 묶음 (실제 파일 아님)</li>
+      <li><strong>Resource Map =</strong> 구조 설명 문서 (RDF 형식)</li>
+      <li><strong>OAI-PMH ≠ OAI-ORE</strong> (프로토콜 vs 데이터 모델)</li>
+      <li><strong>Dublin Core ≠ OAI-ORE</strong> (메타데이터 요소 vs 구조 표현)</li>
+    </ul>
+  </div>
+
+  <h2>🔗 더 공부하고 싶다면</h2>
+
+  <ul class="list-disc pl-6 space-y-2">
+    <li><a href="https://www.openarchives.org/ore/" target="_blank" class="text-blue-600 hover:underline">OAI-ORE 공식 사이트</a></li>
+    <li><a href="https://www.openarchives.org/ore/1.0/primer" target="_blank" class="text-blue-600 hover:underline">OAI-ORE Primer (입문서)</a></li>
+    <li><a href="https://www.openarchives.org/ore/1.0/vocabulary" target="_blank" class="text-blue-600 hover:underline">OAI-ORE Vocabulary 명세</a></li>
+  </ul>
+
+  <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-lg mt-8">
+    <p class="text-lg font-semibold">🎉 학습을 완료하셨습니다!</p>
+    <p class="mt-2">OAI-ORE가 무엇인지, 어떻게 분류되는지, 그리고 복합 디지털 객체를 어떻게 표현하는지 배웠습니다. 시험에서 "OAI-ORE는 프로토콜이다" 같은 함정 문제가 나와도 이제 자신있게 대답할 수 있겠죠? 😊</p>
   </div>
 </div>
 """
+
 
         # 콘텐츠 생성 또는 업데이트
         content, created = Content.objects.update_or_create(
