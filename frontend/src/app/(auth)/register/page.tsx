@@ -21,6 +21,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useRegister } from '@/lib/hooks/useAuth';
+import { getKakaoLoginUrl } from '@/lib/api/social-auth';
+import { MessageCircle } from 'lucide-react';
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -87,6 +89,12 @@ export default function RegisterPage() {
         }
       },
     });
+  };
+
+  const handleKakaoLogin = () => {
+    const redirectUri = `${window.location.origin}/auth/kakao/callback`;
+    const kakaoAuthUrl = getKakaoLoginUrl(redirectUri);
+    window.location.href = kakaoAuthUrl;
   };
 
   return (
@@ -254,6 +262,27 @@ export default function RegisterPage() {
               disabled={registerMutation.isPending}
             >
               {registerMutation.isPending ? '회원가입 중...' : '회원가입'}
+            </Button>
+
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  또는
+                </span>
+              </div>
+            </div>
+
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full bg-[#FEE500] hover:bg-[#FEE500]/90 text-[#000000] border-[#FEE500]"
+              onClick={handleKakaoLogin}
+            >
+              <MessageCircle className="mr-2 h-4 w-4" />
+              카카오로 3초만에 시작하기
             </Button>
 
             <div className="text-sm text-center text-muted-foreground">
