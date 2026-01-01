@@ -42,30 +42,25 @@ def send_kakao_message_notification(user, content):
     site_url = getattr(settings, 'SITE_URL', 'http://localhost:3000')
     content_url = f"{site_url}/contents/{content.slug}"
 
-    # 콘텐츠 썸네일 이미지 URL (없으면 기본 이미지)
-    if content.thumbnail:
-        image_url = f"{site_url}/media/{content.thumbnail}"
-    else:
-        # 기본 LIS Lab 로고 또는 대표 이미지
-        image_url = "https://mud-kage.kakao.com/dn/NTmhS/btqfEUdFAUf/FjKzkZsnoeE4o19klTOVI1/openlink_640x640s.jpg"
+    # 카카오 메시지 템플릿 구성 (텍스트 템플릿 - 간단하고 확실한 링크)
+    message_text = f"""🔔 LIS Lab 새 콘텐츠 알림
 
-    # 카카오 메시지 템플릿 구성 (피드 템플릿 - 이미지 클릭으로 이동)
-    # 요약을 50자로 제한
-    short_summary = content.summary[:50] + "..." if len(content.summary) > 50 else content.summary
+📚 {content.title}
+
+📂 카테고리: {content.category.name if content.category else '기타'}
+⭐ 난이도: {content.get_difficulty_display()}
+⏱️ 예상 시간: {content.estimated_time}분
+
+{content.summary[:100]}"""
 
     template_object = {
-        "object_type": "feed",
-        "content": {
-            "title": f"🔔 {content.title}",
-            "description": f"{short_summary}\n\n📂 {content.category.name if content.category else '기타'} | ⭐ {content.get_difficulty_display()} | ⏱️ {content.estimated_time}분",
-            "image_url": image_url,
-            "image_width": 800,
-            "image_height": 400,
-            "link": {
-                "web_url": content_url,
-                "mobile_web_url": content_url
-            }
-        }
+        "object_type": "text",
+        "text": message_text,
+        "link": {
+            "web_url": content_url,
+            "mobile_web_url": content_url
+        },
+        "button_title": "학습하기"
     }
 
     # API 요청 헤더
