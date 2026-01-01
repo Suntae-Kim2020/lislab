@@ -11,8 +11,9 @@ RUN npm ci --legacy-peer-deps
 # Copy all files
 COPY . .
 
-# Set environment variable for API URL (default to production)
+# Set environment variables for build time
 ENV NEXT_PUBLIC_API_BASE_URL=https://lislab-backend-326272454487.asia-northeast3.run.app
+ENV NEXT_PUBLIC_KAKAO_APP_KEY=305228deda97eb7c5b8445ffe7483c39
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 ENV PORT=8080
