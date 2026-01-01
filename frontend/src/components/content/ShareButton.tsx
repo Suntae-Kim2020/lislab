@@ -20,7 +20,7 @@ export function ShareButton({ title, url }: ShareButtonProps) {
 
   // Web Share API 사용 (모바일에서 문자, 카카오톡 등 네이티브 공유)
   const handleNativeShare = async () => {
-    if (navigator.share) {
+    if (typeof navigator !== 'undefined' && 'share' in navigator) {
       try {
         await navigator.share({
           title: title,
@@ -82,7 +82,7 @@ export function ShareButton({ title, url }: ShareButtonProps) {
   };
 
   // 모바일에서 Web Share API 지원 시 바로 네이티브 공유
-  if (typeof navigator !== 'undefined' && navigator.share) {
+  if (typeof navigator !== 'undefined' && 'share' in navigator) {
     return (
       <Button
         variant="outline"
