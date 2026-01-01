@@ -1,13 +1,80 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuthStore } from '@/store/authStore';
 
+interface Content {
+  id: number;
+  title: string;
+  slug: string;
+  summary: string;
+  category: {
+    id: number;
+    name: string;
+    slug: string;
+  };
+  view_count: number;
+  difficulty: string;
+  estimated_time: number;
+  created_at: string;
+  updated_at: string;
+}
+
 export default function HomePage() {
   const { isAuthenticated } = useAuthStore();
+  const [contents, setContents] = useState<Content[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchContents = async () => {
+      try {
+        // 인기 콘텐츠 (조회수 순)와 최신 콘텐츠를 각각 가져오기
+        const [popularRes, recentRes] = await Promise.all([
+          fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/contents/contents/?page_size=6&ordering=-view_count`),
+          fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/contents/contents/?page_size=6&ordering=-updated_at`)
+        ]);
+
+        const popularData = await popularRes.json();
+        const recentData = await recentRes.json();
+
+        // 인기 콘텐츠와 최신 콘텐츠를 합치고 중복 제거
+        const allContents = [...popularData.results, ...recentData.results];
+        const uniqueContents = Array.from(
+          new Map(allContents.map(item => [item.id, item])).values()
+        ).slice(0, 9);
+
+        setContents(uniqueContents);
+      } catch (error) {
+        console.error('Failed to fetch contents:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchContents();
+  }, []);
+
+  const getDifficultyLabel = (difficulty: string) => {
+    const labels: { [key: string]: string } = {
+      'BEGINNER': '초급',
+      'INTERMEDIATE': '중급',
+      'ADVANCED': '고급'
+    };
+    return labels[difficulty] || difficulty;
+  };
+
+  const getDifficultyColor = (difficulty: string) => {
+    const colors: { [key: string]: string } = {
+      'BEGINNER': 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+      'INTERMEDIATE': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
+      'ADVANCED': 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+    };
+    return colors[difficulty] || 'bg-gray-100 text-gray-800';
+  };
 
   return (
     <div className="container mx-auto py-6 px-4">
@@ -36,116 +103,56 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Features */}
+      {/* Popular and Recent Contents */}
       <section className="py-12">
-        <h2 className="mb-8 text-center text-3xl font-bold">주요 기능</h2>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          <Link href="/contents" className="transition-transform hover:scale-105">
-            <Card className="h-full cursor-pointer">
-              <CardHeader>
-                <CardTitle>교육 콘텐츠</CardTitle>
-                <CardDescription>
-                  체계적으로 분류된 교육 자료
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  카테고리별로 정리된 고품질 교육 콘텐츠를 제공합니다.
-                </p>
-              </CardContent>
-            </Card>
-          </Link>
+        <h2 className="mb-8 text-center text-3xl font-bold">인기 & 최신 학습 콘텐츠</h2>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>댓글 시스템</CardTitle>
-              <CardDescription>
-                질문하고 답변 받기
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                콘텐츠에 대해 자유롭게 질문하고 관리자의 답변을 받을 수 있습니다.
-              </p>
-            </CardContent>
-          </Card>
+        {loading ? (
+          <div className="text-center text-muted-foreground">로딩 중...</div>
+        ) : (
+          <>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {contents.map((content) => (
+                <Link
+                  key={content.id}
+                  href={`/contents/${content.slug}`}
+                  className="transition-transform hover:scale-105"
+                >
+                  <Card className="h-full cursor-pointer">
+                    <CardHeader>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className={`text-xs px-2 py-1 rounded ${getDifficultyColor(content.difficulty)}`}>
+                          {getDifficultyLabel(content.difficulty)}
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          조회 {content.view_count}
+                        </span>
+                      </div>
+                      <CardTitle className="line-clamp-2">{content.title}</CardTitle>
+                      <CardDescription>
+                        {content.category.name}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-muted-foreground line-clamp-3">
+                        {content.summary}
+                      </p>
+                      {content.estimated_time > 0 && (
+                        <p className="text-xs text-muted-foreground mt-2">
+                          예상 시간: {content.estimated_time}분
+                        </p>
+                      )}
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))}
+            </div>
 
-          <Link href="/boards" className="transition-transform hover:scale-105">
-            <Card className="h-full cursor-pointer">
-              <CardHeader>
-                <CardTitle>게시판</CardTitle>
-                <CardDescription>
-                  공지사항 및 요청 사항
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  공지사항 확인 및 새로운 콘텐츠 개발을 요청할 수 있습니다.
-                </p>
-              </CardContent>
-            </Card>
-          </Link>
-
-          {isAuthenticated ? (
-            <Link href="/my/favorites" className="transition-transform hover:scale-105">
-              <Card className="h-full cursor-pointer">
-                <CardHeader>
-                  <CardTitle>즐겨찾기</CardTitle>
-                  <CardDescription>
-                    나만의 콘텐츠 관리
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">
-                    관심 있는 콘텐츠를 즐겨찾기하여 빠르게 접근할 수 있습니다.
-                  </p>
-                </CardContent>
-              </Card>
-            </Link>
-          ) : (
-            <Card className="opacity-60">
-              <CardHeader>
-                <CardTitle>즐겨찾기</CardTitle>
-                <CardDescription>
-                  나만의 콘텐츠 관리
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  관심 있는 콘텐츠를 즐겨찾기하여 빠르게 접근할 수 있습니다.
-                </p>
-              </CardContent>
-            </Card>
-          )}
-
-          <Card>
-            <CardHeader>
-              <CardTitle>버전 관리</CardTitle>
-              <CardDescription>
-                콘텐츠 개정 이력
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                콘텐츠의 변경 이력을 확인하고 이전 버전을 조회할 수 있습니다.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>메일링 리스트</CardTitle>
-              <CardDescription>
-                최신 소식 받기
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                새로운 콘텐츠와 업데이트 소식을 이메일로 받아보세요.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
+            <div className="mt-8 text-center text-sm text-muted-foreground">
+              * 콘텐츠 메뉴를 통해서 더 많은 학습자료를 만나세요. ^^
+            </div>
+          </>
+        )}
       </section>
 
       {/* CTA Section */}
