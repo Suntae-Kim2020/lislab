@@ -87,6 +87,12 @@ class User(AbstractUser):
         verbose_name='소셜 로그인 ID'
     )
 
+    kakao_message_token = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name='카카오 메시지 전송용 토큰'
+    )
+
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name='가입일'
@@ -211,6 +217,11 @@ class MailingPreference(models.Model):
         blank=True,
         related_name='mailing_subscribers',
         verbose_name='구독 카테고리'
+    )
+
+    kakao_notification_enabled = models.BooleanField(
+        default=False,
+        verbose_name='카카오톡 알림 활성화'
     )
 
     created_at = models.DateTimeField(

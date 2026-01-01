@@ -37,6 +37,7 @@ def send_immediate_notifications(sender, instance, created, **kwargs):
 
     from apps.accounts.models import User
     from apps.accounts.email_utils import send_immediate_content_notification
+    from apps.accounts.kakao_message_utils import send_kakao_message_notification
 
     # 즉시 알림을 받도록 설정한 모든 활성 사용자
     users = User.objects.filter(
@@ -59,8 +60,15 @@ def send_immediate_notifications(sender, instance, created, **kwargs):
 
             if should_send:
                 # 로컬 개발 환경에서는 동기적으로 발송 (Celery/Redis 불필요)
+                # 이메일 발송
                 send_immediate_content_notification(user, instance)
                 print(f"[Signal] 이메일 발송 완료: {user.username} <- {instance.title}")
+
+                # 카카오 메시지 발송 (카카오 로그인 사용자 + 알림 활성화된 경우)
+                if user.social_provider == User.SocialProvider.KAKAO and pref.kakao_notification_enabled:
+                    kakao_sent = send_kakao_message_notification(user, instance)
+                    if kakao_sent:
+                        print(f"[Signal] 카카오 메시지 발송 완료: {user.username} <- {instance.title}")
 
         except Exception as e:
             print(f"[Signal] 알림 발송 실패 ({user.username}): {e}")

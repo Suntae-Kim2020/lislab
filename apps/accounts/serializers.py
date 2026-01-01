@@ -7,14 +7,21 @@ from apps.contents.models import Category
 class UserSerializer(serializers.ModelSerializer):
     """사용자 정보 조회용 Serializer"""
 
+    kakao_message_token = serializers.SerializerMethodField()
+
     class Meta:
         model = User
         fields = [
             'id', 'username', 'email', 'first_name', 'last_name',
             'role', 'user_type', 'phone', 'organization', 'bio',
-            'profile_image', 'is_email_verified', 'created_at'
+            'profile_image', 'is_email_verified', 'social_provider',
+            'kakao_message_token', 'created_at'
         ]
-        read_only_fields = ['id', 'created_at', 'role']
+        read_only_fields = ['id', 'created_at', 'role', 'social_provider', 'kakao_message_token']
+
+    def get_kakao_message_token(self, obj):
+        """카카오 메시지 토큰 유무만 반환 (보안)"""
+        return 'connected' if obj.kakao_message_token else None
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -94,6 +101,7 @@ class MailingPreferenceSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'enabled', 'frequency', 'all_categories',
             'selected_categories', 'selected_category_ids',
+            'kakao_notification_enabled',
             'created_at', 'updated_at'
         ]
         read_only_fields = ['id', 'created_at', 'updated_at', 'selected_categories']
