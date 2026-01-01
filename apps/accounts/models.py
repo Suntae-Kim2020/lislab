@@ -23,6 +23,12 @@ class User(AbstractUser):
         JOB_SEEKER = 'JOB_SEEKER', '취업준비생'
         OTHER = 'OTHER', '기타'
 
+    class SocialProvider(models.TextChoices):
+        NONE = 'NONE', '일반 회원가입'
+        KAKAO = 'KAKAO', '카카오'
+        GOOGLE = 'GOOGLE', '구글'
+        NAVER = 'NAVER', '네이버'
+
     role = models.CharField(
         max_length=10,
         choices=Role.choices,
@@ -66,6 +72,21 @@ class User(AbstractUser):
         verbose_name='이메일 인증 여부'
     )
 
+    # 소셜 로그인 관련 필드
+    social_provider = models.CharField(
+        max_length=10,
+        choices=SocialProvider.choices,
+        default=SocialProvider.NONE,
+        verbose_name='소셜 로그인 제공자'
+    )
+
+    social_id = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        verbose_name='소셜 로그인 ID'
+    )
+
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name='가입일'
@@ -81,6 +102,13 @@ class User(AbstractUser):
         verbose_name = '사용자'
         verbose_name_plural = '사용자 목록'
         ordering = ['-created_at']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['social_provider', 'social_id'],
+                condition=~models.Q(social_provider='NONE'),
+                name='unique_social_account'
+            )
+        ]
 
     def __str__(self):
         return f"{self.username} ({self.get_user_type_display()})"
@@ -99,6 +127,11 @@ class User(AbstractUser):
     def can_comment(self):
         """댓글 작성 권한"""
         return self.is_authenticated and self.role != self.Role.GUEST
+
+    @property
+    def is_social_user(self):
+        """소셜 로그인 사용자 여부"""
+        return self.social_provider != self.SocialProvider.NONE
 
 
 class PasswordResetToken(models.Model):

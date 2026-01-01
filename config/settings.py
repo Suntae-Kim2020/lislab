@@ -318,3 +318,8 @@ CKEDITOR_CONFIGS = {
 # Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+
+# Kakao API Settings
+KAKAO_REST_API_KEY = config('KAKAO_REST_API_KEY', default='')
+
