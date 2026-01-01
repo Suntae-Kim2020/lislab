@@ -42,7 +42,7 @@ def send_kakao_message_notification(user, content):
     site_url = getattr(settings, 'SITE_URL', 'http://localhost:3000')
     content_url = f"{site_url}/contents/{content.slug}"
 
-    # 카카오 메시지 템플릿 구성 (피드 템플릿 - 카드 전체 클릭 가능)
+    # 카카오 메시지 템플릿 구성 (피드 템플릿 - 버튼 포함)
     # 매우 짧게 유지 (카카오톡 표시 제한)
     short_summary = content.summary[:50] + "..." if len(content.summary) > 50 else content.summary
 
@@ -50,7 +50,7 @@ def send_kakao_message_notification(user, content):
         "object_type": "feed",
         "content": {
             "title": f"🔔 {content.title}",
-            "description": f"👉 탭해서 학습하기\n\n{short_summary}\n📂 {content.category.name if content.category else '기타'} | ⭐ {content.get_difficulty_display()}",
+            "description": f"{short_summary}\n📂 {content.category.name if content.category else '기타'} | ⭐ {content.get_difficulty_display()}",
             "image_url": "https://mud-kage.kakao.com/dn/NTmhS/btqfEUdFAUf/FjKzkZsnoeE4o19klTOVI1/openlink_640x640s.jpg",
             "image_width": 800,
             "image_height": 800,
@@ -58,7 +58,16 @@ def send_kakao_message_notification(user, content):
                 "web_url": content_url,
                 "mobile_web_url": content_url
             }
-        }
+        },
+        "buttons": [
+            {
+                "title": "자세히 보기",
+                "link": {
+                    "web_url": content_url,
+                    "mobile_web_url": content_url
+                }
+            }
+        ]
     }
 
     # API 요청 헤더
