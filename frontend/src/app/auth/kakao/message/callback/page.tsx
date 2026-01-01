@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
 import { Loader2 } from 'lucide-react';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
 
-export default function KakaoMessageCallbackPage() {
+function KakaoMessageCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { token, user, setUser } = useAuthStore();
@@ -91,5 +91,20 @@ export default function KakaoMessageCallbackPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function KakaoMessageCallbackPage() {
+  return (
+    <Suspense fallback={
+      <div className="container flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
+          <p className="text-lg">카카오 메시지 연동 중...</p>
+        </div>
+      </div>
+    }>
+      <KakaoMessageCallbackContent />
+    </Suspense>
   );
 }

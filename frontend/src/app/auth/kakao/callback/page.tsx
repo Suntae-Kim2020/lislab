@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { kakaoLogin } from '@/lib/api/social-auth';
 import { useAuthStore } from '@/store/authStore';
 import { Loader2 } from 'lucide-react';
 
-export default function KakaoCallbackPage() {
+function KakaoCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { setUser, setToken } = useAuthStore();
@@ -79,5 +79,20 @@ export default function KakaoCallbackPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function KakaoCallbackPage() {
+  return (
+    <Suspense fallback={
+      <div className="container flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
+          <p className="text-lg">카카오 로그인 처리 중...</p>
+        </div>
+      </div>
+    }>
+      <KakaoCallbackContent />
+    </Suspense>
   );
 }

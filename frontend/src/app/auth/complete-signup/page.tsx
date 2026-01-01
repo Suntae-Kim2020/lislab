@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { completeSocialSignup } from '@/lib/api/social-auth';
 
-export default function CompleteSocialSignupPage() {
+function CompleteSocialSignupForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const userId = searchParams.get('user_id');
@@ -177,5 +177,19 @@ export default function CompleteSocialSignupPage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function CompleteSocialSignupPage() {
+  return (
+    <Suspense fallback={
+      <div className="container flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <p className="text-lg">로딩 중...</p>
+        </div>
+      </div>
+    }>
+      <CompleteSocialSignupForm />
+    </Suspense>
   );
 }
