@@ -98,10 +98,9 @@ export function useToggleFavorite() {
         });
       }
     },
-    // 성공 시 서버 데이터로 동기화
-    onSettled: (_, __, slug) => {
-      queryClient.invalidateQueries({ queryKey: ['content', slug] });
-      queryClient.invalidateQueries({ queryKey: ['contents'] });
+    // 성공 시 즐겨찾기 목록만 무효화 (상세/목록은 낙관적 업데이트 유지)
+    onSuccess: () => {
+      // 즐겨찾기 목록만 refetch (다른 페이지에서 사용)
       queryClient.invalidateQueries({ queryKey: ['favorites'] });
     },
   });
