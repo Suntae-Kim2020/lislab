@@ -1,17 +1,10 @@
 import apiClient from './client';
+import { User } from './auth';
 
 export interface KakaoLoginResponse {
   access: string;
   refresh: string;
-  user: {
-    id: number;
-    username: string;
-    email: string;
-    first_name: string;
-    user_type: string;
-    organization: string;
-    social_provider: string;
-  };
+  user: User;
   is_new_user: boolean;
 }
 
