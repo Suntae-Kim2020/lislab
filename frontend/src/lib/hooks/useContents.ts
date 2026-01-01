@@ -44,8 +44,62 @@ export function useToggleFavorite() {
 
   return useMutation({
     mutationFn: (slug: string) => contentsApi.toggleFavorite(slug),
-    onSuccess: (_, slug) => {
-      // 콘텐츠 상세 및 목록 쿼리 무효화
+    // 낙관적 업데이트: mutation 실행 전 UI 즉시 업데이트
+    onMutate: async (slug) => {
+      // 진행 중인 refetch를 취소하여 낙관적 업데이트를 덮어쓰지 않도록 함
+      await queryClient.cancelQueries({ queryKey: ['content', slug] });
+      await queryClient.cancelQueries({ queryKey: ['contents'] });
+
+      // 이전 값 저장 (롤백용)
+      const previousContent = queryClient.getQueryData(['content', slug]);
+      const previousContents = queryClient.getQueriesData({ queryKey: ['contents'] });
+
+      // 콘텐츠 상세 낙관적 업데이트
+      queryClient.setQueryData(['content', slug], (old: any) => {
+        if (!old) return old;
+        return {
+          ...old,
+          is_favorited: !old.is_favorited,
+          favorite_count: old.is_favorited
+            ? (old.favorite_count || 1) - 1
+            : (old.favorite_count || 0) + 1,
+        };
+      });
+
+      // 콘텐츠 목록 낙관적 업데이트
+      queryClient.setQueriesData({ queryKey: ['contents'] }, (old: any) => {
+        if (!old?.results) return old;
+        return {
+          ...old,
+          results: old.results.map((content: any) =>
+            content.slug === slug
+              ? {
+                  ...content,
+                  is_favorited: !content.is_favorited,
+                  favorite_count: content.is_favorited
+                    ? (content.favorite_count || 1) - 1
+                    : (content.favorite_count || 0) + 1,
+                }
+              : content
+          ),
+        };
+      });
+
+      return { previousContent, previousContents };
+    },
+    // 에러 발생 시 이전 값으로 롤백
+    onError: (err, slug, context) => {
+      if (context?.previousContent) {
+        queryClient.setQueryData(['content', slug], context.previousContent);
+      }
+      if (context?.previousContents) {
+        context.previousContents.forEach(([queryKey, data]) => {
+          queryClient.setQueryData(queryKey, data);
+        });
+      }
+    },
+    // 성공 시 서버 데이터로 동기화
+    onSettled: (_, __, slug) => {
       queryClient.invalidateQueries({ queryKey: ['content', slug] });
       queryClient.invalidateQueries({ queryKey: ['contents'] });
       queryClient.invalidateQueries({ queryKey: ['favorites'] });
