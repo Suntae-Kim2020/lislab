@@ -39,7 +39,7 @@ export default function MyPage() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">마이페이지</h1>
         <p className="text-muted-foreground">
-          환영합니다, {user.username}님!
+          환영합니다, {user.first_name || user.username}님!
         </p>
       </div>
 

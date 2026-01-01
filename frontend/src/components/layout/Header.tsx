@@ -110,7 +110,7 @@ export function Header() {
                   <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                     <Avatar>
                       <AvatarFallback>
-                        {user.username.charAt(0).toUpperCase()}
+                        {(user.first_name || user.username).charAt(0).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
                   </Button>
@@ -118,7 +118,7 @@ export function Header() {
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>
                     <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium">{user.username}</p>
+                      <p className="text-sm font-medium">{user.first_name || user.username}</p>
                       <p className="text-xs text-muted-foreground">{user.email}</p>
                     </div>
                   </DropdownMenuLabel>

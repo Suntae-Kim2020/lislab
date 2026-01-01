@@ -15,6 +15,7 @@ export default function CompleteSocialSignupPage() {
   const userId = searchParams.get('user_id');
 
   const [formData, setFormData] = useState({
+    email: '',
     user_type: 'STUDENT' as 'STUDENT' | 'PROFESSOR' | 'JOB_SEEKER' | 'OTHER',
     organization: '',
     phone: '',
@@ -30,12 +31,26 @@ export default function CompleteSocialSignupPage() {
       return;
     }
 
+    // 필수 필드 검증
+    if (!formData.email) {
+      setError('이메일은 필수 입력 항목입니다.');
+      return;
+    }
+
+    // 이메일 형식 검증
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError('올바른 이메일 형식을 입력해주세요.');
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
     try {
       await completeSocialSignup({
         user_id: parseInt(userId),
+        email: formData.email,
         user_type: formData.user_type,
         organization: formData.organization || undefined,
         phone: formData.phone || undefined,
@@ -51,10 +66,6 @@ export default function CompleteSocialSignupPage() {
     }
   };
 
-  const handleSkip = () => {
-    // 추가 정보 입력을 건너뛰고 메인 페이지로 이동
-    router.push('/');
-  };
 
   if (!userId) {
     return (
@@ -80,7 +91,7 @@ export default function CompleteSocialSignupPage() {
         <CardHeader>
           <CardTitle>추가 정보 입력</CardTitle>
           <CardDescription>
-            서비스 이용을 위해 추가 정보를 입력해주세요.
+            서비스 이용을 위해 추가 정보를 입력해주세요. 모든 필수 항목을 입력해야 합니다.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -92,12 +103,30 @@ export default function CompleteSocialSignupPage() {
             )}
 
             <div className="space-y-2">
+              <Label htmlFor="email">이메일 *</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="example@email.com"
+                value={formData.email}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
+                required
+              />
+              <p className="text-xs text-muted-foreground">
+                신규 콘텐츠 등록 알림을 받을 이메일 주소입니다.
+              </p>
+            </div>
+
+            <div className="space-y-2">
               <Label htmlFor="user_type">사용자 구분 *</Label>
               <Select
                 value={formData.user_type}
                 onValueChange={(value: any) =>
                   setFormData({ ...formData, user_type: value })
                 }
+                required
               >
                 <SelectTrigger>
                   <SelectValue placeholder="사용자 구분을 선택하세요" />
@@ -137,23 +166,13 @@ export default function CompleteSocialSignupPage() {
               />
             </div>
 
-            <div className="flex gap-2">
-              <Button
-                type="submit"
-                disabled={loading}
-                className="flex-1"
-              >
-                {loading ? '저장 중...' : '완료'}
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleSkip}
-                disabled={loading}
-              >
-                건너뛰기
-              </Button>
-            </div>
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full"
+            >
+              {loading ? '저장 중...' : '완료'}
+            </Button>
           </form>
         </CardContent>
       </Card>

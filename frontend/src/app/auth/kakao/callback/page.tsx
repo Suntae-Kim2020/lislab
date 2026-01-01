@@ -9,7 +9,7 @@ import { Loader2 } from 'lucide-react';
 export default function KakaoCallbackPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { login } = useAuthStore();
+  const { setUser, setToken } = useAuthStore();
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -42,12 +42,9 @@ export default function KakaoCallbackPage() {
         localStorage.setItem('access_token', response.access);
         localStorage.setItem('refresh_token', response.refresh);
 
-        // 사용자 정보 저장
-        login({
-          id: response.user.id,
-          username: response.user.username,
-          email: response.user.email,
-        });
+        // 사용자 정보 및 토큰 저장
+        setToken(response.access);
+        setUser(response.user);
 
         // 신규 사용자인 경우 추가 정보 입력 페이지로 이동
         if (response.is_new_user) {
@@ -64,7 +61,7 @@ export default function KakaoCallbackPage() {
     };
 
     handleKakaoCallback();
-  }, [searchParams, router, login]);
+  }, [searchParams, router, setUser, setToken]);
 
   return (
     <div className="container flex items-center justify-center min-h-screen">

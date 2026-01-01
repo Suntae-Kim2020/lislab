@@ -10,7 +10,8 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuthStore } from '@/store/authStore';
-import { Mail, Check, AlertCircle } from 'lucide-react';
+import { Mail, Check, AlertCircle, MessageCircle } from 'lucide-react';
+import { getKakaoMessageConnectUrl } from '@/lib/api/social-auth';
 
 interface Category {
   id: number;
@@ -25,13 +26,14 @@ interface MailingPreference {
   frequency: 'IMMEDIATE' | 'WEEKLY' | 'MONTHLY';
   all_categories: boolean;
   selected_categories: Array<{ id: number; name: string; slug: string }>;
+  kakao_notification_enabled: boolean;
 }
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
 
 export default function MailingSettingsPage() {
   const router = useRouter();
-  const { isAuthenticated, token } = useAuthStore();
+  const { isAuthenticated, token, user } = useAuthStore();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -43,7 +45,8 @@ export default function MailingSettingsPage() {
     enabled: false,
     frequency: 'WEEKLY',
     all_categories: false,
-    selected_categories: []
+    selected_categories: [],
+    kakao_notification_enabled: false
   });
 
   useEffect(() => {
@@ -124,6 +127,7 @@ export default function MailingSettingsPage() {
           frequency: preferences.frequency,
           all_categories: preferences.all_categories,
           selected_category_ids: selectedCategoryIds,
+          kakao_notification_enabled: preferences.kakao_notification_enabled,
         }),
       });
 
@@ -222,6 +226,86 @@ export default function MailingSettingsPage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Kakao Notification (only for Kakao users) */}
+        {preferences.enabled && user?.social_provider === 'KAKAO' && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 3C6.477 3 2 6.477 2 10.75c0 2.376 1.293 4.501 3.315 5.876l-.902 3.313a.5.5 0 00.738.566l3.94-2.364C10.032 18.564 11 18.75 12 18.75c5.523 0 10-3.477 10-7.75S17.523 3 12 3z"/>
+                </svg>
+                카카오톡 알림 설정
+              </CardTitle>
+              <CardDescription>
+                카카오톡 메시지로도 알림을 받을 수 있습니다
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {/* 카카오 메시지 연동 상태 */}
+              <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <MessageCircle className="h-5 w-5 text-blue-600" />
+                    <div>
+                      <p className="text-sm font-medium text-blue-900">
+                        카카오 메시지 연동 상태
+                      </p>
+                      <p className="text-xs text-blue-700">
+                        {user?.kakao_message_token ? '연동됨 ✓' : '미연동'}
+                      </p>
+                    </div>
+                  </div>
+                  {!user?.kakao_message_token && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        const redirectUri = `${window.location.origin}/auth/kakao/message/callback`;
+                        const kakaoUrl = getKakaoMessageConnectUrl(redirectUri);
+                        window.location.href = kakaoUrl;
+                      }}
+                    >
+                      연동하기
+                    </Button>
+                  )}
+                </div>
+                <p className="text-xs text-blue-600 mt-2">
+                  {user?.kakao_message_token
+                    ? '카카오톡 메시지 알림을 받을 수 있습니다.'
+                    : '카카오톡 메시지를 받으려면 먼저 연동이 필요합니다.'}
+                </p>
+              </div>
+
+              {/* 알림 활성화 토글 */}
+              <div className="flex items-center space-x-2">
+                <Switch
+                  id="kakao-notification"
+                  checked={preferences.kakao_notification_enabled}
+                  onCheckedChange={(checked) => setPreferences({ ...preferences, kakao_notification_enabled: checked })}
+                  disabled={!user?.kakao_message_token}
+                />
+                <Label htmlFor="kakao-notification" className="cursor-pointer">
+                  {preferences.kakao_notification_enabled ? '카카오톡 알림 활성화됨' : '카카오톡 알림 비활성화됨'}
+                </Label>
+              </div>
+
+              {!user?.kakao_message_token && (
+                <p className="text-xs text-muted-foreground">
+                  * 카카오 메시지 연동 후 활성화할 수 있습니다.
+                </p>
+              )}
+
+              {preferences.kakao_notification_enabled && user?.kakao_message_token && (
+                <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                  <p className="text-sm text-yellow-800">
+                    💡 신규 콘텐츠 발행 시 이메일과 카카오톡 메시지로 함께 알림을 받게 됩니다.
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
 
         {/* Frequency */}
         {preferences.enabled && (
