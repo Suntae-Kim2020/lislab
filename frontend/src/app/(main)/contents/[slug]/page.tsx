@@ -12,6 +12,7 @@ import { CommentList } from '@/components/features/CommentList';
 import { TagSearchModal } from '@/components/content/TagSearchModal';
 import { QRCodeButton } from '@/components/content/QRCodeButton';
 import { PDFSaveButton } from '@/components/content/PDFSaveButton';
+import { ShareButton } from '@/components/content/ShareButton';
 import { Heart, Clock, Eye, Calendar, User, GraduationCap } from 'lucide-react';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
@@ -172,6 +173,10 @@ export default function ContentDetailPage() {
           <div className="flex items-start justify-between gap-4 mb-4">
             <h1 className="text-4xl font-bold">{content.title}</h1>
             <div className="flex gap-2">
+              <ShareButton
+                title={content.title}
+                url={typeof window !== 'undefined' ? window.location.href : ''}
+              />
               <QRCodeButton title={content.title} />
               <PDFSaveButton title={content.title} contentRef={pdfContentRef} />
               {isAuthenticated && (
