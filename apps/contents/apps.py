@@ -8,6 +8,4 @@ class ContentsConfig(AppConfig):
 
     def ready(self):
         """앱이 준비되면 시그널 등록"""
-        # 시그널 임시 비활성화 - Redis/Celery 없이 테스트
-        # import apps.contents.signals
-        pass
+        import apps.contents.signals

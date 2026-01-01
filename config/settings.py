@@ -31,6 +31,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'django_extensions',
+    'ckeditor',
+    'ckeditor_uploader',
 
     # Local apps
     'apps.accounts',
@@ -263,3 +265,56 @@ if DEBUG:
     INSTALLED_APPS += ['debug_toolbar']
     MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
     INTERNAL_IPS = ['127.0.0.1', 'localhost']
+
+# CKEditor Configuration
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_IMAGE_BACKEND = "pillow"
+CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'skin': 'moono-lisa',
+        'toolbar_Basic': [
+            ['Source', '-', 'Bold', 'Italic']
+        ],
+        'toolbar_Full': [
+            ['Styles', 'Format', 'Bold', 'Italic', 'Underline', 'Strike', 'SpellChecker', 'Undo', 'Redo'],
+            ['Link', 'Unlink', 'Anchor'],
+            ['Image', 'Flash', 'Table', 'HorizontalRule'],
+            ['TextColor', 'BGColor'],
+            ['Smiley', 'SpecialChar'], ['Source'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['NumberedList', 'BulletedList'],
+            ['Indent', 'Outdent'],
+            ['Maximize'],
+        ],
+        'toolbar': 'Full',
+        'height': 600,
+        'width': '100%',
+        'filebrowserWindowWidth': 940,
+        'filebrowserWindowHeight': 725,
+    },
+    'content': {
+        'toolbar': 'Full',
+        'height': 700,
+        'width': '100%',
+        'extraPlugins': ','.join([
+            'uploadimage',
+            'div',
+            'autolink',
+            'autoembed',
+            'embedsemantic',
+            'autogrow',
+            'widget',
+            'lineutils',
+            'clipboard',
+            'dialog',
+            'dialogui',
+            'elementspath'
+        ]),
+    }
+}
+
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

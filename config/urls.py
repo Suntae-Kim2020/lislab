@@ -11,6 +11,7 @@ from rest_framework_simplejwt.views import (
 urlpatterns = [
     # Admin
     path('admin/', admin.site.urls),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
 
     # API Authentication
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
