@@ -8,6 +8,7 @@ class UserSerializer(serializers.ModelSerializer):
     """사용자 정보 조회용 Serializer"""
 
     kakao_message_token = serializers.SerializerMethodField()
+    has_kakao_message_token = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -15,13 +16,17 @@ class UserSerializer(serializers.ModelSerializer):
             'id', 'username', 'email', 'first_name', 'last_name',
             'role', 'user_type', 'phone', 'organization', 'bio',
             'profile_image', 'is_email_verified', 'social_provider',
-            'kakao_message_token', 'created_at'
+            'kakao_message_token', 'has_kakao_message_token', 'created_at'
         ]
-        read_only_fields = ['id', 'created_at', 'role', 'social_provider', 'kakao_message_token']
+        read_only_fields = ['id', 'created_at', 'role', 'social_provider', 'kakao_message_token', 'has_kakao_message_token']
 
     def get_kakao_message_token(self, obj):
         """카카오 메시지 토큰 유무만 반환 (보안)"""
         return 'connected' if obj.kakao_message_token else None
+
+    def get_has_kakao_message_token(self, obj):
+        """카카오 메시지 토큰 보유 여부 (boolean)"""
+        return bool(obj.kakao_message_token)
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
