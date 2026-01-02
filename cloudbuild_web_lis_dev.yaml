@@ -1,0 +1,46 @@
+steps:
+  # Build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'asia-northeast3-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/lislab-backend:$BUILD_ID'
+      - '.'
+
+  # Push the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'asia-northeast3-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/lislab-backend:$BUILD_ID'
+
+  # Run the management command
+  - name: 'asia-northeast3-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/lislab-backend:$BUILD_ID'
+    entrypoint: 'python'
+    args:
+      - 'manage.py'
+      - 'create_web_lis_dev'
+    secretEnv:
+      - 'DB_PASSWORD'
+      - 'SECRET_KEY'
+      - 'EMAIL_HOST_PASSWORD'
+    env:
+      - 'CLOUD_SQL_CONNECTION_NAME=hybrid-flame-323510:asia-northeast3:lislab-db'
+      - 'DB_NAME=lis_db'
+      - 'DB_USER=postgres'
+      - 'DEBUG=False'
+      - 'EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend'
+      - 'EMAIL_HOST_USER=kistiman@gmail.com'
+      - 'DEFAULT_FROM_EMAIL=kistiman@gmail.com'
+      - 'SITE_URL=https://lislab.kr'
+
+availableSecrets:
+  secretManager:
+    - versionName: projects/$PROJECT_ID/secrets/DB_PASSWORD/versions/latest
+      env: 'DB_PASSWORD'
+    - versionName: projects/$PROJECT_ID/secrets/SECRET_KEY/versions/latest
+      env: 'SECRET_KEY'
+    - versionName: projects/$PROJECT_ID/secrets/EMAIL_HOST_PASSWORD/versions/latest
+      env: 'EMAIL_HOST_PASSWORD'
+
+options:
+  logging: CLOUD_LOGGING_ONLY

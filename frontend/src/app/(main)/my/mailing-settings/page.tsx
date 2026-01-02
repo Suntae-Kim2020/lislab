@@ -348,9 +348,9 @@ export default function MailingSettingsPage() {
         {preferences.enabled && (
           <Card>
             <CardHeader>
-              <CardTitle>상위 카테고리</CardTitle>
+              <CardTitle>카테고리</CardTitle>
               <CardDescription>
-                관심 있는 상위 카테고리를 선택하세요
+                관심 있는 카테고리를 선택하세요
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -364,26 +364,24 @@ export default function MailingSettingsPage() {
                   })}
                 />
                 <Label htmlFor="all-categories" className="cursor-pointer font-semibold">
-                  전체 상위 카테고리 구독
+                  전체 카테고리 구독
                 </Label>
               </div>
 
               {!preferences.all_categories && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {categories
-                    .filter(category => category.parent === category.id)
-                    .map((category) => (
-                      <div key={category.id} className="flex items-center space-x-2">
-                        <Checkbox
-                          id={`cat-${category.id}`}
-                          checked={preferences.selected_categories.some(c => c.id === category.id)}
-                          onCheckedChange={() => toggleCategory(category)}
-                        />
-                        <Label htmlFor={`cat-${category.id}`} className="cursor-pointer">
-                          {category.name}
-                        </Label>
-                      </div>
-                    ))}
+                  {categories.map((category) => (
+                    <div key={category.id} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`cat-${category.id}`}
+                        checked={preferences.selected_categories.some(c => c.id === category.id)}
+                        onCheckedChange={() => toggleCategory(category)}
+                      />
+                      <Label htmlFor={`cat-${category.id}`} className="cursor-pointer">
+                        {category.name}
+                      </Label>
+                    </div>
+                  ))}
                 </div>
               )}
 

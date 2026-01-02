@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useCurrentUser, useUpdateProfile, useChangePassword } from '@/lib/hooks/useProfile';
+import { useUpdateProfile, useChangePassword } from '@/lib/hooks/useProfile';
 import { useAuthStore } from '@/store/authStore';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,14 +11,16 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ArrowLeft } from 'lucide-react';
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { isAuthenticated, isLoading: authLoading } = useAuthStore();
-  const { data: user, isLoading, error } = useCurrentUser();
+  const { user, isAuthenticated, isLoading: authLoading, setUser } = useAuthStore();
   const updateProfileMutation = useUpdateProfile();
   const changePasswordMutation = useChangePassword();
+  const isLoading = authLoading;
+  const error = null;
 
   // 프로필 정보 상태
   const [firstName, setFirstName] = useState('');
@@ -27,6 +29,7 @@ export default function ProfilePage() {
   const [phone, setPhone] = useState('');
   const [organization, setOrganization] = useState('');
   const [bio, setBio] = useState('');
+  const [userType, setUserType] = useState<string | undefined>(undefined);
 
   // 비밀번호 변경 상태
   const [oldPassword, setOldPassword] = useState('');
@@ -40,6 +43,8 @@ export default function ProfilePage() {
   }, [isAuthenticated, authLoading, router]);
 
   useEffect(() => {
+    console.log('🔍 Profile page - user changed:', user);
+    console.log('🔍 user_type:', user?.user_type);
     if (user) {
       setFirstName(user.first_name || '');
       setLastName(user.last_name || '');
@@ -47,6 +52,9 @@ export default function ProfilePage() {
       setPhone(user.phone || '');
       setOrganization(user.organization || '');
       setBio(user.bio || '');
+      const newUserType = user.user_type || undefined;
+      console.log('🔍 Setting userType to:', newUserType);
+      setUserType(newUserType);
     }
   }, [user]);
 
@@ -65,10 +73,24 @@ export default function ProfilePage() {
           phone,
           organization,
           bio,
+          user_type: userType || undefined,
         },
       },
       {
-        onSuccess: () => {
+        onSuccess: (updatedUser) => {
+          // authStore도 업데이트 (타입 변환 및 빈 값 처리)
+          setUser({
+            ...updatedUser,
+            role: updatedUser.role as 'GUEST' | 'USER' | 'ADMIN',
+            username: updatedUser.username || '',
+            email: updatedUser.email || '',
+            first_name: updatedUser.first_name || '',
+            last_name: updatedUser.last_name || '',
+            phone: updatedUser.phone || '',
+            organization: updatedUser.organization || '',
+            bio: updatedUser.bio || '',
+            user_type: updatedUser.user_type || '',
+          });
           alert('프로필이 수정되었습니다.');
         },
         onError: (error: any) => {
@@ -229,6 +251,36 @@ export default function ProfilePage() {
                         placeholder="학교, 회사 등"
                       />
                     </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="userType">사용자 구분</Label>
+                    {userType !== undefined ? (
+                      <Select
+                        value={userType}
+                        onValueChange={(value) => {
+                          console.log('🔍 Select onChange:', value);
+                          setUserType(value);
+                        }}
+                      >
+                        <SelectTrigger id="userType">
+                          <SelectValue placeholder="사용자 구분을 선택하세요" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="STUDENT">학생</SelectItem>
+                          <SelectItem value="PROFESSOR">교수/연구자</SelectItem>
+                          <SelectItem value="JOB_SEEKER">취업준비생</SelectItem>
+                          <SelectItem value="OTHER">기타</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      <div className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm text-muted-foreground">
+                        로딩 중...
+                      </div>
+                    )}
+                    <p className="text-xs text-muted-foreground">
+                      현재 값: {userType || '(없음)'}
+                    </p>
                   </div>
 
                   <div className="space-y-2">

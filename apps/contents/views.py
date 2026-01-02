@@ -62,12 +62,10 @@ class ContentViewSet(viewsets.ModelViewSet):
                 Q(tags__name__icontains=search)
             ).distinct()
 
-        # 카테고리 필터 (상위 카테고리 또는 하위 카테고리)
+        # 카테고리 필터
         category = self.request.query_params.get('category', None)
         if category:
-            queryset = queryset.filter(
-                Q(category__slug=category) | Q(category__parent__slug=category)
-            )
+            queryset = queryset.filter(category__slug=category)
 
         # 태그 필터 (slug 또는 name으로 검색)
         tag = self.request.query_params.get('tag', None)

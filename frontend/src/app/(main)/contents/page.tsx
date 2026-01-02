@@ -18,41 +18,33 @@ function ContentsPageContent() {
 
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState<string>(categoryParam || 'all');
-  const [subCategory, setSubCategory] = useState<string>('all');
   const [difficulty, setDifficulty] = useState<string>('all');
+  const [page, setPage] = useState(1);
 
   // URL 파라미터가 변경될 때 카테고리 업데이트
   useEffect(() => {
     setCategory(categoryParam || 'all');
-    setSubCategory('all');
+    setPage(1); // 카테고리 변경 시 첫 페이지로
   }, [categoryParam]);
+
+  // 필터 변경 시 첫 페이지로 리셋
+  useEffect(() => {
+    setPage(1);
+  }, [search, category, difficulty]);
 
   const { data: contentsData, isLoading } = useContents({
     search,
-    category: subCategory !== 'all' ? subCategory : (category === 'all' ? '' : category),
-    difficulty: difficulty === 'all' ? '' : difficulty
+    category: category === 'all' ? '' : category,
+    difficulty: difficulty === 'all' ? '' : difficulty,
+    page
   });
   const { data: categories } = useCategories();
   const toggleFavoriteMutation = useToggleFavorite();
 
-  // 상위 카테고리 (parent가 자기 자신인 카테고리)
-  const parentCategories = Array.isArray(categories)
-    ? categories.filter(cat => cat.parent === cat.id)
+  // 모든 카테고리를 order 순서대로 정렬
+  const sortedCategories = Array.isArray(categories)
+    ? categories.sort((a, b) => a.order - b.order)
     : [];
-
-  // 선택된 카테고리의 하위 카테고리
-  const selectedCategoryId = Array.isArray(categories)
-    ? categories.find(cat => cat.slug === category)?.id
-    : undefined;
-  const subCategories = selectedCategoryId && Array.isArray(categories)
-    ? categories.filter(cat => cat.parent === selectedCategoryId)
-    : [];
-
-  // 카테고리 변경 시 하위 카테고리 초기화
-  const handleCategoryChange = (value: string) => {
-    setCategory(value);
-    setSubCategory('all');
-  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -94,36 +86,19 @@ function ContentsPageContent() {
           </form>
 
           <div className="flex flex-wrap gap-2">
-            <Select value={category} onValueChange={handleCategoryChange}>
+            <Select value={category} onValueChange={setCategory}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="카테고리" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">전체</SelectItem>
-                {parentCategories.map((cat) => (
+                {sortedCategories.map((cat) => (
                   <SelectItem key={cat.id} value={cat.slug}>
                     {cat.name}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
-
-            {/* 하위 메뉴 드롭박스 - 선택된 카테고리에 하위 카테고리가 있을 때만 표시 */}
-            {subCategories.length > 0 && (
-              <Select value={subCategory} onValueChange={setSubCategory}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="하위 메뉴" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">전체</SelectItem>
-                  {subCategories.map((cat) => (
-                    <SelectItem key={cat.id} value={cat.slug}>
-                      {cat.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
 
             <Select value={difficulty} onValueChange={setDifficulty}>
               <SelectTrigger className="w-[180px]">
@@ -137,12 +112,11 @@ function ContentsPageContent() {
               </SelectContent>
             </Select>
 
-            {(category !== 'all' || subCategory !== 'all' || difficulty !== 'all' || search) && (
+            {(category !== 'all' || difficulty !== 'all' || search) && (
               <Button
                 variant="outline"
                 onClick={() => {
                   setCategory('all');
-                  setSubCategory('all');
                   setDifficulty('all');
                   setSearch('');
                 }}
@@ -182,8 +156,23 @@ function ContentsPageContent() {
         {/* Pagination */}
         {contentsData && contentsData.count > 20 && (
           <div className="flex justify-center gap-2">
-            <Button variant="outline">이전</Button>
-            <Button variant="outline">다음</Button>
+            <Button
+              variant="outline"
+              onClick={() => setPage(p => Math.max(1, p - 1))}
+              disabled={!contentsData.previous}
+            >
+              이전
+            </Button>
+            <span className="flex items-center px-4 text-sm text-muted-foreground">
+              페이지 {page}
+            </span>
+            <Button
+              variant="outline"
+              onClick={() => setPage(p => p + 1)}
+              disabled={!contentsData.next}
+            >
+              다음
+            </Button>
           </div>
         )}
       </div>

@@ -5,14 +5,9 @@ from .models import Category, Tag, Content, ContentVersion, Favorite
 class CategorySerializer(serializers.ModelSerializer):
     """카테고리 Serializer"""
 
-    children_count = serializers.SerializerMethodField()
-
     class Meta:
         model = Category
-        fields = ['id', 'name', 'slug', 'description', 'parent', 'order', 'children_count']
-
-    def get_children_count(self, obj):
-        return obj.children.count()
+        fields = ['id', 'name', 'slug', 'description', 'order']
 
 
 class TagSerializer(serializers.ModelSerializer):

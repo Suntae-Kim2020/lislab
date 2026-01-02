@@ -66,7 +66,7 @@ export function useDeletePost() {
       queryClient.invalidateQueries({
         predicate: (query) => {
           const key = query.queryKey;
-          return key[0] === 'posts' && (key.length === 1 || typeof key[1] === 'string');
+          return key[0] === 'posts' && (key.length === 1 || typeof key[1] === 'string' || key[1] === undefined);
         }
       });
     },

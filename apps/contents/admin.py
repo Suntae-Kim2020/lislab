@@ -18,8 +18,8 @@ class ContentAdminForm(forms.ModelForm):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'parent', 'order', 'is_active', 'created_at']
-    list_filter = ['is_active', 'parent']
+    list_display = ['name', 'order', 'is_active', 'created_at']
+    list_filter = ['is_active']
     search_fields = ['name', 'description']
     prepopulated_fields = {'slug': ('name',)}
     ordering = ['order', 'name']
@@ -42,7 +42,7 @@ class ContentVersionInline(admin.TabularInline):
 @admin.register(Content)
 class ContentAdmin(admin.ModelAdmin):
     form = ContentAdminForm
-    list_display = ['title', 'parent_category', 'category', 'author', 'status_badge', 'difficulty_badge', 'version', 'view_count', 'created_at']
+    list_display = ['title', 'category', 'author', 'status_badge', 'difficulty_badge', 'version', 'view_count', 'created_at']
     list_filter = ['status', 'category', 'difficulty', 'created_at']
     search_fields = ['title', 'summary', 'author__username']
     prepopulated_fields = {'slug': ('title',)}
@@ -73,13 +73,6 @@ class ContentAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
     )
-
-    def parent_category(self, obj):
-        """상위 카테고리 표시"""
-        if obj.category and obj.category.parent:
-            return obj.category.parent.name
-        return '-'
-    parent_category.short_description = '상위 카테고리'
 
     def status_badge(self, obj):
         """상태를 색상 배지로 표시"""

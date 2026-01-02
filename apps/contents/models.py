@@ -23,15 +23,6 @@ class Category(models.Model):
         verbose_name='설명'
     )
 
-    parent = models.ForeignKey(
-        'self',
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-        related_name='children',
-        verbose_name='상위 카테고리'
-    )
-
     order = models.IntegerField(
         default=0,
         verbose_name='정렬 순서'

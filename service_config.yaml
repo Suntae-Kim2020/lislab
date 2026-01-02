@@ -1,0 +1,121 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  annotations:
+    run.googleapis.com/build-enable-automatic-updates: 'false'
+    run.googleapis.com/build-id: e285986c-1e10-4031-a666-4f161ad434fb
+    run.googleapis.com/build-image-uri: asia-northeast3-docker.pkg.dev/hybrid-flame-323510/cloud-run-source-deploy/lislab-backend
+    run.googleapis.com/build-name: projects/326272454487/locations/asia-northeast3/builds/e285986c-1e10-4031-a666-4f161ad434fb
+    run.googleapis.com/build-source-location: gs://run-sources-hybrid-flame-323510-asia-northeast3/services/lislab-backend/1767230750.08963-d30cefebaae249aca540bc798688a47a.zip#1767230775076782
+    run.googleapis.com/client-name: gcloud
+    run.googleapis.com/client-version: 550.0.0
+    run.googleapis.com/ingress: all
+    run.googleapis.com/ingress-status: all
+    run.googleapis.com/maxScale: '20'
+    run.googleapis.com/operation-id: 854df3bd-fb6b-4278-b3a2-3103a04bee0f
+    run.googleapis.com/urls: '["https://lislab-backend-326272454487.asia-northeast3.run.app","https://lislab-backend-daboexyd6q-du.a.run.app"]'
+    serving.knative.dev/creator: kistiman@gmail.com
+    serving.knative.dev/lastModifier: kistiman@gmail.com
+  creationTimestamp: '2025-12-31T02:47:56.030472Z'
+  generation: 38
+  labels:
+    cloud.googleapis.com/location: asia-northeast3
+    run.googleapis.com/satisfiesPzs: 'true'
+  name: lislab-backend
+  namespace: '326272454487'
+  resourceVersion: AAZHSYQrdyA
+  selfLink: /apis/serving.knative.dev/v1/namespaces/326272454487/services/lislab-backend
+  uid: 126241e8-cdcc-4a12-a135-e70d3b22ec42
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: '20'
+        run.googleapis.com/client-name: gcloud
+        run.googleapis.com/client-version: 550.0.0
+        run.googleapis.com/cloudsql-instances: hybrid-flame-323510:asia-northeast3:lislab-db
+        run.googleapis.com/startup-cpu-boost: 'true'
+      labels:
+        client.knative.dev/nonce: dyszjtpfkw
+        run.googleapis.com/startupProbeType: Default
+    spec:
+      containerConcurrency: 80
+      containers:
+      - env:
+        - name: CLOUD_SQL_CONNECTION_NAME
+          value: hybrid-flame-323510:asia-northeast3:lislab-db
+        - name: ALLOWED_HOSTS
+          value: localhost,127.0.0.1,api.lislab.kr,lislab-backend-326272454487.asia-northeast3.run.app
+        - name: DEBUG
+          value: 'False'
+        - name: CORS_ALLOWED_ORIGINS
+          value: http://localhost:3000,http://127.0.0.1:3000,https://lislab.kr,https://www.lislab.kr,https://lislab-frontend-326272454487.asia-northeast3.run.app
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: db-password
+        - name: DJANGO_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: django-secret-key
+        - name: EMAIL_HOST_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: email-password
+        - name: EMAIL_BACKEND
+          value: django.core.mail.backends.smtp.EmailBackend
+        - name: EMAIL_HOST
+          value: smtp.gmail.com
+        - name: EMAIL_PORT
+          value: '587'
+        - name: EMAIL_USE_TLS
+          value: 'True'
+        - name: EMAIL_HOST_USER
+          value: kistiman@gmail.com
+        - name: DEFAULT_FROM_EMAIL
+          value: kim.suntae@jbnu.ac.kr
+        - name: SITE_URL
+          value: https://lislab.kr
+        image: asia-northeast3-docker.pkg.dev/hybrid-flame-323510/cloud-run-source-deploy/lislab-backend@sha256:08f5d6873bb77b480fef8ef9263f8f6c2339206bdc0fecfa525031154e5e5b67
+        ports:
+        - containerPort: 8080
+          name: http1
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        startupProbe:
+          failureThreshold: 1
+          periodSeconds: 240
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 240
+      serviceAccountName: 326272454487-compute@developer.gserviceaccount.com
+      timeoutSeconds: 300
+  traffic:
+  - percent: 100
+    revisionName: lislab-backend-00024-2hp
+status:
+  address:
+    url: https://lislab-backend-daboexyd6q-du.a.run.app
+  conditions:
+  - lastTransitionTime: '2026-01-01T01:28:55.811788Z'
+    status: 'True'
+    type: Ready
+  - lastTransitionTime: '2026-01-01T01:28:55.839684Z'
+    reason: Retired
+    status: 'True'
+    type: ConfigurationsReady
+  - lastTransitionTime: '2025-12-31T12:17:44.693664Z'
+    status: 'True'
+    type: RoutesReady
+  latestCreatedRevisionName: lislab-backend-00034-rbq
+  latestReadyRevisionName: lislab-backend-00024-2hp
+  observedGeneration: 38
+  traffic:
+  - percent: 100
+    revisionName: lislab-backend-00024-2hp
+  url: https://lislab-backend-daboexyd6q-du.a.run.app

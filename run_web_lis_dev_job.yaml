@@ -1,0 +1,17 @@
+apiVersion: run.googleapis.com/v1
+kind: Job
+metadata:
+  name: create-web-lis-dev-content
+spec:
+  template:
+    spec:
+      template:
+        spec:
+          containers:
+          - image: asia-northeast3-docker.pkg.dev/hybrid-flame-323510/cloud-run-source-deploy/lislab-backend/lislab-backend:latest
+            command: ["/bin/bash"]
+            args:
+            - "-c"
+            - |
+              python manage.py create_web_lis_dev
+          serviceAccountName: 326272454487-compute@developer.gserviceaccount.com

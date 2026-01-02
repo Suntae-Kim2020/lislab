@@ -13,15 +13,24 @@ import {
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
+import { useCategories } from '@/lib/hooks/useContents';
 
 export function Header() {
   const { user, isAuthenticated, logout } = useAuthStore();
   const router = useRouter();
+  const { data: categories } = useCategories();
 
   const handleLogout = () => {
     logout();
     router.push('/login');
   };
+
+  // "실습"을 제외한 카테고리들을 order 순서대로 정렬
+  const menuCategories = Array.isArray(categories)
+    ? categories
+        .filter(cat => cat.slug !== 'practice')
+        .sort((a, b) => a.order - b.order)
+    : [];
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -44,39 +53,13 @@ export function Header() {
                   <Link href="/contents">전체 콘텐츠</Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/contents?category=web-docs">웹문서</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/contents?category=web-technology">웹기술</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/contents?category=search-protocol">프로토콜</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/contents?category=standard-specifications">표준규격지침</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/contents?category=conceptual-model">개념 모델</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/contents?category=data-model">데이터 모델</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/contents?category=serialization" className="pl-6">→ 직렬화</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/contents?category=metadata">메타데이터</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/contents?category=ontology">온톨로지</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/contents?category=identifier-reference">식별자와 참조체계</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/contents?category=overview">한눈에 보기</Link>
-                </DropdownMenuItem>
+                {menuCategories.map((category) => (
+                  <DropdownMenuItem key={category.id} asChild>
+                    <Link href={`/contents?category=${category.slug}`}>
+                      {category.name}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
               </DropdownMenuContent>
             </DropdownMenu>
 

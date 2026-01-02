@@ -1,0 +1,21 @@
+apiVersion: run.googleapis.com/v1
+kind: Job
+metadata:
+  name: create-oai-ore-content
+spec:
+  template:
+    spec:
+      template:
+        spec:
+          containers:
+          - image: gcr.io/hybrid-flame-323510/lislab-backend:latest
+            args:
+            - python
+            - manage.py
+            - create_oai_ore
+            env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  key: latest
+                  name: DATABASE_URL

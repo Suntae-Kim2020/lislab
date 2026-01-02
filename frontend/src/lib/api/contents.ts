@@ -30,9 +30,7 @@ export interface Category {
   name: string;
   slug: string;
   description: string;
-  parent: number | null;
   order: number;
-  children_count: number;
 }
 
 // 콘텐츠 목록 조회
@@ -42,8 +40,8 @@ export const getContents = async (params?: {
   tag?: string;
   difficulty?: string;
   page?: number;
-}): Promise<{ results: Content[]; count: number }> => {
-  const response = await apiClient.get<{ results: Content[]; count: number }>('/contents/contents/', { params });
+}): Promise<{ results: Content[]; count: number; next: string | null; previous: string | null }> => {
+  const response = await apiClient.get<{ results: Content[]; count: number; next: string | null; previous: string | null }>('/contents/contents/', { params });
   return response.data;
 };
 
