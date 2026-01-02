@@ -46,24 +46,54 @@ class Command(BaseCommand):
         self.stdout.write(f"삭제: {len(to_delete)}개\n")
 
         # 삭제할 카테고리의 콘텐츠 처리
-        if to_delete:
-            self.stdout.write("\n삭제할 카테고리:")
-            for cat in to_delete:
-                content_count = Content.objects.filter(category=cat).count()
-                self.stdout.write(f"  - {cat.slug} ({cat.name}): {content_count}개 콘텐츠")
-                
-                # 콘텐츠가 있으면 경고
-                if content_count > 0:
-                    self.stdout.write(self.style.WARNING(
-                        f"    ⚠️  {content_count}개의 콘텐츠가 있습니다. 삭제하면 콘텐츠도 삭제됩니다."
-                    ))
+        # 콘텐츠를 적절한 카테고리로 이동하는 매핑
+        category_mapping = {
+            'format-comparison': 'metadata',
+            'bibliographic-models-comparison': 'conceptual-model',
+            'frbr': 'conceptual-model',
+            'serialization': 'data-model',
+            'dublin-core': 'metadata',
+            'xml': 'data-model',
+            'rdf': 'data-model',
+            'oai-pmh': 'search-protocol',
+            'html': 'web-technology',
+            'srw': 'search-protocol',
+            'sru': 'search-protocol',
+            'sparql': 'search-protocol',
+            'rdfs': 'ontology',
+            'owl': 'ontology',
+            'mods': 'metadata',
+            'mets': 'metadata',
+            'marc21': 'metadata',
+            'lrm': 'conceptual-model',
+            'json': 'data-model',
+        }
 
-            # 자동 삭제 (콘텐츠는 CASCADE로 함께 삭제됨)
+        if to_delete:
+            self.stdout.write("\n삭제할 카테고리 및 콘텐츠 이동:")
+            for cat in to_delete:
+                contents = Content.objects.filter(category=cat)
+                content_count = contents.count()
+
+                if content_count > 0:
+                    # 이동할 카테고리 결정
+                    target_slug = category_mapping.get(cat.slug, 'overview')
+                    target_cat = Category.objects.get(slug=target_slug)
+
+                    # 콘텐츠 이동
+                    contents.update(category=target_cat)
+                    self.stdout.write(
+                        f"  ✓ {cat.slug} ({cat.name}): {content_count}개 콘텐츠 → {target_cat.name}"
+                    )
+                else:
+                    self.stdout.write(f"  - {cat.slug} ({cat.name}): 콘텐츠 없음")
+
+            # 자동 삭제 (콘텐츠는 이미 이동됨)
             deleted_count = 0
             for cat in to_delete:
                 cat.delete()
                 deleted_count += 1
-            self.stdout.write(self.style.SUCCESS(f"✓ {deleted_count}개 카테고리 삭제 완료"))
+            self.stdout.write(self.style.SUCCESS(f"\n✓ {deleted_count}개 카테고리 삭제 완료"))
 
         # 남은 카테고리 업데이트
         self.stdout.write("\n카테고리 정보 업데이트:")
