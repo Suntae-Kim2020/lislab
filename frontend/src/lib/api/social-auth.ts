@@ -56,7 +56,7 @@ export const getKakaoLoginUrl = (redirectUri: string): string => {
     client_id: process.env.NEXT_PUBLIC_KAKAO_APP_KEY || '',
     redirect_uri: redirectUri,
     response_type: 'code',
-    // scope 파라미터 완전히 제거 (기본 권한만 사용)
+    scope: 'talk_message', // 최초 로그인 시 메시지 권한 포함
   });
   return `${kakaoAuthUrl}?${params.toString()}`;
 };
