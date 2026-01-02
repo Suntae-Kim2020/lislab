@@ -164,6 +164,7 @@ def kakao_login(request):
             'user_type': user.user_type,
             'organization': user.organization,
             'social_provider': user.social_provider,
+            'has_kakao_message_token': bool(user.kakao_message_token),  # 카카오 메시지 토큰 보유 여부
         },
         'is_new_user': is_new_user,
     }, status=status.HTTP_200_OK)

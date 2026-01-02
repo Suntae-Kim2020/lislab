@@ -174,7 +174,7 @@ LIS Lab에 새로운 콘텐츠가 발행되었습니다.
 지금 학습하기: {site_url}/contents/{content.slug}
 
 ----
-© 2025 LIS Lab. All rights reserved.
+© {datetime.now().year} LIS Lab. All rights reserved.
 메일링 설정: {site_url}/my/mailing-settings
 """
 

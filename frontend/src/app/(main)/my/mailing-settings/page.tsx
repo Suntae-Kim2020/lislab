@@ -252,11 +252,11 @@ export default function MailingSettingsPage() {
                         카카오 메시지 연동 상태
                       </p>
                       <p className="text-xs text-blue-700">
-                        {user?.kakao_message_token ? '연동됨 ✓' : '미연동'}
+                        {user?.has_kakao_message_token ? '연동됨 ✓' : '미연동'}
                       </p>
                     </div>
                   </div>
-                  {!user?.kakao_message_token && (
+                  {!user?.has_kakao_message_token && (
                     <Button
                       size="sm"
                       variant="outline"
@@ -271,7 +271,7 @@ export default function MailingSettingsPage() {
                   )}
                 </div>
                 <p className="text-xs text-blue-600 mt-2">
-                  {user?.kakao_message_token
+                  {user?.has_kakao_message_token
                     ? '카카오톡 메시지 알림을 받을 수 있습니다.'
                     : '카카오톡 메시지를 받으려면 먼저 연동이 필요합니다.'}
                 </p>
@@ -283,20 +283,20 @@ export default function MailingSettingsPage() {
                   id="kakao-notification"
                   checked={preferences.kakao_notification_enabled}
                   onCheckedChange={(checked) => setPreferences({ ...preferences, kakao_notification_enabled: checked })}
-                  disabled={!user?.kakao_message_token}
+                  disabled={!user?.has_kakao_message_token}
                 />
                 <Label htmlFor="kakao-notification" className="cursor-pointer">
                   {preferences.kakao_notification_enabled ? '카카오톡 알림 활성화됨' : '카카오톡 알림 비활성화됨'}
                 </Label>
               </div>
 
-              {!user?.kakao_message_token && (
+              {!user?.has_kakao_message_token && (
                 <p className="text-xs text-muted-foreground">
                   * 카카오 메시지 연동 후 활성화할 수 있습니다.
                 </p>
               )}
 
-              {preferences.kakao_notification_enabled && user?.kakao_message_token && (
+              {preferences.kakao_notification_enabled && user?.has_kakao_message_token && (
                 <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
                   <p className="text-sm text-yellow-800">
                     💡 신규 콘텐츠 발행 시 이메일과 카카오톡 메시지로 함께 알림을 받게 됩니다.

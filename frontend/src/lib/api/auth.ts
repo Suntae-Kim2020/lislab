@@ -37,6 +37,7 @@ export interface User {
   is_email_verified: boolean;
   social_provider?: string;
   kakao_message_token?: string;
+  has_kakao_message_token?: boolean;
   created_at: string;
 }
 
