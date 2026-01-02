@@ -27,6 +27,7 @@ def get_kakao_access_token(code, redirect_uri):
         'client_id': settings.KAKAO_REST_API_KEY,
         'redirect_uri': redirect_uri,
         'code': code,
+        'scope': 'talk_message',  # 메시지 전송 권한 포함
     }
 
     response = requests.post(KAKAO_TOKEN_URL, data=data)
