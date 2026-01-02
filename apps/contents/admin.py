@@ -107,7 +107,11 @@ class ContentAdmin(admin.ModelAdmin):
     def content_preview(self, obj):
         """콘텐츠 HTML 미리보기"""
         if obj.content_html:
-            return mark_safe(f'<div style="border: 1px solid #ddd; padding: 15px; max-height: 400px; overflow-y: auto;">{obj.content_html[:1000]}...</div>')
+            # HTML 태그를 제거하고 텍스트만 표시 (태그가 잘려서 페이지가 깨지는 것을 방지)
+            import re
+            text_only = re.sub(r'<[^>]+>', '', obj.content_html)
+            preview_text = text_only[:500]
+            return format_html('<div style="border: 1px solid #ddd; padding: 15px; max-height: 200px; overflow-y: auto; white-space: pre-wrap;">{}</div>', preview_text + '...' if len(text_only) > 500 else preview_text)
         return '-'
     content_preview.short_description = '콘텐츠 미리보기'
 
