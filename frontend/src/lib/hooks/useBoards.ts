@@ -87,6 +87,32 @@ export function useCreateReply() {
   });
 }
 
+// Update a reply
+export function useUpdateReply() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ postId, replyId, data }: { postId: number; replyId: number; data: CreateReplyRequest }) =>
+      boardsApi.updateReply(postId, replyId, data),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['posts', variables.postId] });
+    },
+  });
+}
+
+// Delete a reply
+export function useDeleteReply() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ postId, replyId }: { postId: number; replyId: number }) =>
+      boardsApi.deleteReply(postId, replyId),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['posts', variables.postId] });
+    },
+  });
+}
+
 // Update post status
 export function useUpdatePostStatus() {
   const queryClient = useQueryClient();

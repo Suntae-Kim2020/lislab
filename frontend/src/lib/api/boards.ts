@@ -103,6 +103,17 @@ export const boardsApi = {
     return response.data;
   },
 
+  // Update a reply (admin only)
+  updateReply: async (postId: number, replyId: number, data: CreateReplyRequest): Promise<PostReply> => {
+    const response = await apiClient.patch<PostReply>(`/boards/posts/${postId}/reply/${replyId}/`, data);
+    return response.data;
+  },
+
+  // Delete a reply (admin only)
+  deleteReply: async (postId: number, replyId: number): Promise<void> => {
+    await apiClient.delete(`/boards/posts/${postId}/reply/${replyId}/delete/`);
+  },
+
   // Update status (admin only)
   updateStatus: async (postId: number, status: string): Promise<Post> => {
     const response = await apiClient.post<Post>(`/boards/posts/${postId}/update-status/`, { status });

@@ -18,12 +18,15 @@ class BoardSerializer(serializers.ModelSerializer):
 class PostReplySerializer(serializers.ModelSerializer):
     """게시글 답글 Serializer"""
 
-    author_name = serializers.CharField(source='author.username', read_only=True)
+    author_name = serializers.SerializerMethodField()
 
     class Meta:
         model = PostReply
         fields = ['id', 'post', 'author', 'author_name', 'content', 'created_at', 'updated_at']
-        read_only_fields = ['author', 'created_at', 'updated_at']
+        read_only_fields = ['post', 'author', 'created_at', 'updated_at']
+
+    def get_author_name(self, obj):
+        return obj.author.first_name or obj.author.username
 
 
 class PostListSerializer(serializers.ModelSerializer):
@@ -31,7 +34,7 @@ class PostListSerializer(serializers.ModelSerializer):
 
     board_name = serializers.CharField(source='board.name', read_only=True)
     board_type = serializers.CharField(source='board.board_type', read_only=True)
-    author_name = serializers.CharField(source='author.username', read_only=True)
+    author_name = serializers.SerializerMethodField()
     replies_count = serializers.SerializerMethodField()
 
     class Meta:
@@ -42,6 +45,9 @@ class PostListSerializer(serializers.ModelSerializer):
             'replies_count', 'created_at', 'updated_at'
         ]
 
+    def get_author_name(self, obj):
+        return obj.author.first_name or obj.author.username
+
     def get_replies_count(self, obj):
         return obj.admin_replies.count()
 
@@ -51,7 +57,7 @@ class PostDetailSerializer(serializers.ModelSerializer):
 
     board_name = serializers.CharField(source='board.name', read_only=True)
     board_type = serializers.CharField(source='board.board_type', read_only=True)
-    author_name = serializers.CharField(source='author.username', read_only=True)
+    author_name = serializers.SerializerMethodField()
     admin_replies = PostReplySerializer(many=True, read_only=True)
     can_edit = serializers.SerializerMethodField()
     can_delete = serializers.SerializerMethodField()
@@ -64,6 +70,9 @@ class PostDetailSerializer(serializers.ModelSerializer):
             'admin_replies', 'created_at', 'updated_at',
             'can_edit', 'can_delete'
         ]
+
+    def get_author_name(self, obj):
+        return obj.author.first_name or obj.author.username
 
     def get_can_edit(self, obj):
         request = self.context.get('request')

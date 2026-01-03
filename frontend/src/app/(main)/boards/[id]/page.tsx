@@ -3,14 +3,14 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { usePost, useCreateReply, useDeletePost } from '@/lib/hooks/useBoards';
+import { usePost, useCreateReply, useUpdateReply, useDeleteReply, useDeletePost } from '@/lib/hooks/useBoards';
 import { useAuthStore } from '@/store/authStore';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, Eye, User, ArrowLeft } from 'lucide-react';
+import { Calendar, Eye, User, ArrowLeft, Pencil, Trash2, X, Check } from 'lucide-react';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 
@@ -44,9 +44,13 @@ export default function PostDetailPage() {
   const { user, isAuthenticated } = useAuthStore();
   const [replyContent, setReplyContent] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
+  const [editingReplyId, setEditingReplyId] = useState<number | null>(null);
+  const [editingReplyContent, setEditingReplyContent] = useState('');
 
   const { data: post, isLoading } = usePost(id, !isDeleting);
   const createReplyMutation = useCreateReply();
+  const updateReplyMutation = useUpdateReply();
+  const deleteReplyMutation = useDeleteReply();
   const deletePostMutation = useDeletePost();
 
   const handleCreateReply = () => {
@@ -74,6 +78,40 @@ export default function PostDetailPage() {
           router.push('/boards');
         },
       });
+    }
+  };
+
+  const handleEditReply = (replyId: number, content: string) => {
+    setEditingReplyId(replyId);
+    setEditingReplyContent(content);
+  };
+
+  const handleCancelEditReply = () => {
+    setEditingReplyId(null);
+    setEditingReplyContent('');
+  };
+
+  const handleSaveReply = () => {
+    if (!editingReplyContent.trim() || !editingReplyId) return;
+
+    updateReplyMutation.mutate(
+      {
+        postId: id,
+        replyId: editingReplyId,
+        data: { content: editingReplyContent },
+      },
+      {
+        onSuccess: () => {
+          setEditingReplyId(null);
+          setEditingReplyContent('');
+        },
+      }
+    );
+  };
+
+  const handleDeleteReply = (replyId: number) => {
+    if (window.confirm('답변을 삭제하시겠습니까?')) {
+      deleteReplyMutation.mutate({ postId: id, replyId });
     }
   };
 
@@ -183,15 +221,67 @@ export default function PostDetailPage() {
               {post.admin_replies.map((reply) => (
                 <Card key={reply.id} className="bg-blue-50 dark:bg-blue-950">
                   <CardContent className="pt-6">
-                    <div className="flex items-center gap-2 mb-3 text-sm text-muted-foreground">
-                      <Badge>관리자</Badge>
-                      <span>{reply.author_name}</span>
-                      <span>·</span>
-                      <span>{format(new Date(reply.created_at), 'yyyy.MM.dd HH:mm', { locale: ko })}</span>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <Badge>관리자</Badge>
+                        <span>{reply.author_name}</span>
+                        <span>·</span>
+                        <span>{format(new Date(reply.created_at), 'yyyy.MM.dd HH:mm', { locale: ko })}</span>
+                        {reply.updated_at !== reply.created_at && (
+                          <span className="text-xs">(수정됨)</span>
+                        )}
+                      </div>
+                      {isAdmin && editingReplyId !== reply.id && (
+                        <div className="flex gap-1">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleEditReply(reply.id, reply.content)}
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleDeleteReply(reply.id)}
+                            disabled={deleteReplyMutation.isPending}
+                          >
+                            <Trash2 className="h-4 w-4 text-destructive" />
+                          </Button>
+                        </div>
+                      )}
                     </div>
-                    <div className="prose prose-slate max-w-none dark:prose-invert whitespace-pre-wrap">
-                      {reply.content}
-                    </div>
+                    {editingReplyId === reply.id ? (
+                      <div className="space-y-3">
+                        <Textarea
+                          value={editingReplyContent}
+                          onChange={(e) => setEditingReplyContent(e.target.value)}
+                          className="min-h-[100px]"
+                        />
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            onClick={handleSaveReply}
+                            disabled={!editingReplyContent.trim() || updateReplyMutation.isPending}
+                          >
+                            <Check className="h-4 w-4 mr-1" />
+                            {updateReplyMutation.isPending ? '저장 중...' : '저장'}
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={handleCancelEditReply}
+                          >
+                            <X className="h-4 w-4 mr-1" />
+                            취소
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="prose prose-slate max-w-none dark:prose-invert whitespace-pre-wrap">
+                        {reply.content}
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               ))}

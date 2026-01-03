@@ -114,3 +114,48 @@ class PostViewSet(viewsets.ModelViewSet):
         serializer.save(post=post, author=request.user)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    @action(detail=True, methods=['put', 'patch'], url_path='reply/(?P<reply_id>[^/.]+)', permission_classes=[IsAuthenticated])
+    def update_reply(self, request, pk=None, reply_id=None):
+        """관리자 답글 수정"""
+        if not request.user.is_admin:
+            return Response(
+                {"detail": "권한이 없습니다."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        post = self.get_object()
+        try:
+            reply = PostReply.objects.get(id=reply_id, post=post)
+        except PostReply.DoesNotExist:
+            return Response(
+                {"detail": "답글을 찾을 수 없습니다."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        serializer = PostReplySerializer(reply, data=request.data, partial=True, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['delete'], url_path='reply/(?P<reply_id>[^/.]+)/delete', permission_classes=[IsAuthenticated])
+    def delete_reply(self, request, pk=None, reply_id=None):
+        """관리자 답글 삭제"""
+        if not request.user.is_admin:
+            return Response(
+                {"detail": "권한이 없습니다."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        post = self.get_object()
+        try:
+            reply = PostReply.objects.get(id=reply_id, post=post)
+        except PostReply.DoesNotExist:
+            return Response(
+                {"detail": "답글을 찾을 수 없습니다."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        reply.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
