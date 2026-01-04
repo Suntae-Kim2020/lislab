@@ -124,7 +124,7 @@ export function Header() {
                         <Link href="/admin/dashboard">대시보드</Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
-                        <a href="http://localhost:8000/admin/" target="_blank" rel="noopener noreferrer">
+                        <a href={`${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000'}/admin/`} target="_blank" rel="noopener noreferrer">
                           관리자 페이지
                         </a>
                       </DropdownMenuItem>
