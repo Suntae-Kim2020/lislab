@@ -173,7 +173,7 @@ SIMPLE_JWT = {
 # CORS Settings
 CORS_ALLOWED_ORIGINS = config(
     'CORS_ALLOWED_ORIGINS',
-    default='http://localhost:3000,http://127.0.0.1:3000,https://lislab.kr,https://www.lislab.kr,https://lislab-frontend-326272454487.asia-northeast3.run.app'
+    default='http://localhost:3000,http://localhost:3001,http://127.0.0.1:3000,http://127.0.0.1:3001,https://lislab.kr,https://www.lislab.kr,https://lislab-frontend-326272454487.asia-northeast3.run.app'
 ).split(',')
 
 CORS_ALLOW_CREDENTIALS = True
@@ -324,4 +324,12 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # Kakao API Settings
 KAKAO_REST_API_KEY = config('KAKAO_REST_API_KEY', default='')
+
+# Naver API Settings
+NAVER_CLIENT_ID = config('NAVER_CLIENT_ID', default='')
+NAVER_CLIENT_SECRET = config('NAVER_CLIENT_SECRET', default='')
+
+# Google API Settings
+GOOGLE_CLIENT_ID = config('GOOGLE_CLIENT_ID', default='')
+GOOGLE_CLIENT_SECRET = config('GOOGLE_CLIENT_SECRET', default='')
 
