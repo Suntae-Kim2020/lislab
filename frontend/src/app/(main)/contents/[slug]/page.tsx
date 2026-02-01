@@ -37,17 +37,15 @@ export default function ContentDetailPage() {
   const { data: content, isLoading } = useContent(slug);
   const toggleFavoriteMutation = useToggleFavorite();
 
-  // Extract body content from full HTML documents and check for inline styles
+  // Extract body content and styles from HTML
   const getContentInfo = (html: string) => {
     // Check if this is a full HTML document
     const hasFullDocument = html.includes('<!DOCTYPE html>') || html.includes('<html');
 
     if (hasFullDocument) {
-      // Parse the HTML and extract body content only
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
       const bodyContent = doc.body?.innerHTML || html;
-      // Also get inline styles from head if they exist
       const styleElements = doc.head?.querySelectorAll('style');
       let inlineStyles = '';
       if (styleElements) {
@@ -56,38 +54,62 @@ export default function ContentDetailPage() {
         });
       }
 
-      // Scope the inline styles to only apply within .custom-content-wrapper
-      // This prevents styles like "body", "h1" from affecting the entire page
-      if (inlineStyles) {
-        // Remove color-related properties from .code-block to allow global CSS to apply
-        inlineStyles = inlineStyles.replace(/\.code-block\s*\{[^}]*\}/g, (match) => {
-          // Remove background-color and color properties
-          return match
-            .replace(/background-color:\s*[^;]+;/g, '')
-            .replace(/color:\s*[^;]+;/g, '');
-        });
-
-        // Remove colors from code syntax highlighting classes
-        inlineStyles = inlineStyles.replace(/\.code-block\s+\.(keyword|string|prefix|uri|comment)\s*\{[^}]*\}/g, '');
-
-        // Replace body selector with .custom-content-wrapper
-        inlineStyles = inlineStyles.replace(/\bbody\b/g, '.custom-content-wrapper');
-        // Prefix all other selectors with .custom-content-wrapper
-        // This is a simplified approach - wrap everything in the scoped class
-        inlineStyles = `.custom-content-wrapper { ${inlineStyles} }`;
-      }
-
       return {
         content: bodyContent,
-        hasInlineStyles: false, // Disable inline styles to use global CSS
-        inlineStyles: ''
+        inlineStyles: inlineStyles
       };
     }
     return {
       content: html,
-      hasInlineStyles: false,
       inlineStyles: ''
     };
+  };
+
+  // Shadow DOM wrapper component for CSS isolation
+  const IsolatedContent = ({ html, styles }: { html: string; styles: string }) => {
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+      if (containerRef.current) {
+        // Clear existing shadow root if any
+        const existingShadow = containerRef.current.shadowRoot;
+        if (!existingShadow) {
+          const shadow = containerRef.current.attachShadow({ mode: 'open' });
+
+          // Add base styles for typography
+          const baseStyles = `
+            :host {
+              display: block;
+              font-family: inherit;
+              line-height: 1.7;
+              color: inherit;
+            }
+            * { box-sizing: border-box; }
+            h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; margin-bottom: 0.5em; font-weight: 600; }
+            h1 { font-size: 2em; }
+            h2 { font-size: 1.5em; }
+            h3 { font-size: 1.25em; }
+            p { margin: 1em 0; }
+            ul, ol { margin: 1em 0; padding-left: 2em; }
+            a { color: #3b82f6; text-decoration: underline; }
+            table { border-collapse: collapse; width: 100%; margin: 1em 0; }
+            th, td { border: 1px solid #e5e7eb; padding: 0.5em; text-align: left; }
+            th { background: #f9fafb; }
+            pre, code { font-family: monospace; background: #f3f4f6; padding: 0.2em 0.4em; border-radius: 4px; }
+            pre { padding: 1em; overflow-x: auto; }
+            img { max-width: 100%; height: auto; }
+          `;
+
+          shadow.innerHTML = `
+            <style>${baseStyles}</style>
+            ${styles ? `<style>${styles}</style>` : ''}
+            <div class="content-body">${html}</div>
+          `;
+        }
+      }
+    }, [html, styles]);
+
+    return <div ref={containerRef} className="shadow-content-wrapper" />;
   };
 
   // Execute scripts in content_html
@@ -261,17 +283,21 @@ export default function ContentDetailPage() {
           <CardContent className="pt-6">
             {(() => {
               const contentInfo = getContentInfo(content.content_html || '');
+              // Use Shadow DOM for CSS isolation when content has inline styles
+              if (contentInfo.inlineStyles) {
+                return (
+                  <div ref={contentRef}>
+                    <IsolatedContent html={contentInfo.content} styles={contentInfo.inlineStyles} />
+                  </div>
+                );
+              }
+              // Use regular rendering for simple content
               return (
-                <>
-                  {contentInfo.hasInlineStyles && (
-                    <style dangerouslySetInnerHTML={{ __html: contentInfo.inlineStyles }} />
-                  )}
-                  <div
-                    ref={contentRef}
-                    className={contentInfo.hasInlineStyles ? 'custom-content-wrapper' : 'prose prose-slate max-w-none dark:prose-invert'}
-                    dangerouslySetInnerHTML={{ __html: contentInfo.content }}
-                  />
-                </>
+                <div
+                  ref={contentRef}
+                  className="prose prose-slate max-w-none dark:prose-invert"
+                  dangerouslySetInnerHTML={{ __html: contentInfo.content }}
+                />
               );
             })()}
           </CardContent>
