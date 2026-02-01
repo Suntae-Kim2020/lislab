@@ -190,7 +190,7 @@ export default function ContentDetailPage() {
 
   return (
     <div className="container mx-auto py-8 px-4">
-      <div ref={pdfContentRef} className="max-w-4xl mx-auto">
+      <div ref={pdfContentRef} className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-start justify-between gap-4 mb-4">
