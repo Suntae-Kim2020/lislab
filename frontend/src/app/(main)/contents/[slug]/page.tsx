@@ -39,23 +39,28 @@ export default function ContentDetailPage() {
 
   // Extract body content and styles from HTML
   const getContentInfo = (html: string) => {
-    // Check if this is a full HTML document
+    // Check if content has style tags that need isolation
+    const hasStyleTag = html.includes('<style');
     const hasFullDocument = html.includes('<!DOCTYPE html>') || html.includes('<html');
 
-    if (hasFullDocument) {
+    if (hasStyleTag || hasFullDocument) {
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
-      const bodyContent = doc.body?.innerHTML || html;
-      const styleElements = doc.head?.querySelectorAll('style');
+
+      // Extract all style tags content
       let inlineStyles = '';
-      if (styleElements) {
-        styleElements.forEach((style) => {
-          inlineStyles += style.textContent || '';
-        });
-      }
+      const allStyles = doc.querySelectorAll('style');
+      allStyles.forEach((style) => {
+        inlineStyles += style.textContent || '';
+      });
+
+      // Get body content, removing style tags from it
+      const bodyContent = doc.body?.innerHTML || html;
+      // Remove style tags from body content since we extracted them
+      const cleanedContent = bodyContent.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '');
 
       return {
-        content: bodyContent,
+        content: cleanedContent,
         inlineStyles: inlineStyles
       };
     }
