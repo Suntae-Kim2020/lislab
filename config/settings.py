@@ -295,11 +295,13 @@ CKEDITOR_CONFIGS = {
         'width': '100%',
         'filebrowserWindowWidth': 940,
         'filebrowserWindowHeight': 725,
+        'allowedContent': True,
     },
     'content': {
         'toolbar': 'Full',
         'height': 700,
         'width': '100%',
+        'allowedContent': True,
         'extraPlugins': ','.join([
             'uploadimage',
             'div',
