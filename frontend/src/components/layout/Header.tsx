@@ -46,7 +46,18 @@ export function Header() {
           <nav className="flex items-center space-x-6">
             <DropdownMenu>
               <DropdownMenuTrigger className="text-sm font-medium transition-colors hover:text-primary">
-                콘텐츠
+                알기쉬운 통계(작성중)
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem asChild>
+                  <Link href="/contents?category=statistics">전체 보기</Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger className="text-sm font-medium transition-colors hover:text-primary">
+                디지털도서관
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem asChild>
