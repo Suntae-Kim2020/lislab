@@ -25,10 +25,10 @@ export function Header() {
     router.push('/login');
   };
 
-  // "실습"을 제외한 카테고리들을 order 순서대로 정렬
+  // "실습"과 "알기쉬운 통계"를 제외한 카테고리들을 order 순서대로 정렬
   const menuCategories = Array.isArray(categories)
     ? categories
-        .filter(cat => cat.slug !== 'practice')
+        .filter(cat => cat.slug !== 'practice' && cat.slug !== 'statistics')
         .sort((a, b) => a.order - b.order)
     : [];
 
