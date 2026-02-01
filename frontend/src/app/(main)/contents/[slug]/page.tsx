@@ -81,33 +81,29 @@ export default function ContentDetailPage() {
         if (!existingShadow) {
           const shadow = containerRef.current.attachShadow({ mode: 'open' });
 
+          // Transform CSS for Shadow DOM compatibility
+          // :root -> :host (CSS variables)
+          // body -> .content-body (body styles)
+          let transformedStyles = styles
+            .replace(/:root\s*\{/g, ':host {')
+            .replace(/\bbody\s*\{/g, '.content-body {');
+
           // Add base styles for typography
           const baseStyles = `
             :host {
               display: block;
               font-family: inherit;
               line-height: 1.7;
-              color: inherit;
             }
-            * { box-sizing: border-box; }
-            h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; margin-bottom: 0.5em; font-weight: 600; }
-            h1 { font-size: 2em; }
-            h2 { font-size: 1.5em; }
-            h3 { font-size: 1.25em; }
-            p { margin: 1em 0; }
-            ul, ol { margin: 1em 0; padding-left: 2em; }
-            a { color: #3b82f6; text-decoration: underline; }
-            table { border-collapse: collapse; width: 100%; margin: 1em 0; }
-            th, td { border: 1px solid #e5e7eb; padding: 0.5em; text-align: left; }
-            th { background: #f9fafb; }
-            pre, code { font-family: monospace; background: #f3f4f6; padding: 0.2em 0.4em; border-radius: 4px; }
-            pre { padding: 1em; overflow-x: auto; }
-            img { max-width: 100%; height: auto; }
+            .content-body {
+              color: #1f2a37;
+              background: #f5f7fb;
+            }
           `;
 
           shadow.innerHTML = `
             <style>${baseStyles}</style>
-            ${styles ? `<style>${styles}</style>` : ''}
+            ${transformedStyles ? `<style>${transformedStyles}</style>` : ''}
             <div class="content-body">${html}</div>
           `;
         }
