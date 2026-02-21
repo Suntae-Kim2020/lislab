@@ -1,4 +1,4 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
@@ -18,7 +18,7 @@ from .serializers import (
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     """카테고리 ViewSet (읽기 전용)"""
 
-    queryset = Category.objects.filter(is_active=True)
+    queryset = Category.objects.filter(is_active=True, parent__isnull=True).prefetch_related('children')
     serializer_class = CategorySerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     pagination_class = None  # 카테고리는 페이지네이션 비활성화 (전체 목록 반환)
@@ -71,10 +71,15 @@ class ContentViewSet(viewsets.ModelViewSet):
                 Q(tags__name__icontains=search)
             ).distinct()
 
-        # 카테고리 필터
+        # 카테고리 필터 (해당 카테고리 + 하위 카테고리 콘텐츠 포함)
         category = self.request.query_params.get('category', None)
         if category:
-            queryset = queryset.filter(category__slug=category)
+            try:
+                cat = Category.objects.get(slug=category)
+                cat_ids = [cat.id] + [d.id for d in cat.get_descendants()]
+                queryset = queryset.filter(category_id__in=cat_ids)
+            except Category.DoesNotExist:
+                queryset = queryset.filter(category__slug=category)
 
         # 태그 필터 (slug 또는 name으로 검색)
         tag = self.request.query_params.get('tag', None)
@@ -106,13 +111,27 @@ class ContentViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def perform_create(self, serializer):
-        """콘텐츠 생성 시 작성자 자동 설정"""
-        if not self.request.user.can_manage_content:
+        """콘텐츠 생성 시 작성자 자동 설정 및 카테고리 권한 검증"""
+        user = self.request.user
+        if not user.can_manage_content:
             return Response(
                 {"detail": "권한이 없습니다."},
                 status=status.HTTP_403_FORBIDDEN
             )
-        serializer.save(author=self.request.user)
+        # 작성자의 카테고리 범위 검증
+        if user.is_writer and not user.is_admin:
+            category = serializer.validated_data.get('category')
+            if category:
+                assigned = user.assigned_categories.all()
+                allowed_ids = set(assigned.values_list('id', flat=True))
+                for cat in assigned:
+                    for desc in cat.get_descendants():
+                        allowed_ids.add(desc.id)
+                if category.id not in allowed_ids:
+                    raise serializers.ValidationError(
+                        {"category": "담당 카테고리 범위를 벗어났습니다."}
+                    )
+        serializer.save(author=user)
 
     def perform_update(self, serializer):
         """콘텐츠 수정 시 권한 체크"""

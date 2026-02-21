@@ -18,11 +18,54 @@ class ContentAdminForm(forms.ModelForm):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'order', 'is_active', 'created_at']
-    list_filter = ['is_active']
+    list_display = ['name', 'parent', 'order', 'is_active', 'created_at']
+    list_filter = ['is_active', 'parent']
     search_fields = ['name', 'description']
     prepopulated_fields = {'slug': ('name',)}
+    filter_horizontal = ['assigned_writers']
     ordering = ['order', 'name']
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser or request.user.is_admin:
+            return qs
+        if request.user.is_writer:
+            assigned = request.user.assigned_categories.all()
+            assigned_ids = set(assigned.values_list('id', flat=True))
+            descendant_ids = set()
+            for cat in assigned:
+                for desc in cat.get_descendants():
+                    descendant_ids.add(desc.id)
+            return qs.filter(id__in=assigned_ids | descendant_ids)
+        return qs
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'parent':
+            if not (request.user.is_superuser or request.user.is_admin):
+                if request.user.is_writer:
+                    kwargs['queryset'] = request.user.assigned_categories.all()
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def has_change_permission(self, request, obj=None):
+        if request.user.is_superuser or request.user.is_admin:
+            return True
+        if obj and request.user.is_writer:
+            # 작성자는 담당 카테고리 자체는 수정 불가, 하위만 수정 가능
+            assigned_ids = set(request.user.assigned_categories.values_list('id', flat=True))
+            if obj.id in assigned_ids:
+                return False
+            return True
+        return super().has_change_permission(request, obj)
+
+    def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser or request.user.is_admin:
+            return True
+        return False
+
+    def get_exclude(self, request, obj=None):
+        if not (request.user.is_superuser or request.user.is_admin):
+            return ['assigned_writers']
+        return super().get_exclude(request, obj) or []
 
 
 @admin.register(Tag)
@@ -167,6 +210,18 @@ class ContentAdmin(admin.ModelAdmin):
         if request.user.is_superuser or request.user.is_admin:
             return True
         return False
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'category':
+            if not (request.user.is_superuser or request.user.is_admin):
+                if request.user.is_writer:
+                    assigned = request.user.assigned_categories.all()
+                    allowed_ids = set(assigned.values_list('id', flat=True))
+                    for cat in assigned:
+                        for desc in cat.get_descendants():
+                            allowed_ids.add(desc.id)
+                    kwargs['queryset'] = Category.objects.filter(id__in=allowed_ids)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def save_model(self, request, obj, form, change):
         """콘텐츠 저장 시 작성자 및 발행일 자동 설정"""

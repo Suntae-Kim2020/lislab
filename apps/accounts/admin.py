@@ -16,13 +16,21 @@ class UserAdmin(BaseUserAdmin):
             'fields': ('role', 'user_type', 'phone', 'organization', 'bio', 'profile_image', 'is_email_verified')
         }),
         ('작성자 권한', {
-            'fields': ('groups',),
-            'description': '"작성자" 그룹을 추가하면 콘텐츠 작성/수정 권한이 부여됩니다. (is_staff도 체크해야 admin 로그인 가능)'
+            'fields': ('groups', 'assigned_categories_display'),
+            'description': '"작성자" 그룹을 추가하면 콘텐츠 작성/수정 권한이 부여됩니다. (is_staff도 체크해야 admin 로그인 가능). 담당 카테고리는 카테고리 관리에서 배정합니다.'
         }),
         ('권한', {'fields': ('is_active', 'is_staff', 'is_superuser', 'user_permissions')}),
         ('중요한 일정', {'fields': ('last_login', 'date_joined')}),
     )
     filter_horizontal = ('groups', 'user_permissions')
+    readonly_fields = ['assigned_categories_display']
+
+    @admin.display(description='담당 카테고리')
+    def assigned_categories_display(self, obj):
+        cats = obj.assigned_categories.all()
+        if not cats:
+            return '-'
+        return ', '.join(cat.name for cat in cats)
 
     @admin.display(description='이름')
     def full_name(self, obj):

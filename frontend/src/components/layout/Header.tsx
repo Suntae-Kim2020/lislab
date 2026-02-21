@@ -25,10 +25,13 @@ export function Header() {
     router.push('/login');
   };
 
-  // "실습"과 "알기쉬운 통계"를 제외한 카테고리들을 order 순서대로 정렬
+  // 독립 메뉴로 분리할 카테고리 slug 목록
+  const excludeFromLibrary = ['practice', 'statistics', 'special-lecture-a', 'special-lecture-b'];
+
+  // 디지털도서관 하위 카테고리 (독립 메뉴 제외)
   const menuCategories = Array.isArray(categories)
     ? categories
-        .filter(cat => cat.slug !== 'practice' && cat.slug !== 'statistics')
+        .filter(cat => !excludeFromLibrary.includes(cat.slug))
         .sort((a, b) => a.order - b.order)
     : [];
 
@@ -74,12 +77,49 @@ export function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Link
-              href="/contents?category=practice"
-              className="text-sm font-medium transition-colors hover:text-primary"
-            >
-              실습
-            </Link>
+            {(['special-lecture-a', 'special-lecture-b', 'practice'] as const).map((slug) => {
+              const cat = Array.isArray(categories)
+                ? categories.find(c => c.slug === slug)
+                : undefined;
+              const label = slug === 'special-lecture-a' ? '특강A(베타)'
+                : slug === 'special-lecture-b' ? '특강B(베타)'
+                : '실습';
+
+              if (cat && cat.children && cat.children.length > 0) {
+                return (
+                  <DropdownMenu key={slug}>
+                    <DropdownMenuTrigger className="text-sm font-medium transition-colors hover:text-primary">
+                      {label}
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem asChild>
+                        <Link href={`/contents?category=${slug}`}>전체 보기</Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      {cat.children
+                        .sort((a, b) => a.order - b.order)
+                        .map((sub) => (
+                          <DropdownMenuItem key={sub.id} asChild>
+                            <Link href={`/contents?category=${sub.slug}`}>
+                              {sub.name}
+                            </Link>
+                          </DropdownMenuItem>
+                        ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                );
+              }
+
+              return (
+                <Link
+                  key={slug}
+                  href={`/contents?category=${slug}`}
+                  className="text-sm font-medium transition-colors hover:text-primary"
+                >
+                  {label}
+                </Link>
+              );
+            })}
 
             <Link
               href="/boards"

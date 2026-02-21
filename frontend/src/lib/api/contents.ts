@@ -25,12 +25,22 @@ export interface Content {
   favorite_count?: number;
 }
 
+export interface SubCategory {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
+  order: number;
+}
+
 export interface Category {
   id: number;
   name: string;
   slug: string;
   description: string;
   order: number;
+  parent: number | null;
+  children: SubCategory[];
 }
 
 // 콘텐츠 목록 조회

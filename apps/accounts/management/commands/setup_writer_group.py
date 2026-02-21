@@ -20,8 +20,10 @@ class Command(BaseCommand):
             ('contents', 'content', 'add_content'),
             ('contents', 'content', 'change_content'),
             ('contents', 'content', 'view_content'),
-            # Category: 조회
+            # Category: 조회, 추가 (하위 카테고리 생성 가능)
             ('contents', 'category', 'view_category'),
+            ('contents', 'category', 'add_category'),
+            ('contents', 'category', 'change_category'),
             # Tag: 조회, 추가
             ('contents', 'tag', 'view_tag'),
             ('contents', 'tag', 'add_tag'),

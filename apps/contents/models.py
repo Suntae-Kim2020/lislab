@@ -23,6 +23,22 @@ class Category(models.Model):
         verbose_name='설명'
     )
 
+    parent = models.ForeignKey(
+        'self',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='children',
+        verbose_name='상위 카테고리'
+    )
+
+    assigned_writers = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        related_name='assigned_categories',
+        verbose_name='담당 작성자'
+    )
+
     order = models.IntegerField(
         default=0,
         verbose_name='정렬 순서'
@@ -45,7 +61,16 @@ class Category(models.Model):
         ordering = ['order', 'name']
 
     def __str__(self):
+        if self.parent:
+            return f"{self.parent.name} > {self.name}"
         return self.name
+
+    def get_descendants(self):
+        """모든 하위 카테고리를 재귀적으로 반환"""
+        descendants = list(self.children.all())
+        for child in list(descendants):
+            descendants.extend(child.get_descendants())
+        return descendants
 
 
 class Tag(models.Model):

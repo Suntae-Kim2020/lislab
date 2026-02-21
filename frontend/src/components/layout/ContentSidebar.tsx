@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { FileText } from 'lucide-react';
 import { useCategories, useContents } from '@/lib/hooks/useContents';
 import { Skeleton } from '@/components/ui/skeleton';
-import type { Category } from '@/lib/api/contents';
+import type { Category, SubCategory } from '@/lib/api/contents';
 
 const difficultyLabels = {
   BEGINNER: '초급',
@@ -49,6 +49,28 @@ export function ContentSidebar() {
                 category={category}
                 currentPath={pathname}
               />
+
+              {/* 하위 카테고리 */}
+              {category.children && category.children.length > 0 && (
+                <div className="ml-3">
+                  {category.children
+                    .sort((a, b) => a.order - b.order)
+                    .map((sub) => (
+                      <div key={sub.id}>
+                        <Link
+                          href={`/contents?category=${sub.slug}`}
+                          className="block px-3 py-1.5 text-xs font-medium text-muted-foreground border-l-2 border-muted hover:bg-accent hover:text-foreground transition-colors cursor-pointer"
+                        >
+                          {sub.name}
+                        </Link>
+                        <SubCategoryContents
+                          subCategory={sub}
+                          currentPath={pathname}
+                        />
+                      </div>
+                    ))}
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -57,15 +79,17 @@ export function ContentSidebar() {
   );
 }
 
-function CategoryContents({ category, currentPath }: {
-  category: Category;
+function ContentList({ categorySlug, currentPath, isSubCategory = false }: {
+  categorySlug: string;
   currentPath: string;
+  isSubCategory?: boolean;
 }) {
-  const { data, isLoading } = useContents({ category: category.slug });
+  const { data, isLoading } = useContents({ category: categorySlug });
+  const mlClass = isSubCategory ? 'ml-4' : 'ml-3';
 
   if (isLoading) {
     return (
-      <div className="ml-3 space-y-1 mt-2">
+      <div className={`${mlClass} space-y-1 mt-2`}>
         <Skeleton className="h-6 w-full" />
         <Skeleton className="h-6 w-full" />
       </div>
@@ -75,11 +99,7 @@ function CategoryContents({ category, currentPath }: {
   const contents = data?.results || [];
 
   if (contents.length === 0) {
-    return (
-      <div className="ml-3 py-2 text-xs text-muted-foreground">
-        콘텐츠 없음
-      </div>
-    );
+    return null;
   }
 
   return (
@@ -90,7 +110,7 @@ function CategoryContents({ category, currentPath }: {
           <Link
             key={content.id}
             href={`/contents/${content.slug}`}
-            className={`flex items-start ml-3 px-2 py-1.5 text-xs rounded-md transition-colors ${
+            className={`flex items-start ${mlClass} px-2 py-1.5 text-xs rounded-md transition-colors ${
               isActive
                 ? 'bg-primary text-primary-foreground'
                 : 'hover:bg-accent'
@@ -108,4 +128,18 @@ function CategoryContents({ category, currentPath }: {
       })}
     </div>
   );
+}
+
+function CategoryContents({ category, currentPath }: {
+  category: Category;
+  currentPath: string;
+}) {
+  return <ContentList categorySlug={category.slug} currentPath={currentPath} />;
+}
+
+function SubCategoryContents({ subCategory, currentPath }: {
+  subCategory: SubCategory;
+  currentPath: string;
+}) {
+  return <ContentList categorySlug={subCategory.slug} currentPath={currentPath} isSubCategory />;
 }

@@ -2,12 +2,26 @@ from rest_framework import serializers
 from .models import Category, Tag, Content, ContentVersion, Favorite
 
 
-class CategorySerializer(serializers.ModelSerializer):
-    """카테고리 Serializer"""
+class SubCategorySerializer(serializers.ModelSerializer):
+    """하위 카테고리 Serializer"""
 
     class Meta:
         model = Category
         fields = ['id', 'name', 'slug', 'description', 'order']
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    """카테고리 Serializer"""
+
+    children = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Category
+        fields = ['id', 'name', 'slug', 'description', 'order', 'parent', 'children']
+
+    def get_children(self, obj):
+        active_children = obj.children.filter(is_active=True).order_by('order', 'name')
+        return SubCategorySerializer(active_children, many=True).data
 
 
 class TagSerializer(serializers.ModelSerializer):
