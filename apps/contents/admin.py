@@ -47,13 +47,13 @@ class ContentAdmin(admin.ModelAdmin):
     search_fields = ['title', 'summary', 'author__username']
     prepopulated_fields = {'slug': ('title',)}
     filter_horizontal = ['tags']
-    readonly_fields = ['view_count', 'created_at', 'updated_at', 'published_at', 'content_preview']
+    readonly_fields = ['view_count', 'created_at', 'updated_at', 'published_at']
     inlines = [ContentVersionInline]
     actions = ['make_published', 'make_draft']
 
     fieldsets = (
         ('기본 정보', {
-            'fields': ('title', 'slug', 'summary', 'content_html', 'thumbnail', 'content_preview')
+            'fields': ('title', 'slug', 'summary', 'content_html')
         }),
         ('분류', {
             'fields': ('category', 'tags', 'difficulty')
@@ -134,6 +134,36 @@ class ContentAdmin(admin.ModelAdmin):
         updated = queryset.update(status='DRAFT')
         self.message_user(request, f'{updated}개의 콘텐츠가 초안으로 변경되었습니다.')
     make_draft.short_description = '선택된 콘텐츠를 초안으로 변경'
+
+    def get_queryset(self, request):
+        """작성자는 본인 콘텐츠만 목록에 표시"""
+        qs = super().get_queryset(request)
+        if request.user.is_superuser or request.user.is_admin:
+            return qs
+        if request.user.is_writer:
+            return qs.filter(author=request.user)
+        return qs
+
+    def get_readonly_fields(self, request, obj=None):
+        """작성자는 author 필드 수정 불가"""
+        readonly = list(self.readonly_fields)
+        if not (request.user.is_superuser or request.user.is_admin):
+            readonly.append('author')
+        return readonly
+
+    def get_actions(self, request):
+        """작성자는 발행/초안 변경 액션 사용 불가"""
+        actions = super().get_actions(request)
+        if not (request.user.is_superuser or request.user.is_admin):
+            actions.pop('make_published', None)
+            actions.pop('make_draft', None)
+        return actions
+
+    def has_delete_permission(self, request, obj=None):
+        """작성자는 삭제 불가"""
+        if request.user.is_superuser or request.user.is_admin:
+            return True
+        return False
 
     def save_model(self, request, obj, form, change):
         """콘텐츠 저장 시 작성자 및 발행일 자동 설정"""

@@ -122,12 +122,17 @@ class User(AbstractUser):
     @property
     def is_admin(self):
         """관리자 권한 체크"""
-        return self.role == self.Role.ADMIN or self.is_staff or self.is_superuser
+        return self.role == self.Role.ADMIN or self.is_superuser
+
+    @property
+    def is_writer(self):
+        """작성자 권한 체크"""
+        return self.groups.filter(name='작성자').exists()
 
     @property
     def can_manage_content(self):
         """콘텐츠 관리 권한"""
-        return self.is_admin
+        return self.is_admin or self.is_writer
 
     @property
     def can_comment(self):

@@ -9,11 +9,20 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ['role', 'user_type', 'is_active', 'is_staff', 'created_at']
     search_fields = ['username', 'email', 'first_name', 'last_name', 'organization']
 
-    fieldsets = BaseUserAdmin.fieldsets + (
+    fieldsets = (
+        (None, {'fields': ('username', 'password')}),
+        ('개인정보', {'fields': ('first_name', 'last_name', 'email')}),
         ('추가 정보', {
             'fields': ('role', 'user_type', 'phone', 'organization', 'bio', 'profile_image', 'is_email_verified')
         }),
+        ('작성자 권한', {
+            'fields': ('groups',),
+            'description': '"작성자" 그룹을 추가하면 콘텐츠 작성/수정 권한이 부여됩니다. (is_staff도 체크해야 admin 로그인 가능)'
+        }),
+        ('권한', {'fields': ('is_active', 'is_staff', 'is_superuser', 'user_permissions')}),
+        ('중요한 일정', {'fields': ('last_login', 'date_joined')}),
     )
+    filter_horizontal = ('groups', 'user_permissions')
 
     @admin.display(description='이름')
     def full_name(self, obj):

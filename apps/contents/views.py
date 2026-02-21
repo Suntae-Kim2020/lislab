@@ -49,8 +49,17 @@ class ContentViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = Content.objects.filter(is_deleted=False)
 
-        # 비관리자는 공개 콘텐츠만 조회
-        if not (self.request.user.is_authenticated and self.request.user.is_admin):
+        user = self.request.user
+        if user.is_authenticated and user.is_admin:
+            # 관리자는 모든 콘텐츠 조회
+            pass
+        elif user.is_authenticated and user.is_writer:
+            # 작성자는 공개 콘텐츠 + 본인 콘텐츠 조회
+            queryset = queryset.filter(
+                Q(status=Content.Status.PUBLISHED) | Q(author=user)
+            )
+        else:
+            # 일반 사용자/비회원은 공개 콘텐츠만
             queryset = queryset.filter(status=Content.Status.PUBLISHED)
 
         # 검색
@@ -98,7 +107,7 @@ class ContentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         """콘텐츠 생성 시 작성자 자동 설정"""
-        if not self.request.user.is_admin:
+        if not self.request.user.can_manage_content:
             return Response(
                 {"detail": "권한이 없습니다."},
                 status=status.HTTP_403_FORBIDDEN
@@ -107,11 +116,19 @@ class ContentViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         """콘텐츠 수정 시 권한 체크"""
-        if not self.request.user.is_admin:
+        user = self.request.user
+        if not user.can_manage_content:
             return Response(
                 {"detail": "권한이 없습니다."},
                 status=status.HTTP_403_FORBIDDEN
             )
+        # 작성자는 본인 콘텐츠만 수정 가능
+        if user.is_writer and not user.is_admin:
+            if serializer.instance.author != user:
+                return Response(
+                    {"detail": "본인의 콘텐츠만 수정할 수 있습니다."},
+                    status=status.HTTP_403_FORBIDDEN
+                )
         serializer.save()
 
     def destroy(self, request, *args, **kwargs):
