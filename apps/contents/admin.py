@@ -144,12 +144,15 @@ class ContentAdmin(admin.ModelAdmin):
             return qs.filter(author=request.user)
         return qs
 
-    def get_readonly_fields(self, request, obj=None):
-        """작성자는 author 필드 수정 불가"""
-        readonly = list(self.readonly_fields)
+    def get_fieldsets(self, request, obj=None):
+        """작성자에게는 author 필드를 숨김 (자동 설정됨)"""
+        fieldsets = super().get_fieldsets(request, obj)
         if not (request.user.is_superuser or request.user.is_admin):
-            readonly.append('author')
-        return readonly
+            fieldsets = [
+                (name, {**opts, 'fields': tuple(f for f in opts['fields'] if f != 'author')})
+                for name, opts in fieldsets
+            ]
+        return fieldsets
 
     def get_actions(self, request):
         """작성자는 발행/초안 변경 액션 사용 불가"""
