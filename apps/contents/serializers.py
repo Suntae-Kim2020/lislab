@@ -22,7 +22,7 @@ class ContentListSerializer(serializers.ModelSerializer):
     """콘텐츠 목록용 Serializer"""
 
     category_name = serializers.CharField(source='category.name', read_only=True)
-    author_name = serializers.CharField(source='author.username', read_only=True)
+    author_name = serializers.SerializerMethodField()
     tags = TagSerializer(many=True, read_only=True)
     is_favorited = serializers.SerializerMethodField()
 
@@ -36,6 +36,10 @@ class ContentListSerializer(serializers.ModelSerializer):
             'created_at', 'updated_at', 'is_favorited'
         ]
 
+    def get_author_name(self, obj):
+        name = f'{obj.author.last_name}{obj.author.first_name}'.strip()
+        return name or obj.author.username
+
     def get_is_favorited(self, obj):
         request = self.context.get('request')
         if request and request.user.is_authenticated:
@@ -47,7 +51,7 @@ class ContentDetailSerializer(serializers.ModelSerializer):
     """콘텐츠 상세용 Serializer"""
 
     category_name = serializers.CharField(source='category.name', read_only=True)
-    author_name = serializers.CharField(source='author.username', read_only=True)
+    author_name = serializers.SerializerMethodField()
     tags = TagSerializer(many=True, read_only=True)
     is_favorited = serializers.SerializerMethodField()
     favorite_count = serializers.SerializerMethodField()
@@ -64,6 +68,10 @@ class ContentDetailSerializer(serializers.ModelSerializer):
             'created_at', 'updated_at', 'published_at',
             'is_favorited', 'favorite_count'
         ]
+
+    def get_author_name(self, obj):
+        name = f'{obj.author.last_name}{obj.author.first_name}'.strip()
+        return name or obj.author.username
 
     def get_is_favorited(self, obj):
         request = self.context.get('request')
@@ -110,7 +118,7 @@ class FavoriteContentSerializer(serializers.ModelSerializer):
     """즐겨찾기용 콘텐츠 Serializer (is_favorited 필드 최적화)"""
 
     category_name = serializers.CharField(source='category.name', read_only=True)
-    author_name = serializers.CharField(source='author.username', read_only=True)
+    author_name = serializers.SerializerMethodField()
     tags = TagSerializer(many=True, read_only=True)
     is_favorited = serializers.SerializerMethodField()
 
@@ -123,6 +131,10 @@ class FavoriteContentSerializer(serializers.ModelSerializer):
             'view_count', 'estimated_time', 'difficulty',
             'created_at', 'updated_at', 'is_favorited'
         ]
+
+    def get_author_name(self, obj):
+        name = f'{obj.author.last_name}{obj.author.first_name}'.strip()
+        return name or obj.author.username
 
     def get_is_favorited(self, obj):
         # 즐겨찾기 목록에서는 항상 True
