@@ -145,6 +145,27 @@ class User(AbstractUser):
         return self.social_provider != self.SocialProvider.NONE
 
 
+class TeamMember(models.Model):
+    """팀 멤버 (LIS Lab 사람들 페이지용)"""
+
+    name = models.CharField(max_length=100, verbose_name='이름')
+    title = models.CharField(max_length=100, blank=True, verbose_name='직함/역할')
+    photo = models.ImageField(upload_to='team/%Y/%m/', blank=True, null=True, verbose_name='사진')
+    bio = models.TextField(blank=True, verbose_name='소개')
+    order = models.IntegerField(default=0, verbose_name='정렬 순서')
+    is_active = models.BooleanField(default=True, verbose_name='활성화')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'team_members'
+        ordering = ['order', 'name']
+        verbose_name = '팀 멤버'
+        verbose_name_plural = '팀 멤버 목록'
+
+    def __str__(self):
+        return f"{self.name} ({self.title})"
+
+
 class PasswordResetToken(models.Model):
     """비밀번호 재설정 토큰"""
 

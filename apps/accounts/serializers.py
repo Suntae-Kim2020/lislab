@@ -1,7 +1,15 @@
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
-from .models import User, MailingPreference
+from .models import User, MailingPreference, TeamMember
 from apps.contents.models import Category
+
+
+class TeamMemberSerializer(serializers.ModelSerializer):
+    """팀 멤버 Serializer"""
+
+    class Meta:
+        model = TeamMember
+        fields = ['id', 'name', 'title', 'photo', 'bio', 'order']
 
 
 class UserSerializer(serializers.ModelSerializer):

@@ -3,13 +3,14 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import update_session_auth_hash
-from .models import User, MailingPreference
+from .models import User, MailingPreference, TeamMember
 from .serializers import (
     UserSerializer,
     UserRegistrationSerializer,
     UserUpdateSerializer,
     PasswordChangeSerializer,
-    MailingPreferenceSerializer
+    MailingPreferenceSerializer,
+    TeamMemberSerializer,
 )
 
 
@@ -117,6 +118,19 @@ class UserViewSet(viewsets.ModelViewSet):
             {"detail": "비밀번호가 변경되었습니다."},
             status=status.HTTP_200_OK
         )
+
+
+class TeamMemberViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    팀 멤버 ViewSet (읽기 전용, 인증 불필요)
+    """
+
+    serializer_class = TeamMemberSerializer
+    permission_classes = [AllowAny]
+    pagination_class = None
+
+    def get_queryset(self):
+        return TeamMember.objects.filter(is_active=True)
 
 
 class MailingPreferenceViewSet(viewsets.ModelViewSet):

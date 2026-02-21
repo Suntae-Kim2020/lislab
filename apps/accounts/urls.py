@@ -1,12 +1,13 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import UserViewSet, MailingPreferenceViewSet
+from .views import UserViewSet, MailingPreferenceViewSet, TeamMemberViewSet
 from .statistics import admin_statistics
 from .social_auth import kakao_login, complete_social_signup, kakao_message_connect, naver_login, google_login
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet, basename='user')
 router.register(r'mailing-preferences', MailingPreferenceViewSet, basename='mailing-preference')
+router.register(r'team-members', TeamMemberViewSet, basename='team-member')
 
 urlpatterns = [
     path('', include(router.urls)),

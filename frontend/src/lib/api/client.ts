@@ -18,7 +18,8 @@ apiClient.interceptors.request.use(
     const isPublicEndpoint =
       (config.url?.includes('/contents/contents/') && !config.url?.includes('/favorite/')) ||
       config.url?.includes('/contents/categories/') ||
-      config.url?.includes('/contents/tags/');
+      config.url?.includes('/contents/tags/') ||
+      config.url?.includes('/accounts/team-members/');
 
     // 공개 엔드포인트가 아니거나 favorite 엔드포인트인 경우 토큰 추가
     if (!isPublicEndpoint) {
