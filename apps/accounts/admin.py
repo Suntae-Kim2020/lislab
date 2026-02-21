@@ -5,7 +5,7 @@ from .models import User, PasswordResetToken
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
-    list_display = ['username', 'email', 'user_type', 'role', 'is_active', 'created_at']
+    list_display = ['username', 'full_name', 'email', 'user_type', 'role', 'is_active', 'created_at']
     list_filter = ['role', 'user_type', 'is_active', 'is_staff', 'created_at']
     search_fields = ['username', 'email', 'first_name', 'last_name', 'organization']
 
@@ -14,6 +14,11 @@ class UserAdmin(BaseUserAdmin):
             'fields': ('role', 'user_type', 'phone', 'organization', 'bio', 'profile_image', 'is_email_verified')
         }),
     )
+
+    @admin.display(description='이름')
+    def full_name(self, obj):
+        name = f'{obj.last_name}{obj.first_name}'.strip()
+        return name or '-'
 
     add_fieldsets = BaseUserAdmin.add_fieldsets + (
         ('추가 정보', {

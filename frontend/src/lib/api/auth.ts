@@ -68,6 +68,12 @@ export const changePassword = async (data: {
   await apiClient.post('/accounts/users/change_password/', data);
 };
 
+// 사용자 목록 조회 (관리자)
+export const getUsers = async (): Promise<User[]> => {
+  const response = await apiClient.get<User[]>('/accounts/users/');
+  return response.data;
+};
+
 // 로그아웃 (클라이언트 측)
 export const logout = (): void => {
   if (typeof window !== 'undefined') {
