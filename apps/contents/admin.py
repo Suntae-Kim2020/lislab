@@ -18,12 +18,26 @@ class ContentAdminForm(forms.ModelForm):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'parent', 'order', 'is_active', 'created_at']
-    list_filter = ['is_active', 'parent']
+    list_display = ['name', 'parent', 'order', 'is_active', 'show_in_menu', 'menu_order', 'created_at']
+    list_filter = ['is_active', 'show_in_menu', 'parent']
+    list_editable = ['order', 'is_active', 'show_in_menu', 'menu_order']
     search_fields = ['name', 'description']
     exclude = ['slug']
     filter_horizontal = ['assigned_writers']
     ordering = ['order', 'name']
+
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'description', 'parent', 'order', 'is_active')
+        }),
+        ('메뉴 설정', {
+            'fields': ('show_in_menu', 'menu_order', 'menu_name', 'url', 'open_in_new_tab'),
+            'description': '메뉴에 노출을 체크하면 메인 화면 상단 메뉴에 표시됩니다. 커스텀 URL을 설정하면 네비게이션 전용 항목이 됩니다.'
+        }),
+        ('담당 작성자', {
+            'fields': ('assigned_writers',),
+        }),
+    )
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -61,6 +75,15 @@ class CategoryAdmin(admin.ModelAdmin):
         if request.user.is_superuser or request.user.is_admin:
             return True
         return False
+
+    def get_fieldsets(self, request, obj=None):
+        if not (request.user.is_superuser or request.user.is_admin):
+            return (
+                (None, {
+                    'fields': ('name', 'description', 'parent', 'order', 'is_active')
+                }),
+            )
+        return super().get_fieldsets(request, obj)
 
     def get_exclude(self, request, obj=None):
         if not (request.user.is_superuser or request.user.is_admin):
@@ -212,6 +235,8 @@ class ContentAdmin(admin.ModelAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'category':
+            # 네비게이션 전용 카테고리(url 설정됨)는 콘텐츠 카테고리 선택에서 제외
+            base_qs = Category.objects.filter(url='')
             if not (request.user.is_superuser or request.user.is_admin):
                 if request.user.is_writer:
                     assigned = request.user.assigned_categories.all()
@@ -219,7 +244,8 @@ class ContentAdmin(admin.ModelAdmin):
                     for cat in assigned:
                         for desc in cat.get_descendants():
                             allowed_ids.add(desc.id)
-                    kwargs['queryset'] = Category.objects.filter(id__in=allowed_ids)
+                    base_qs = base_qs.filter(id__in=allowed_ids)
+            kwargs['queryset'] = base_qs
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def save_model(self, request, obj, form, change):

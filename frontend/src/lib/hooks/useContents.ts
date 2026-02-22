@@ -38,6 +38,15 @@ export function useCategories() {
   });
 }
 
+// 메뉴 목록 조회 훅
+export function useMenus() {
+  return useQuery({
+    queryKey: ['menus'],
+    queryFn: contentsApi.getMenus,
+    staleTime: 1000 * 60 * 5, // 5분
+  });
+}
+
 // 즐겨찾기 토글 훅
 export function useToggleFavorite() {
   const queryClient = useQueryClient();

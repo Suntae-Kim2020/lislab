@@ -13,27 +13,62 @@ import {
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
-import { useCategories } from '@/lib/hooks/useContents';
+import { useMenus } from '@/lib/hooks/useContents';
+import type { MenuItem, MenuChild } from '@/lib/api/contents';
+
+function NavMenuItem({ item }: { item: MenuItem }) {
+  const hasChildren = item.children && item.children.length > 0;
+
+  if (!hasChildren) {
+    return (
+      <Link
+        href={item.url}
+        className="text-sm font-medium transition-colors hover:text-primary"
+        {...(item.open_in_new_tab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+      >
+        {item.name}
+      </Link>
+    );
+  }
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger className="text-sm font-medium transition-colors hover:text-primary">
+        {item.name}
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        {item.url && item.url !== '#' && (
+          <>
+            <DropdownMenuItem asChild>
+              <Link href={item.url}>전체 보기</Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+          </>
+        )}
+        {item.children.map((child: MenuChild) => (
+          <DropdownMenuItem key={child.id} asChild>
+            <Link
+              href={child.url}
+              {...(child.open_in_new_tab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            >
+              {child.name}
+            </Link>
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
 
 export function Header() {
   const { user, isAuthenticated, logout } = useAuthStore();
   const router = useRouter();
-  const { data: categories } = useCategories();
+  const { data: menus } = useMenus();
 
   const handleLogout = () => {
     logout();
     router.push('/login');
   };
-
-  // 독립 메뉴로 분리할 카테고리 slug 목록
-  const excludeFromLibrary = ['practice', 'statistics', 'special-lecture-a', 'special-lecture-b'];
-
-  // 디지털도서관 하위 카테고리 (독립 메뉴 제외)
-  const menuCategories = Array.isArray(categories)
-    ? categories
-        .filter(cat => !excludeFromLibrary.includes(cat.slug))
-        .sort((a, b) => a.order - b.order)
-    : [];
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -47,100 +82,9 @@ export function Header() {
 
           {/* Navigation */}
           <nav className="flex items-center space-x-6">
-            <DropdownMenu>
-              <DropdownMenuTrigger className="text-sm font-medium transition-colors hover:text-primary">
-                알기쉬운 통계(작성중)
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem asChild>
-                  <Link href="/contents?category=statistics">전체 보기</Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger className="text-sm font-medium transition-colors hover:text-primary">
-                디지털도서관
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem asChild>
-                  <Link href="/contents">전체 콘텐츠</Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                {menuCategories.map((category) => (
-                  <DropdownMenuItem key={category.id} asChild>
-                    <Link href={`/contents?category=${category.slug}`}>
-                      {category.name}
-                    </Link>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            {(['special-lecture-a', 'special-lecture-b', 'practice'] as const).map((slug) => {
-              const cat = Array.isArray(categories)
-                ? categories.find(c => c.slug === slug)
-                : undefined;
-              const label = slug === 'special-lecture-a' ? '특강A(베타)'
-                : slug === 'special-lecture-b' ? '특강B(베타)'
-                : '실습';
-
-              if (cat && cat.children && cat.children.length > 0) {
-                return (
-                  <DropdownMenu key={slug}>
-                    <DropdownMenuTrigger className="text-sm font-medium transition-colors hover:text-primary">
-                      {label}
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuItem asChild>
-                        <Link href={`/contents?category=${slug}`}>전체 보기</Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      {cat.children
-                        .sort((a, b) => a.order - b.order)
-                        .map((sub) => (
-                          <DropdownMenuItem key={sub.id} asChild>
-                            <Link href={`/contents?category=${sub.slug}`}>
-                              {sub.name}
-                            </Link>
-                          </DropdownMenuItem>
-                        ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                );
-              }
-
-              return (
-                <Link
-                  key={slug}
-                  href={`/contents?category=${slug}`}
-                  className="text-sm font-medium transition-colors hover:text-primary"
-                >
-                  {label}
-                </Link>
-              );
-            })}
-
-            <Link
-              href="/boards"
-              className="text-sm font-medium transition-colors hover:text-primary"
-            >
-              게시판
-            </Link>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger className="text-sm font-medium transition-colors hover:text-primary">
-                소개
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem asChild>
-                  <Link href="/about">LIS Lab 소개</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/about/people">LIS Lab 사람들</Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {menus?.map((item) => (
+              <NavMenuItem key={item.id} item={item} />
+            ))}
           </nav>
 
           {/* User Menu */}

@@ -43,6 +43,27 @@ export interface Category {
   children: SubCategory[];
 }
 
+export interface MenuChild {
+  id: number;
+  name: string;
+  url: string;
+  open_in_new_tab: boolean;
+}
+
+export interface MenuItem {
+  id: number;
+  name: string;
+  url: string;
+  open_in_new_tab: boolean;
+  children: MenuChild[];
+}
+
+// 메뉴 목록 조회
+export const getMenus = async (): Promise<MenuItem[]> => {
+  const response = await apiClient.get<MenuItem[]>('/contents/menus/');
+  return response.data;
+};
+
 // 콘텐츠 목록 조회
 export const getContents = async (params?: {
   search?: string;

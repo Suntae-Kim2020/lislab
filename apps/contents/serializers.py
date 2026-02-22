@@ -164,3 +164,33 @@ class FavoriteSerializer(serializers.ModelSerializer):
         model = Favorite
         fields = ['id', 'content', 'created_at']
         read_only_fields = ['created_at']
+
+
+class MenuSerializer(serializers.ModelSerializer):
+    """메뉴 Serializer (Category 기반)"""
+
+    name = serializers.SerializerMethodField()
+    url = serializers.SerializerMethodField()
+    children = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Category
+        fields = ['id', 'name', 'url', 'open_in_new_tab', 'children']
+
+    def get_name(self, obj):
+        return obj.get_menu_name()
+
+    def get_url(self, obj):
+        return obj.get_menu_url()
+
+    def get_children(self, obj):
+        children = obj.children.filter(is_active=True).order_by('order', 'name')
+        return [
+            {
+                'id': child.id,
+                'name': child.get_menu_name(),
+                'url': child.get_menu_url(),
+                'open_in_new_tab': child.open_in_new_tab,
+            }
+            for child in children
+        ]

@@ -12,17 +12,20 @@ from .serializers import (
     ContentDetailSerializer,
     ContentCreateUpdateSerializer,
     ContentVersionSerializer,
-    FavoriteSerializer
+    FavoriteSerializer,
+    MenuSerializer,
 )
 
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
-    """카테고리 ViewSet (읽기 전용)"""
+    """카테고리 ViewSet (읽기 전용) - 콘텐츠 카테고리만 (네비게이션 전용 제외)"""
 
-    queryset = Category.objects.filter(is_active=True, parent__isnull=True).prefetch_related('children')
+    queryset = Category.objects.filter(
+        is_active=True, parent__isnull=True, url=''
+    ).prefetch_related('children')
     serializer_class = CategorySerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
-    pagination_class = None  # 카테고리는 페이지네이션 비활성화 (전체 목록 반환)
+    pagination_class = None
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
@@ -208,3 +211,19 @@ class FavoriteViewSet(viewsets.ReadOnlyModelViewSet):
         ).prefetch_related(
             Prefetch('content__tags', queryset=Tag.objects.order_by(Collate('name', 'C')))
         )
+
+
+class MenuViewSet(viewsets.ReadOnlyModelViewSet):
+    """메뉴 ViewSet (읽기 전용, 공개) - show_in_menu=True인 카테고리를 메뉴로 반환"""
+
+    serializer_class = MenuSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = None
+
+    def get_queryset(self):
+        return Category.objects.filter(
+            is_active=True,
+            show_in_menu=True,
+        ).prefetch_related(
+            'children',
+        ).order_by('menu_order', 'name')

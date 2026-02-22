@@ -54,6 +54,38 @@ class Category(models.Model):
         verbose_name='활성화 여부'
     )
 
+    # 메뉴 관련 필드
+    show_in_menu = models.BooleanField(
+        default=False,
+        verbose_name='메뉴에 노출',
+        help_text='체크하면 메인 화면 상단 메뉴에 표시됩니다.'
+    )
+
+    menu_order = models.IntegerField(
+        default=0,
+        verbose_name='메뉴 정렬 순서',
+        help_text='메뉴에 노출 시 정렬 순서 (낮을수록 왼쪽)'
+    )
+
+    menu_name = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name='메뉴 표시명',
+        help_text='비워두면 카테고리명을 메뉴명으로 사용합니다.'
+    )
+
+    url = models.CharField(
+        max_length=500,
+        blank=True,
+        verbose_name='커스텀 URL',
+        help_text='설정하면 콘텐츠 카테고리가 아닌 네비게이션 전용 링크가 됩니다.'
+    )
+
+    open_in_new_tab = models.BooleanField(
+        default=False,
+        verbose_name='새 탭에서 열기'
+    )
+
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name='생성일'
@@ -80,6 +112,16 @@ class Category(models.Model):
         if self.parent:
             return f"{self.parent.name} > {self.name}"
         return self.name
+
+    def get_menu_name(self):
+        """메뉴 표시명 반환"""
+        return self.menu_name or self.name
+
+    def get_menu_url(self):
+        """메뉴 URL 반환: 커스텀 URL이 있으면 사용, 없으면 카테고리 URL 자동 생성"""
+        if self.url:
+            return self.url
+        return f'/contents?category={self.slug}'
 
     def get_descendants(self):
         """모든 하위 카테고리를 재귀적으로 반환"""
