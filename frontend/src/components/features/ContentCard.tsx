@@ -64,7 +64,7 @@ export function ContentCard({ content, onToggleFavorite, isAuthenticated }: Cont
           <Badge className={difficultyColors[content.difficulty]}>
             {difficultyLabels[content.difficulty]}
           </Badge>
-          {content.tags.slice(0, 3).map((tag) => (
+          {[...content.tags].sort((a, b) => a.name.localeCompare(b.name)).slice(0, 3).map((tag) => (
             <Badge key={tag.id} variant="outline">
               {tag.name}
             </Badge>

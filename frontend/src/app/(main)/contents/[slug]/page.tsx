@@ -220,7 +220,7 @@ export default function ContentDetailPage() {
           <div className="flex flex-wrap gap-2 mb-4">
             <Badge>{difficultyLabels[content.difficulty]}</Badge>
             <Badge variant="outline">{content.category_name}</Badge>
-            {content.tags.map((tag) => (
+            {[...content.tags].sort((a, b) => a.name.localeCompare(b.name)).map((tag) => (
               <Badge
                 key={tag.id}
                 variant="secondary"

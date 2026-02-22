@@ -27,7 +27,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
     """태그 ViewSet (읽기 전용)"""
 
-    queryset = Tag.objects.all()
+    queryset = Tag.objects.all().order_by('name')
     serializer_class = TagSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
@@ -88,7 +88,10 @@ class ContentViewSet(viewsets.ModelViewSet):
         if difficulty:
             queryset = queryset.filter(difficulty=difficulty)
 
-        return queryset.select_related('category', 'author').prefetch_related('tags')
+        from django.db.models import Prefetch
+        return queryset.select_related('category', 'author').prefetch_related(
+            Prefetch('tags', queryset=Tag.objects.order_by('name'))
+        )
 
     def get_serializer_class(self):
         if self.action == 'list':
