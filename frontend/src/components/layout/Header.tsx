@@ -184,12 +184,18 @@ export function Header() {
                       <DropdownMenuItem asChild>
                         <Link href="/admin/users">사용자 목록</Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <a href={`${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000'}/admin/`} target="_blank" rel="noopener noreferrer">
-                          관리자 페이지
-                        </a>
-                      </DropdownMenuItem>
                     </>
+                  )}
+                  {(user.role === 'ADMIN' || user.is_staff) && (
+                    <DropdownMenuItem
+                      onClick={() => {
+                        const token = localStorage.getItem('access_token');
+                        const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+                        window.open(`${baseUrl}/admin-login/?token=${token}`, '_blank');
+                      }}
+                    >
+                      관리자 페이지
+                    </DropdownMenuItem>
                   )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleLogout}>

@@ -35,6 +35,7 @@ export interface User {
   bio: string;
   profile_image: string | null;
   is_email_verified: boolean;
+  is_staff: boolean;
   social_provider?: string;
   kakao_message_token?: string;
   has_kakao_message_token?: boolean;

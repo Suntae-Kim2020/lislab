@@ -7,10 +7,12 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView,
 )
+from apps.accounts.views import AdminLoginView
 
 urlpatterns = [
     # Admin
     path('admin/', admin.site.urls),
+    path('admin-login/', AdminLoginView.as_view(), name='admin-login'),
     path('ckeditor/', include('ckeditor_uploader.urls')),
 
     # API Authentication

@@ -33,9 +33,10 @@ export default function HomePage() {
     const fetchContents = async () => {
       try {
         // 인기 콘텐츠 (조회수 순)와 최신 콘텐츠를 각각 가져오기
+        const headers = { 'Accept': 'application/json' };
         const [popularRes, recentRes] = await Promise.all([
-          fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/contents/contents/?page_size=6&ordering=-view_count`),
-          fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/contents/contents/?page_size=6&ordering=-updated_at`)
+          fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/contents/contents/?page_size=6&ordering=-view_count`, { headers }),
+          fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/contents/contents/?page_size=6&ordering=-updated_at`, { headers })
         ]);
 
         const popularData = await popularRes.json();

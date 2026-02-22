@@ -23,10 +23,10 @@ class UserSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'username', 'email', 'first_name', 'last_name',
             'role', 'user_type', 'phone', 'organization', 'bio',
-            'profile_image', 'is_email_verified', 'social_provider',
+            'profile_image', 'is_email_verified', 'is_staff', 'social_provider',
             'kakao_message_token', 'has_kakao_message_token', 'created_at'
         ]
-        read_only_fields = ['id', 'created_at', 'role', 'social_provider', 'kakao_message_token', 'has_kakao_message_token']
+        read_only_fields = ['id', 'created_at', 'role', 'is_staff', 'social_provider', 'kakao_message_token', 'has_kakao_message_token']
 
     def get_kakao_message_token(self, obj):
         """카카오 메시지 토큰 유무만 반환 (보안)"""

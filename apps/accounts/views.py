@@ -2,7 +2,10 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth import update_session_auth_hash, login
+from django.http import HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden
+from django.views import View
+from rest_framework_simplejwt.tokens import AccessToken
 from .models import User, MailingPreference, TeamMember
 from .serializers import (
     UserSerializer,
@@ -169,3 +172,25 @@ class MailingPreferenceViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
+
+
+class AdminLoginView(View):
+    """JWT 토큰으로 Django admin 세션을 생성하고 리다이렉트"""
+
+    def get(self, request):
+        token_str = request.GET.get('token', '')
+        if not token_str:
+            return HttpResponseBadRequest('토큰이 필요합니다.')
+
+        try:
+            access_token = AccessToken(token_str)
+            user_id = access_token['user_id']
+            user = User.objects.get(pk=user_id)
+        except Exception:
+            return HttpResponseBadRequest('유효하지 않은 토큰입니다.')
+
+        if not user.is_staff:
+            return HttpResponseForbidden('관리자 권한이 없습니다.')
+
+        login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+        return HttpResponseRedirect('/admin/')
