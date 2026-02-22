@@ -44,8 +44,21 @@ class Command(BaseCommand):
 
         group.permissions.set(permissions)
         self.stdout.write(self.style.SUCCESS(
-            f'  {len(permissions)}개의 권한이 부여되었습니다.'
+            f'  {len(permissions)}개의 권한이 그룹에 부여되었습니다.'
         ))
 
         for perm in permissions:
             self.stdout.write(f'  - {perm.content_type.app_label}.{perm.codename}')
+
+        # 기존 작성자 그룹 멤버들에게 user_permissions + is_staff 일괄 설정
+        members = group.user_set.all()
+        for user in members:
+            user.user_permissions.add(*permissions)
+            if not user.is_staff:
+                user.is_staff = True
+                user.save(update_fields=['is_staff'])
+            self.stdout.write(f'  사용자 {user.username}: 권한 설정 완료')
+
+        self.stdout.write(self.style.SUCCESS(
+            f'  {members.count()}명의 기존 멤버에게 권한을 설정했습니다.'
+        ))
