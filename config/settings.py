@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'ckeditor',
     'ckeditor_uploader',
+    'storages',
 
     # Local apps
     'apps.accounts',
@@ -136,8 +137,16 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+GCS_BUCKET_NAME = config('GCS_BUCKET_NAME', default='')
+if GCS_BUCKET_NAME:
+    DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+    GS_BUCKET_NAME = GCS_BUCKET_NAME
+    GS_DEFAULT_ACL = 'publicRead'
+    GS_QUERYSTRING_AUTH = False
+    MEDIA_URL = f'https://storage.googleapis.com/{GCS_BUCKET_NAME}/'
+else:
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -318,11 +327,6 @@ CKEDITOR_CONFIGS = {
         ]),
     }
 }
-
-# Media files
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-
 
 # Kakao API Settings
 KAKAO_REST_API_KEY = config('KAKAO_REST_API_KEY', default='')
