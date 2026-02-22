@@ -2,11 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useAuthStore } from '@/store/authStore';
-
 interface Content {
   id: number;
   title: string;
@@ -25,7 +22,6 @@ interface Content {
 }
 
 export default function HomePage() {
-  const { isAuthenticated } = useAuthStore();
   const [contents, setContents] = useState<Content[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -79,31 +75,6 @@ export default function HomePage() {
 
   return (
     <div className="container mx-auto py-6 px-4">
-      {/* Hero Section */}
-      <section className="flex flex-col items-center justify-center space-y-4 py-6 text-center">
-        <div className="relative w-full max-w-2xl mx-auto p-8 bg-gradient-to-b from-background via-muted/30 to-background rounded-xl">
-          <div className="relative">
-            <Image
-              src="/lis-lab-hero.png"
-              alt="LIS Lab - Library & Information Science Learning Platform"
-              width={672}
-              height={384}
-              priority
-              className="rounded-lg mx-auto shadow-2xl"
-            />
-            <div className="absolute inset-0 rounded-lg bg-gradient-to-t from-background/20 via-transparent to-background/20 pointer-events-none"></div>
-          </div>
-        </div>
-        <div className="flex gap-4">
-          <Button asChild size="lg">
-            <Link href="/contents">콘텐츠 둘러보기</Link>
-          </Button>
-          <Button asChild variant="outline" size="lg">
-            <Link href="/register">시작하기</Link>
-          </Button>
-        </div>
-      </section>
-
       {/* Popular and Recent Contents */}
       <section className="py-12">
         <h2 className="mb-8 text-center text-3xl font-bold">인기 & 최신 학습 콘텐츠</h2>
