@@ -6,22 +6,17 @@
         var permsFrom = document.getElementById('id_user_permissions_from');
         var permsTo = document.getElementById('id_user_permissions_to');
         var staffCheckbox = document.getElementById('id_is_staff');
+        var groupPermsMap = window.GROUP_PERMS_MAP || {};
 
         if (!groupsTo || !permsFrom || !permsTo) {
-            console.log('[sync_group_perms] 위젯을 찾을 수 없습니다.');
-            return;
+            return false;
+        }
+        if (Object.keys(groupPermsMap).length === 0) {
+            return false;
         }
 
-        console.log('[sync_group_perms] 초기화 완료');
-
-        // API URL: /admin/accounts/user/group-permissions/{id}/
-        var apiBase = '/admin/accounts/user/group-permissions/';
-
-        // 이전 그룹 상태
         var previousGroupIds = getAllOptionValues(groupsTo);
-        console.log('[sync_group_perms] 초기 그룹:', previousGroupIds);
 
-        // groups "to" 박스 변경 감시
         var observer = new MutationObserver(function() {
             var currentGroupIds = getAllOptionValues(groupsTo);
 
@@ -32,20 +27,31 @@
                 return currentGroupIds.indexOf(id) === -1;
             });
 
-            console.log('[sync_group_perms] 변경 감지 - added:', added, 'removed:', removed);
+            added.forEach(function(gid) {
+                var perms = groupPermsMap[gid] || [];
+                perms.forEach(function(p) { movePerm(String(p.id), p.name, 'add'); });
+            });
 
-            added.forEach(function(gid) { syncPermissions(gid, 'add'); });
-            removed.forEach(function(gid) { syncPermissions(gid, 'remove'); });
+            removed.forEach(function(gid) {
+                var perms = groupPermsMap[gid] || [];
+                perms.forEach(function(p) { movePerm(String(p.id), p.name, 'remove'); });
+            });
 
-            // 스태프 권한 자동 체크
             if (staffCheckbox) {
                 staffCheckbox.checked = currentGroupIds.length > 0;
             }
 
             previousGroupIds = currentGroupIds;
+
+            try {
+                if (typeof SelectFilter !== 'undefined') {
+                    SelectFilter.refresh_icons('id_user_permissions');
+                }
+            } catch(e) {}
         });
 
         observer.observe(groupsTo, { childList: true });
+        return true;
 
         function getAllOptionValues(sel) {
             var vals = [];
@@ -55,62 +61,39 @@
             return vals;
         }
 
-        function syncPermissions(groupId, action) {
-            var url = apiBase + groupId + '/';
-            console.log('[sync_group_perms] fetch:', url, action);
-
-            fetch(url, {
-                credentials: 'same-origin',
-                headers: { 'X-Requested-With': 'XMLHttpRequest' }
-            })
-            .then(function(resp) { return resp.json(); })
-            .then(function(data) {
-                console.log('[sync_group_perms] 응답:', data.permissions.length, '개 권한');
-                data.permissions.forEach(function(perm) {
-                    var pid = String(perm.id);
-                    if (action === 'add') {
-                        // from → to
-                        var opt = permsFrom.querySelector('option[value="' + pid + '"]');
-                        if (opt) {
-                            permsFrom.removeChild(opt);
-                        }
-                        // to에 없으면 추가
-                        if (!permsTo.querySelector('option[value="' + pid + '"]')) {
-                            var newOpt = new Option(perm.name, pid);
-                            permsTo.appendChild(newOpt);
-                        }
-                    } else {
-                        // to → from
-                        var opt2 = permsTo.querySelector('option[value="' + pid + '"]');
-                        if (opt2) {
-                            permsTo.removeChild(opt2);
-                        }
-                        if (!permsFrom.querySelector('option[value="' + pid + '"]')) {
-                            var newOpt2 = new Option(perm.name, pid);
-                            permsFrom.appendChild(newOpt2);
-                        }
-                    }
-                });
-
-                // Django SelectFilter 위젯 갱신
-                try {
-                    if (typeof SelectFilter !== 'undefined') {
-                        SelectFilter.refresh_icons('id_user_permissions');
-                    }
-                } catch(e) {
-                    console.log('[sync_group_perms] refresh_icons 에러 (무시):', e);
+        function movePerm(pid, pname, action) {
+            if (action === 'add') {
+                var fromOpt = permsFrom.querySelector('option[value="' + pid + '"]');
+                if (fromOpt) permsFrom.removeChild(fromOpt);
+                if (!permsTo.querySelector('option[value="' + pid + '"]')) {
+                    permsTo.appendChild(new Option(pname, pid));
                 }
-            })
-            .catch(function(err) {
-                console.error('[sync_group_perms] fetch 에러:', err);
-            });
+            } else {
+                var toOpt = permsTo.querySelector('option[value="' + pid + '"]');
+                if (toOpt) permsTo.removeChild(toOpt);
+                if (!permsFrom.querySelector('option[value="' + pid + '"]')) {
+                    permsFrom.appendChild(new Option(pname, pid));
+                }
+            }
         }
     }
 
-    // filter_horizontal 위젯이 초기화된 뒤 실행
+    // SelectFilter 위젯이 DOM을 변환한 뒤에 실행해야 함
+    // load 이벤트 후에도 위젯이 없으면 폴링으로 대기
+    function waitAndInit() {
+        if (init()) return;
+        var attempts = 0;
+        var timer = setInterval(function() {
+            attempts++;
+            if (init() || attempts > 50) {
+                clearInterval(timer);
+            }
+        }, 100);
+    }
+
     if (document.readyState === 'complete') {
-        init();
+        waitAndInit();
     } else {
-        window.addEventListener('load', init);
+        window.addEventListener('load', waitAndInit);
     }
 })();
