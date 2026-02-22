@@ -1,7 +1,10 @@
+import logging
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
 from .models import User, PasswordResetToken, TeamMember
+
+logger = logging.getLogger(__name__)
 
 
 @admin.register(User)
@@ -39,31 +42,33 @@ class UserAdmin(BaseUserAdmin):
 
     def save_related(self, request, form, formsets, change):
         """그룹 저장 후 user_permissions 자동 설정"""
+        user = form.instance
+        logger.warning(f'[save_related] 시작: user={user.username}, superuser={user.is_superuser}, role={user.role}')
+
+        # 먼저 super로 m2m 저장 (groups, user_permissions 등)
         super().save_related(request, form, formsets, change)
 
-        user = form.instance
         if user.is_superuser or user.role == 'ADMIN':
+            logger.warning(f'[save_related] 관리자/슈퍼유저 → 스킵')
             return
 
         writer_group = Group.objects.filter(name='작성자').first()
         if not writer_group:
+            logger.warning(f'[save_related] 작성자 그룹 없음 → 스킵')
             return
 
         is_writer = user.groups.filter(pk=writer_group.pk).exists()
-        group_perms = writer_group.permissions.all()
+        group_perms = list(writer_group.permissions.all())
+        logger.warning(f'[save_related] is_writer={is_writer}, group_perms count={len(group_perms)}')
 
         if is_writer:
-            # 그룹 권한을 사용자 권한에 추가
-            current_perms = set(user.user_permissions.values_list('pk', flat=True))
-            target_perms = set(group_perms.values_list('pk', flat=True))
-            merged = current_perms | target_perms
-            user.user_permissions.set(merged)
+            user.user_permissions.add(*group_perms)
+            final_count = user.user_permissions.count()
+            logger.warning(f'[save_related] 권한 추가 완료: {final_count}개')
         else:
-            # 작성자 그룹 제거 시 해당 권한 제거
-            perm_ids = set(group_perms.values_list('pk', flat=True))
-            current_perms = set(user.user_permissions.values_list('pk', flat=True))
-            remaining = current_perms - perm_ids
-            user.user_permissions.set(remaining)
+            user.user_permissions.remove(*group_perms)
+            final_count = user.user_permissions.count()
+            logger.warning(f'[save_related] 권한 제거 완료: {final_count}개')
 
     @admin.display(description='담당 카테고리')
     def assigned_categories_display(self, obj):
