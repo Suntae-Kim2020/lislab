@@ -20,12 +20,19 @@ from .serializers import (
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     """카테고리 ViewSet (읽기 전용) - 콘텐츠 카테고리만 (네비게이션 전용 제외)"""
 
-    queryset = Category.objects.filter(
-        is_active=True, parent__isnull=True, url=''
-    ).prefetch_related('children')
     serializer_class = CategorySerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     pagination_class = None
+
+    def get_queryset(self):
+        # 네비게이션 전용(url 설정됨) 카테고리 제외
+        # parent가 없거나, parent가 네비게이션 전용인 경우(디지털도서관 등) 루트로 취급
+        return Category.objects.filter(
+            is_active=True,
+            url='',
+        ).filter(
+            Q(parent__isnull=True) | Q(parent__url__gt='')
+        ).prefetch_related('children')
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
