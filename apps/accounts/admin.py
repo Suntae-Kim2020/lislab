@@ -1,8 +1,7 @@
+import json
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
-from django.http import JsonResponse
-from django.urls import path
 from .models import User, PasswordResetToken, TeamMember
 
 
@@ -31,28 +30,27 @@ class UserAdmin(BaseUserAdmin):
     class Media:
         js = ('accounts/js/sync_group_perms.js',)
 
-    def get_urls(self):
-        custom_urls = [
-            path(
-                'group-permissions/<int:group_id>/',
-                self.admin_site.admin_view(self.group_permissions_view),
-                name='accounts_group_permissions',
-            ),
-        ]
-        return custom_urls + super().get_urls()
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        """그룹별 권한 데이터를 페이지에 임베드"""
+        response = super().change_view(request, object_id, form_url, extra_context)
+        if hasattr(response, 'render'):
+            group_perms_map = {}
+            for group in Group.objects.prefetch_related('permissions__content_type').all():
+                group_perms_map[str(group.pk)] = [
+                    {'id': p.pk, 'name': str(p)}
+                    for p in group.permissions.all()
+                ]
+            script = '<script>window.GROUP_PERMS_MAP = %s;</script>' % json.dumps(group_perms_map, ensure_ascii=False)
 
-    def group_permissions_view(self, request, group_id):
-        """그룹의 권한 목록을 JSON으로 반환"""
-        try:
-            group = Group.objects.get(pk=group_id)
-        except Group.DoesNotExist:
-            return JsonResponse({'permissions': []})
-        perms = group.permissions.select_related('content_type').all()
-        data = [
-            {'id': p.pk, 'name': str(p)}
-            for p in perms
-        ]
-        return JsonResponse({'permissions': data})
+            original_render = response.render
+            def patched_render():
+                result = original_render()
+                content = result.content.decode('utf-8')
+                content = content.replace('</body>', script + '</body>')
+                result.content = content.encode('utf-8')
+                return result
+            response.render = patched_render
+        return response
 
     def save_model(self, request, obj, form, change):
         """그룹 지정 시 is_staff 자동 설정"""
