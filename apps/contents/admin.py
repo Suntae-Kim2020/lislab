@@ -21,6 +21,7 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name', 'parent', 'order', 'is_active', 'created_at']
     list_filter = ['is_active', 'parent']
     search_fields = ['name', 'description']
+    exclude = ['slug']
     filter_horizontal = ['assigned_writers']
     ordering = ['order', 'name']
 
@@ -71,6 +72,7 @@ class CategoryAdmin(admin.ModelAdmin):
 class TagAdmin(admin.ModelAdmin):
     list_display = ['name', 'created_at']
     search_fields = ['name']
+    exclude = ['slug']
 
 
 class ContentVersionInline(admin.TabularInline):
@@ -93,7 +95,7 @@ class ContentAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ('기본 정보', {
-            'fields': ('title', 'slug', 'summary', 'content_html')
+            'fields': ('title', 'summary', 'content_html')
         }),
         ('분류', {
             'fields': ('category', 'tags', 'difficulty')
