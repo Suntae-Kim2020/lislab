@@ -1,12 +1,47 @@
 import json
+from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
+from apps.contents.models import Category
 from .models import User, PasswordResetToken, TeamMember
+
+
+class UserChangeForm(forms.ModelForm):
+    assigned_categories = forms.ModelMultipleChoiceField(
+        queryset=Category.objects.all(),
+        required=False,
+        widget=admin.widgets.FilteredSelectMultiple('카테고리', False),
+        label='담당 카테고리',
+    )
+
+    class Meta:
+        model = User
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.pk:
+            self.fields['assigned_categories'].initial = (
+                self.instance.assigned_categories.all()
+            )
+
+    def save(self, commit=True):
+        user = super().save(commit=commit)
+        if commit:
+            user.assigned_categories.set(self.cleaned_data['assigned_categories'])
+        else:
+            old_save_m2m = self.save_m2m
+            def new_save_m2m():
+                old_save_m2m()
+                user.assigned_categories.set(self.cleaned_data['assigned_categories'])
+            self.save_m2m = new_save_m2m
+        return user
 
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
+    form = UserChangeForm
     list_display = ['username', 'full_name', 'email', 'user_type', 'role', 'is_active', 'created_at']
     list_filter = ['role', 'user_type', 'is_active', 'is_staff', 'created_at']
     search_fields = ['username', 'email', 'first_name', 'last_name', 'organization']
@@ -18,14 +53,13 @@ class UserAdmin(BaseUserAdmin):
             'fields': ('role', 'user_type', 'phone', 'organization', 'bio', 'profile_image', 'is_email_verified')
         }),
         ('작성자 권한', {
-            'fields': ('groups', 'assigned_categories_display'),
-            'description': '"작성자" 그룹을 추가하면 스태프 권한과 사용자 권한이 자동 설정됩니다. 담당 카테고리는 카테고리 관리에서 배정합니다.'
+            'fields': ('groups', 'assigned_categories'),
+            'description': '"작성자" 그룹을 추가하면 스태프 권한과 사용자 권한이 자동 설정됩니다.'
         }),
         ('권한', {'fields': ('is_active', 'is_staff', 'is_superuser', 'user_permissions')}),
         ('중요한 일정', {'fields': ('last_login', 'date_joined')}),
     )
-    filter_horizontal = ('groups', 'user_permissions')
-    readonly_fields = ['assigned_categories_display']
+    filter_horizontal = ('groups', 'user_permissions', 'assigned_categories')
 
     class Media:
         js = ('accounts/js/sync_group_perms.js',)
@@ -81,13 +115,6 @@ class UserAdmin(BaseUserAdmin):
             user.user_permissions.add(*group_perms)
         else:
             user.user_permissions.remove(*group_perms)
-
-    @admin.display(description='담당 카테고리')
-    def assigned_categories_display(self, obj):
-        cats = obj.assigned_categories.all()
-        if not cats:
-            return '-'
-        return ', '.join(cat.name for cat in cats)
 
     @admin.display(description='이름')
     def full_name(self, obj):
