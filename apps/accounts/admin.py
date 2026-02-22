@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.models import Group
 from .models import User, PasswordResetToken, TeamMember
 
 
@@ -17,13 +18,44 @@ class UserAdmin(BaseUserAdmin):
         }),
         ('작성자 권한', {
             'fields': ('groups', 'assigned_categories_display'),
-            'description': '"작성자" 그룹을 추가하면 콘텐츠 작성/수정 권한과 is_staff가 자동 설정됩니다. 담당 카테고리는 카테고리 관리에서 배정합니다.'
+            'description': '"작성자" 그룹을 추가하면 스태프 권한과 사용자 권한이 자동 설정됩니다. 담당 카테고리는 카테고리 관리에서 배정합니다.'
         }),
         ('권한', {'fields': ('is_active', 'is_staff', 'is_superuser', 'user_permissions')}),
         ('중요한 일정', {'fields': ('last_login', 'date_joined')}),
     )
     filter_horizontal = ('groups', 'user_permissions')
     readonly_fields = ['assigned_categories_display']
+
+    def save_related(self, request, form, formsets, change):
+        """그룹 저장 후 is_staff와 user_permissions 자동 설정"""
+        super().save_related(request, form, formsets, change)
+
+        user = form.instance
+        if user.is_superuser or user.role == 'ADMIN':
+            return
+
+        writer_group = Group.objects.filter(name='작성자').first()
+        if not writer_group:
+            return
+
+        is_writer = user.groups.filter(pk=writer_group.pk).exists()
+
+        if is_writer:
+            # 스태프 권한 자동 설정
+            if not user.is_staff:
+                user.is_staff = True
+                user.save(update_fields=['is_staff'])
+            # 그룹 권한을 사용자 권한에 복사
+            group_perms = writer_group.permissions.all()
+            user.user_permissions.add(*group_perms)
+        else:
+            # 작성자 그룹 제거 시 스태프 권한 해제 및 권한 제거
+            if user.is_staff:
+                user.is_staff = False
+                user.save(update_fields=['is_staff'])
+            if writer_group:
+                group_perms = writer_group.permissions.all()
+                user.user_permissions.remove(*group_perms)
 
     @admin.display(description='담당 카테고리')
     def assigned_categories_display(self, obj):
