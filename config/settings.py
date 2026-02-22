@@ -141,7 +141,7 @@ GCS_BUCKET_NAME = config('GCS_BUCKET_NAME', default='')
 if GCS_BUCKET_NAME:
     DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
     GS_BUCKET_NAME = GCS_BUCKET_NAME
-    GS_DEFAULT_ACL = 'publicRead'
+    GS_DEFAULT_ACL = None
     GS_QUERYSTRING_AUTH = False
     MEDIA_URL = f'https://storage.googleapis.com/{GCS_BUCKET_NAME}/'
 else:
