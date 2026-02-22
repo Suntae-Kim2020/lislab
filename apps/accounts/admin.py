@@ -26,8 +26,19 @@ class UserAdmin(BaseUserAdmin):
     filter_horizontal = ('groups', 'user_permissions')
     readonly_fields = ['assigned_categories_display']
 
+    def save_model(self, request, obj, form, change):
+        """그룹 지정 시 is_staff 자동 설정 (save_related 전에 처리)"""
+        if not obj.is_superuser and obj.role != 'ADMIN':
+            writer_group = Group.objects.filter(name='작성자').first()
+            if writer_group:
+                # form.cleaned_data['groups']에서 저장 전 그룹 확인
+                new_groups = form.cleaned_data.get('groups', [])
+                is_writer = writer_group in new_groups
+                obj.is_staff = is_writer
+        super().save_model(request, obj, form, change)
+
     def save_related(self, request, form, formsets, change):
-        """그룹 저장 후 is_staff와 user_permissions 자동 설정"""
+        """그룹 저장 후 user_permissions 자동 설정"""
         super().save_related(request, form, formsets, change)
 
         user = form.instance
@@ -39,23 +50,20 @@ class UserAdmin(BaseUserAdmin):
             return
 
         is_writer = user.groups.filter(pk=writer_group.pk).exists()
+        group_perms = writer_group.permissions.all()
 
         if is_writer:
-            # 스태프 권한 자동 설정
-            if not user.is_staff:
-                user.is_staff = True
-                user.save(update_fields=['is_staff'])
-            # 그룹 권한을 사용자 권한에 복사
-            group_perms = writer_group.permissions.all()
-            user.user_permissions.add(*group_perms)
+            # 그룹 권한을 사용자 권한에 추가
+            current_perms = set(user.user_permissions.values_list('pk', flat=True))
+            target_perms = set(group_perms.values_list('pk', flat=True))
+            merged = current_perms | target_perms
+            user.user_permissions.set(merged)
         else:
-            # 작성자 그룹 제거 시 스태프 권한 해제 및 권한 제거
-            if user.is_staff:
-                user.is_staff = False
-                user.save(update_fields=['is_staff'])
-            if writer_group:
-                group_perms = writer_group.permissions.all()
-                user.user_permissions.remove(*group_perms)
+            # 작성자 그룹 제거 시 해당 권한 제거
+            perm_ids = set(group_perms.values_list('pk', flat=True))
+            current_perms = set(user.user_permissions.values_list('pk', flat=True))
+            remaining = current_perms - perm_ids
+            user.user_permissions.set(remaining)
 
     @admin.display(description='담당 카테고리')
     def assigned_categories_display(self, obj):
