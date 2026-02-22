@@ -2,7 +2,8 @@ from rest_framework import viewsets, status, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
-from django.db.models import Q
+from django.db.models import Q, Prefetch
+from django.db.models.functions import Collate
 from .models import Category, Tag, Content, ContentVersion, Favorite
 from .serializers import (
     CategorySerializer,
@@ -27,7 +28,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
     """태그 ViewSet (읽기 전용)"""
 
-    queryset = Tag.objects.all().order_by('name')
+    queryset = Tag.objects.all().order_by(Collate('name', 'C'))
     serializer_class = TagSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
@@ -88,9 +89,8 @@ class ContentViewSet(viewsets.ModelViewSet):
         if difficulty:
             queryset = queryset.filter(difficulty=difficulty)
 
-        from django.db.models import Prefetch
         return queryset.select_related('category', 'author').prefetch_related(
-            Prefetch('tags', queryset=Tag.objects.order_by('name'))
+            Prefetch('tags', queryset=Tag.objects.order_by(Collate('name', 'C')))
         )
 
     def get_serializer_class(self):
@@ -206,5 +206,5 @@ class FavoriteViewSet(viewsets.ReadOnlyModelViewSet):
             'content__category',
             'content__author'
         ).prefetch_related(
-            'content__tags'
+            Prefetch('content__tags', queryset=Tag.objects.order_by(Collate('name', 'C')))
         )

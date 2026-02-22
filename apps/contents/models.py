@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.functions import Collate
 from django.conf import settings
 from django.utils.text import slugify
 import uuid
@@ -115,7 +116,7 @@ class Tag(models.Model):
         db_table = 'tags'
         verbose_name = '태그'
         verbose_name_plural = '태그 목록'
-        ordering = ['name']
+        ordering = [Collate('name', 'C')]
 
     def save(self, *args, **kwargs):
         if not self.slug:
