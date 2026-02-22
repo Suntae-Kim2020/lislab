@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.utils.text import slugify
+import uuid
 
 
 class Category(models.Model):
@@ -15,7 +16,10 @@ class Category(models.Model):
     slug = models.SlugField(
         max_length=100,
         unique=True,
-        verbose_name='URL Slug'
+        blank=True,
+        allow_unicode=True,
+        verbose_name='URL Slug',
+        help_text='비워두면 카테고리명에서 자동 생성됩니다.'
     )
 
     description = models.TextField(
@@ -60,6 +64,17 @@ class Category(models.Model):
         verbose_name_plural = '카테고리 목록'
         ordering = ['order', 'name']
 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base = slugify(self.name, allow_unicode=True) or uuid.uuid4().hex[:8]
+            slug = base
+            n = 1
+            while Category.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f"{base}-{n}"
+                n += 1
+            self.slug = slug
+        super().save(*args, **kwargs)
+
     def __str__(self):
         if self.parent:
             return f"{self.parent.name} > {self.name}"
@@ -85,7 +100,10 @@ class Tag(models.Model):
     slug = models.SlugField(
         max_length=50,
         unique=True,
-        verbose_name='URL Slug'
+        blank=True,
+        allow_unicode=True,
+        verbose_name='URL Slug',
+        help_text='비워두면 태그명에서 자동 생성됩니다.'
     )
 
     created_at = models.DateTimeField(
@@ -98,6 +116,17 @@ class Tag(models.Model):
         verbose_name = '태그'
         verbose_name_plural = '태그 목록'
         ordering = ['name']
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base = slugify(self.name, allow_unicode=True) or uuid.uuid4().hex[:8]
+            slug = base
+            n = 1
+            while Tag.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f"{base}-{n}"
+                n += 1
+            self.slug = slug
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -120,7 +149,10 @@ class Content(models.Model):
     slug = models.SlugField(
         max_length=200,
         unique=True,
-        verbose_name='URL Slug'
+        blank=True,
+        allow_unicode=True,
+        verbose_name='URL Slug',
+        help_text='비워두면 제목에서 자동 생성됩니다.'
     )
 
     summary = models.TextField(
@@ -256,7 +288,13 @@ class Content(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title, allow_unicode=True)
+            base = slugify(self.title, allow_unicode=True) or uuid.uuid4().hex[:8]
+            slug = base
+            n = 1
+            while Content.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f"{base}-{n}"
+                n += 1
+            self.slug = slug
         super().save(*args, **kwargs)
 
 

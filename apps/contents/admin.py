@@ -21,7 +21,6 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name', 'parent', 'order', 'is_active', 'created_at']
     list_filter = ['is_active', 'parent']
     search_fields = ['name', 'description']
-    prepopulated_fields = {'slug': ('name',)}
     filter_horizontal = ['assigned_writers']
     ordering = ['order', 'name']
 
@@ -72,7 +71,6 @@ class CategoryAdmin(admin.ModelAdmin):
 class TagAdmin(admin.ModelAdmin):
     list_display = ['name', 'created_at']
     search_fields = ['name']
-    prepopulated_fields = {'slug': ('name',)}
 
 
 class ContentVersionInline(admin.TabularInline):
@@ -88,7 +86,6 @@ class ContentAdmin(admin.ModelAdmin):
     list_display = ['title', 'category', 'author', 'status_badge', 'difficulty_badge', 'version', 'view_count', 'created_at']
     list_filter = ['status', 'category', 'difficulty', 'created_at']
     search_fields = ['title', 'summary', 'author__username']
-    prepopulated_fields = {'slug': ('title',)}
     filter_horizontal = ['tags']
     readonly_fields = ['view_count', 'created_at', 'updated_at', 'published_at']
     inlines = [ContentVersionInline]
