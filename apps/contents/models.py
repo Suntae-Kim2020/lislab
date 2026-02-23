@@ -200,6 +200,7 @@ class Content(models.Model):
 
     summary = models.TextField(
         max_length=500,
+        blank=True,
         verbose_name='요약'
     )
 

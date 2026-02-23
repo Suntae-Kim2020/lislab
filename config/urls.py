@@ -8,8 +8,12 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
 )
 from apps.accounts.views import AdminLoginView
+from apps.contents.autocomplete import TagAutocomplete
 
 urlpatterns = [
+    # Autocomplete
+    path('admin/autocomplete/tag/', TagAutocomplete.as_view(create_field='name'), name='tag-autocomplete'),
+
     # Admin
     path('admin/', admin.site.urls),
     path('admin-login/', AdminLoginView.as_view(), name='admin-login'),

@@ -3,6 +3,7 @@ from django.utils.html import format_html
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from ckeditor.widgets import CKEditorWidget
+from dal import autocomplete
 from django import forms
 from .models import Category, Tag, Content, ContentVersion, Favorite
 
@@ -14,6 +15,15 @@ class ContentAdminForm(forms.ModelForm):
     class Meta:
         model = Content
         fields = '__all__'
+        widgets = {
+            'tags': autocomplete.ModelSelect2Multiple(
+                url='tag-autocomplete',
+                attrs={
+                    'data-placeholder': '태그를 입력하세요...',
+                    'data-minimum-input-length': 1,
+                },
+            ),
+        }
 
 
 @admin.register(Category)
@@ -111,7 +121,6 @@ class ContentAdmin(admin.ModelAdmin):
     list_display = ['title', 'category', 'author', 'status_badge', 'difficulty_badge', 'version', 'view_count', 'created_at']
     list_filter = ['status', 'category', 'difficulty', 'created_at']
     search_fields = ['title', 'summary', 'author__username']
-    filter_horizontal = ['tags']
     readonly_fields = ['view_count', 'created_at', 'updated_at', 'published_at']
     inlines = [ContentVersionInline]
     actions = ['make_published', 'make_draft']
