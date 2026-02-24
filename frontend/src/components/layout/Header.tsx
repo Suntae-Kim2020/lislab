@@ -121,14 +121,9 @@ export function Header() {
                     <Link href="/my/mailing-settings">메일링 설정</Link>
                   </DropdownMenuItem>
                   {user.role === 'ADMIN' && (
-                    <>
-                      <DropdownMenuItem asChild>
-                        <Link href="/admin/dashboard">대시보드</Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link href="/admin/users">사용자 목록</Link>
-                      </DropdownMenuItem>
-                    </>
+                    <DropdownMenuItem asChild>
+                      <Link href="/admin/dashboard">대시보드</Link>
+                    </DropdownMenuItem>
                   )}
                   {(user.role === 'ADMIN' || user.is_staff) && (
                     <DropdownMenuItem
