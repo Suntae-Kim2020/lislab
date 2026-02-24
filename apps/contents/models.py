@@ -32,7 +32,7 @@ class Category(models.Model):
         'self',
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         related_name='children',
         verbose_name='상위 카테고리'
     )
