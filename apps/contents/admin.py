@@ -84,7 +84,8 @@ class CategoryAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         if request.user.is_superuser or request.user.is_admin:
             return True
-        return False
+        # 그룹 권한 체크 (Django 기본 권한 시스템 사용)
+        return super().has_delete_permission(request, obj)
 
     def get_fieldsets(self, request, obj=None):
         if not (request.user.is_superuser or request.user.is_admin):
