@@ -238,10 +238,11 @@ class ContentAdmin(admin.ModelAdmin):
         return actions
 
     def has_delete_permission(self, request, obj=None):
-        """작성자는 삭제 불가"""
+        """Django 그룹 권한 시스템 사용"""
         if request.user.is_superuser or request.user.is_admin:
             return True
-        return False
+        # 그룹 권한 체크 (Django 기본 권한 시스템 사용)
+        return super().has_delete_permission(request, obj)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'category':
