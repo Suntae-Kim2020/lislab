@@ -70,9 +70,17 @@ export const changePassword = async (data: {
 };
 
 // 사용자 목록 조회 (관리자)
+interface PaginatedResponse<T> {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: T[];
+}
+
 export const getUsers = async (): Promise<User[]> => {
-  const response = await apiClient.get<User[]>('/accounts/users/');
-  return response.data;
+  // 모든 사용자를 가져오기 위해 page_size를 크게 설정
+  const response = await apiClient.get<PaginatedResponse<User>>('/accounts/users/?page_size=1000');
+  return response.data.results;
 };
 
 // 로그아웃 (클라이언트 측)
