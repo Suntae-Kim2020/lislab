@@ -79,10 +79,18 @@ class ContentViewSet(viewsets.ModelViewSet):
                 Q(tags__name__icontains=search)
             ).distinct()
 
-        # 카테고리 필터 (해당 카테고리에 직접 속한 콘텐츠만 표시)
-        category = self.request.query_params.get('category', None)
-        if category:
-            queryset = queryset.filter(category__slug=category)
+        # 카테고리 필터 (해당 카테고리 및 하위 카테고리 콘텐츠 포함)
+        category_slug = self.request.query_params.get('category', None)
+        if category_slug:
+            try:
+                cat = Category.objects.get(slug=category_slug)
+                # 해당 카테고리와 모든 하위 카테고리 ID 수집
+                category_ids = [cat.id]
+                for child in cat.get_descendants():
+                    category_ids.append(child.id)
+                queryset = queryset.filter(category_id__in=category_ids)
+            except Category.DoesNotExist:
+                queryset = queryset.filter(category__slug=category_slug)
 
         # 태그 필터 (slug 또는 name으로 검색)
         tag = self.request.query_params.get('tag', None)
