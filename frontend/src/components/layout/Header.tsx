@@ -81,9 +81,14 @@ export function Header() {
           </Link>
 
           {/* Navigation */}
-          <nav className="flex items-center space-x-6">
-            {menus?.map((item) => (
-              <NavMenuItem key={item.id} item={item} />
+          <nav className="flex items-center">
+            {menus?.map((item, index) => (
+              <div key={item.id} className="flex items-center">
+                <NavMenuItem item={item} />
+                {index < (menus?.length || 0) - 1 && (
+                  <span className="mx-4 text-muted-foreground/50">|</span>
+                )}
+              </div>
             ))}
           </nav>
 
