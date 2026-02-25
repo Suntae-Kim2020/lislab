@@ -74,11 +74,13 @@ class CategoryAdmin(admin.ModelAdmin):
         if request.user.is_superuser or request.user.is_admin:
             return True
         if obj and request.user.is_writer:
-            # 작성자는 담당 카테고리 자체는 수정 불가, 하위만 수정 가능
-            assigned_ids = set(request.user.assigned_categories.values_list('id', flat=True))
-            if obj.id in assigned_ids:
-                return False
-            return True
+            # 작성자는 담당 카테고리와 그 하위 카테고리 수정 가능
+            assigned = request.user.assigned_categories.all()
+            allowed_ids = set(assigned.values_list('id', flat=True))
+            for cat in assigned:
+                for desc in cat.get_descendants():
+                    allowed_ids.add(desc.id)
+            return obj.id in allowed_ids
         return super().has_change_permission(request, obj)
 
     def has_delete_permission(self, request, obj=None):
