@@ -67,8 +67,25 @@ class CategoryAdmin(admin.ModelAdmin):
         if db_field.name == 'parent':
             if not (request.user.is_superuser or request.user.is_admin):
                 if request.user.is_writer:
-                    kwargs['queryset'] = request.user.assigned_categories.all()
+                    # 작성자는 담당 카테고리와 그 하위 카테고리만 선택 가능
+                    assigned = request.user.assigned_categories.all()
+                    allowed_ids = set(assigned.values_list('id', flat=True))
+                    for cat in assigned:
+                        for desc in cat.get_descendants():
+                            allowed_ids.add(desc.id)
+                    kwargs['queryset'] = Category.objects.filter(id__in=allowed_ids)
+                    kwargs['required'] = True  # 작성자는 상위 카테고리 필수
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def save_model(self, request, obj, form, change):
+        """작성자가 카테고리 생성 시 상위 카테고리 검증"""
+        if not (request.user.is_superuser or request.user.is_admin):
+            if request.user.is_writer and not change:  # 새로 생성하는 경우
+                if not obj.parent:
+                    from django.contrib import messages
+                    messages.error(request, '상위 카테고리를 선택해야 합니다.')
+                    return
+        super().save_model(request, obj, form, change)
 
     def has_change_permission(self, request, obj=None):
         if request.user.is_superuser or request.user.is_admin:
