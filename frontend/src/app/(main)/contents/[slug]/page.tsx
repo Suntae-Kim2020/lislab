@@ -23,6 +23,39 @@ const difficultyLabels = {
   ADVANCED: '고급',
 };
 
+// 텍스트를 줄바꿈과 블릿포인트로 렌더링
+function FormattedText({ text }: { text: string }) {
+  const lines = text.split('\n').filter(line => line.trim());
+
+  // 블릿포인트로 시작하는 줄이 있는지 확인
+  const hasBullets = lines.some(line => /^[-•*]\s/.test(line.trim()));
+
+  if (hasBullets) {
+    const bulletItems = lines.filter(line => /^[-•*]\s/.test(line.trim()));
+    const regularLines = lines.filter(line => !/^[-•*]\s/.test(line.trim()));
+
+    return (
+      <div className="text-sm text-muted-foreground space-y-2">
+        {regularLines.length > 0 && (
+          <p>{regularLines.join(' ')}</p>
+        )}
+        <ul className="list-disc list-inside space-y-1">
+          {bulletItems.map((line, i) => (
+            <li key={i}>{line.replace(/^[-•*]\s/, '')}</li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
+  // 블릿포인트 없으면 줄바꿈만 유지
+  return (
+    <div className="text-sm text-muted-foreground whitespace-pre-line">
+      {text}
+    </div>
+  );
+}
+
 export default function ContentDetailPage() {
   const params = useParams();
   const slug = params.slug as string;
@@ -262,7 +295,7 @@ export default function ContentDetailPage() {
                 <CardTitle className="text-lg">선수 학습</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground">{content.prerequisites}</p>
+                <FormattedText text={content.prerequisites} />
               </CardContent>
             </Card>
           )}
@@ -273,7 +306,7 @@ export default function ContentDetailPage() {
                 <CardTitle className="text-lg">학습 목표</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground">{content.learning_objectives}</p>
+                <FormattedText text={content.learning_objectives} />
               </CardContent>
             </Card>
           )}
