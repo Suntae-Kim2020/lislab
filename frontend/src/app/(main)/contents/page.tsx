@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, Suspense, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -9,7 +9,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { ContentCard } from '@/components/features/ContentCard';
 import { useContents, useCategories, useToggleFavorite } from '@/lib/hooks/useContents';
 import { useAuthStore } from '@/store/authStore';
-import { Search } from 'lucide-react';
+import { Search, FolderOpen } from 'lucide-react';
+import type { Content } from '@/lib/api/contents';
 
 function ContentsPageContent() {
   const { isAuthenticated } = useAuthStore();
@@ -57,6 +58,35 @@ function ContentsPageContent() {
     }
     toggleFavoriteMutation.mutate(slug);
   };
+
+  // 콘텐츠를 카테고리별로 그룹화
+  const groupedContents = useMemo(() => {
+    if (!contentsData?.results) return null;
+
+    const groups: Record<string, Content[]> = {};
+    contentsData.results.forEach((content) => {
+      const catName = content.category_name || '미분류';
+      if (!groups[catName]) {
+        groups[catName] = [];
+      }
+      groups[catName].push(content);
+    });
+
+    // 카테고리 순서대로 정렬 (카테고리 목록의 order 기준)
+    const categoryOrder = sortedCategories.reduce((acc, cat, index) => {
+      acc[cat.name] = index;
+      return acc;
+    }, {} as Record<string, number>);
+
+    return Object.entries(groups).sort(([a], [b]) => {
+      const orderA = categoryOrder[a] ?? 999;
+      const orderB = categoryOrder[b] ?? 999;
+      return orderA - orderB;
+    });
+  }, [contentsData?.results, sortedCategories]);
+
+  // 그룹화 표시 여부 (검색 중이 아니고, 특정 하위 카테고리를 선택하지 않았을 때)
+  const showGrouped = !search && groupedContents && groupedContents.length > 1;
 
   return (
     <div className="container mx-auto py-8 px-4">
@@ -128,30 +158,58 @@ function ContentsPageContent() {
         </div>
 
         {/* Content Grid */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {isLoading ? (
-            Array.from({ length: 6 }).map((_, i) => (
+        {isLoading ? (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, i) => (
               <div key={i} className="space-y-3">
                 <Skeleton className="h-48 w-full" />
                 <Skeleton className="h-4 w-3/4" />
                 <Skeleton className="h-4 w-1/2" />
               </div>
-            ))
-          ) : contentsData?.results && contentsData.results.length > 0 ? (
-            contentsData.results.map((content) => (
-              <ContentCard
-                key={content.id}
-                content={content}
-                onToggleFavorite={handleToggleFavorite}
-                isAuthenticated={isAuthenticated}
-              />
-            ))
-          ) : (
-            <div className="col-span-full text-center py-12">
-              <p className="text-muted-foreground">검색 결과가 없습니다.</p>
+            ))}
+          </div>
+        ) : contentsData?.results && contentsData.results.length > 0 ? (
+          showGrouped ? (
+            // 카테고리별 그룹화 표시
+            <div className="space-y-8">
+              {groupedContents?.map(([categoryName, contents]) => (
+                <div key={categoryName}>
+                  <div className="flex items-center gap-2 mb-4 pb-2 border-b">
+                    <FolderOpen className="h-5 w-5 text-primary" />
+                    <h2 className="text-xl font-semibold">{categoryName}</h2>
+                    <span className="text-sm text-muted-foreground">({contents.length})</span>
+                  </div>
+                  <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {contents.map((content) => (
+                      <ContentCard
+                        key={content.id}
+                        content={content}
+                        onToggleFavorite={handleToggleFavorite}
+                        isAuthenticated={isAuthenticated}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
-          )}
-        </div>
+          ) : (
+            // 일반 리스트 표시
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {contentsData.results.map((content) => (
+                <ContentCard
+                  key={content.id}
+                  content={content}
+                  onToggleFavorite={handleToggleFavorite}
+                  isAuthenticated={isAuthenticated}
+                />
+              ))}
+            </div>
+          )
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">검색 결과가 없습니다.</p>
+          </div>
+        )}
 
         {/* Pagination */}
         {contentsData && contentsData.count > 20 && (
