@@ -311,6 +311,12 @@ class Content(models.Model):
         verbose_name='최초 공개일'
     )
 
+    order = models.IntegerField(
+        default=0,
+        verbose_name='정렬 순서',
+        help_text='낮을수록 먼저 표시됩니다'
+    )
+
     is_deleted = models.BooleanField(
         default=False,
         verbose_name='삭제 여부'
@@ -320,7 +326,7 @@ class Content(models.Model):
         db_table = 'contents'
         verbose_name = '콘텐츠'
         verbose_name_plural = '콘텐츠 목록'
-        ordering = ['-created_at']
+        ordering = ['category', 'order', '-created_at']
         indexes = [
             models.Index(fields=['status', '-created_at']),
             models.Index(fields=['category', '-created_at']),

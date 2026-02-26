@@ -138,7 +138,8 @@ class ContentVersionInline(admin.TabularInline):
 @admin.register(Content)
 class ContentAdmin(admin.ModelAdmin):
     form = ContentAdminForm
-    list_display = ['title', 'category', 'author', 'status_badge', 'difficulty_badge', 'version', 'view_count', 'created_at']
+    list_display = ['title', 'category', 'order', 'author', 'status_badge', 'difficulty_badge', 'version', 'view_count', 'created_at']
+    list_editable = ['order']
     list_filter = ['status', 'category', 'difficulty', 'created_at']
     search_fields = ['title', 'summary', 'author__username']
     readonly_fields = ['view_count', 'created_at', 'updated_at', 'published_at']
@@ -150,7 +151,7 @@ class ContentAdmin(admin.ModelAdmin):
             'fields': ('title', 'summary', 'content_html')
         }),
         ('분류', {
-            'fields': ('category', 'tags', 'difficulty')
+            'fields': ('category', 'tags', 'difficulty', 'order')
         }),
         ('메타 정보', {
             'fields': ('author', 'status', 'version', 'estimated_time')
