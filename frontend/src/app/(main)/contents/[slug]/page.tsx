@@ -75,8 +75,10 @@ export default function ContentDetailPage() {
     // Check if content has style tags that need isolation
     const hasStyleTag = html.includes('<style');
     const hasFullDocument = html.includes('<!DOCTYPE html>') || html.includes('<html');
+    // Check if content has significant inline styles (rich content from admin)
+    const hasInlineStyles = (html.match(/style\s*=\s*["'][^"']{20,}/g) || []).length >= 3;
 
-    if (hasStyleTag || hasFullDocument) {
+    if (hasStyleTag || hasFullDocument || hasInlineStyles) {
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
 
@@ -94,12 +96,14 @@ export default function ContentDetailPage() {
 
       return {
         content: cleanedContent,
-        inlineStyles: inlineStyles
+        inlineStyles: inlineStyles,
+        needsIsolation: true
       };
     }
     return {
       content: html,
-      inlineStyles: ''
+      inlineStyles: '',
+      needsIsolation: false
     };
   };
 
@@ -121,24 +125,101 @@ export default function ContentDetailPage() {
             .replace(/:root\s*\{/g, ':host {')
             .replace(/\bbody\s*\{/g, '.content-body {');
 
-          // Add base styles for typography
+          // Add base styles for typography - reset prose styles and preserve inline styles
           const baseStyles = `
             :host {
               display: block;
-              font-family: inherit;
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
               line-height: 1.7;
             }
             .content-body {
-              color: #1f2a37;
-              background: #f5f7fb;
+              color: inherit;
+              background: transparent;
+            }
+            /* Reset common element styles to allow inline styles to take precedence */
+            .content-body h1, .content-body h2, .content-body h3, .content-body h4, .content-body h5, .content-body h6 {
+              margin: 0;
+              font-size: inherit;
+              font-weight: inherit;
+              line-height: inherit;
+              color: inherit;
+            }
+            .content-body p {
+              margin: 0;
+              color: inherit;
+            }
+            .content-body ul, .content-body ol {
+              margin: 0;
+              padding: 0;
+              list-style: none;
+            }
+            .content-body li {
+              margin: 0;
+            }
+            .content-body a {
+              color: inherit;
+              text-decoration: inherit;
+            }
+            .content-body table {
+              border-collapse: collapse;
+            }
+            .content-body th, .content-body td {
+              padding: 0;
+            }
+            .content-body button {
+              font-family: inherit;
             }
           `;
+
+          // Extract scripts from HTML before inserting
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = html;
+          const scripts = tempDiv.querySelectorAll('script');
+          const scriptContents: { src?: string; text?: string }[] = [];
+          scripts.forEach((script) => {
+            if (script.src) {
+              scriptContents.push({ src: script.src });
+            } else if (script.textContent) {
+              scriptContents.push({ text: script.textContent });
+            }
+            script.remove();
+          });
 
           shadow.innerHTML = `
             <style>${baseStyles}</style>
             ${transformedStyles ? `<style>${transformedStyles}</style>` : ''}
-            <div class="content-body">${html}</div>
+            <div class="content-body">${tempDiv.innerHTML}</div>
           `;
+
+          // Execute scripts in the context of shadow DOM
+          scriptContents.forEach((scriptInfo) => {
+            try {
+              if (scriptInfo.src) {
+                const newScript = document.createElement('script');
+                newScript.src = scriptInfo.src;
+                document.body.appendChild(newScript);
+              } else if (scriptInfo.text) {
+                // Create a function that has access to shadow DOM elements
+                const shadowRoot = shadow;
+                const wrappedScript = `
+                  (function(shadowRoot) {
+                    const document = {
+                      getElementById: (id) => shadowRoot.getElementById(id),
+                      querySelector: (sel) => shadowRoot.querySelector(sel),
+                      querySelectorAll: (sel) => shadowRoot.querySelectorAll(sel),
+                      createElement: (tag) => window.document.createElement(tag),
+                      body: window.document.body
+                    };
+                    ${scriptInfo.text}
+                  })(this);
+                `;
+                const fn = new Function(wrappedScript);
+                fn.call(shadowRoot);
+              }
+            } catch (error) {
+              console.error('Error executing script in shadow DOM:', error);
+            }
+          });
         }
       }
     }, [html, styles]);
@@ -317,8 +398,9 @@ export default function ContentDetailPage() {
           <CardContent className="pt-6">
             {(() => {
               const contentInfo = getContentInfo(content.content_html || '');
-              // Use Shadow DOM for CSS isolation when content has inline styles
-              if (contentInfo.inlineStyles) {
+              // Use Shadow DOM for CSS isolation when content needs isolation
+              // (has style tags, full document structure, or significant inline styles)
+              if (contentInfo.needsIsolation) {
                 return (
                   <div ref={contentRef}>
                     <IsolatedContent html={contentInfo.content} styles={contentInfo.inlineStyles} />
