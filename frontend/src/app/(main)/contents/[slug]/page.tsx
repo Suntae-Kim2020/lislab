@@ -370,17 +370,6 @@ export default function ContentDetailPage() {
 
         {/* Meta Info Cards */}
         <div className="grid gap-4 mb-8 sm:grid-cols-2">
-          {content.prerequisites && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">선수 학습</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <FormattedText text={content.prerequisites} />
-              </CardContent>
-            </Card>
-          )}
-
           {content.learning_objectives && (
             <Card>
               <CardHeader>
@@ -388,6 +377,17 @@ export default function ContentDetailPage() {
               </CardHeader>
               <CardContent>
                 <FormattedText text={content.learning_objectives} />
+              </CardContent>
+            </Card>
+          )}
+
+          {content.prerequisites && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">선수 학습</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <FormattedText text={content.prerequisites} />
               </CardContent>
             </Card>
           )}
