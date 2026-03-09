@@ -31,17 +31,15 @@ export function ContentSidebar() {
   const sortedCategories = (categories || []).sort((a, b) => a.order - b.order);
 
   return (
-    <div className="h-full overflow-y-auto">
-      <div className="p-4">
-        <div className="space-y-4">
-          {sortedCategories.map((category) => (
-            <CategorySection
-              key={category.id}
-              category={category}
-              currentPath={pathname}
-            />
-          ))}
-        </div>
+    <div className="p-4">
+      <div className="space-y-4">
+        {sortedCategories.map((category) => (
+          <CategorySection
+            key={category.id}
+            category={category}
+            currentPath={pathname}
+          />
+        ))}
       </div>
     </div>
   );

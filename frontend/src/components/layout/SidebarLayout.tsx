@@ -1,12 +1,17 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ContentSidebar } from './ContentSidebar';
 
+const SCROLL_POSITION_KEY = 'sidebar-scroll-position';
+
 export function SidebarLayout({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(true);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   // localStorage에서 사이드바 상태 로드
   useEffect(() => {
@@ -15,6 +20,56 @@ export function SidebarLayout({ children }: { children: React.ReactNode }) {
       setIsOpen(saved === 'true');
     }
   }, []);
+
+  // 스크롤 위치 저장
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      sessionStorage.setItem(SCROLL_POSITION_KEY, String(container.scrollTop));
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, [isOpen]);
+
+  // 스크롤 위치 복원 - DOM 변경 감지 후 복원
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container || !isOpen) return;
+
+    const savedPosition = sessionStorage.getItem(SCROLL_POSITION_KEY);
+    if (!savedPosition) return;
+
+    const position = parseInt(savedPosition, 10);
+
+    // MutationObserver로 DOM 변경 감지 후 스크롤 복원
+    const observer = new MutationObserver(() => {
+      // DOM이 변경될 때마다 스크롤 위치 복원 시도
+      if (container.scrollHeight > position) {
+        container.scrollTop = position;
+      }
+    });
+
+    observer.observe(container, {
+      childList: true,
+      subtree: true,
+    });
+
+    // 초기 복원 시도
+    container.scrollTop = position;
+
+    // 3초 후 observer 해제
+    const timeout = setTimeout(() => {
+      observer.disconnect();
+    }, 3000);
+
+    return () => {
+      observer.disconnect();
+      clearTimeout(timeout);
+    };
+  }, [pathname, isOpen]);
 
   // 사이드바 상태 변경 시 localStorage에 저장
   const toggleSidebar = () => {
@@ -46,8 +101,8 @@ export function SidebarLayout({ children }: { children: React.ReactNode }) {
               </Button>
             </div>
 
-            {/* 사이드바 콘텐츠 */}
-            <div className="flex-1 overflow-hidden">
+            {/* 사이드바 콘텐츠 - 스크롤 컨테이너 */}
+            <div ref={scrollContainerRef} className="flex-1 overflow-y-auto">
               <ContentSidebar />
             </div>
           </div>
