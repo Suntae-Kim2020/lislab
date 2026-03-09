@@ -71,8 +71,14 @@ export const getContents = async (params?: {
   tag?: string;
   difficulty?: string;
   page?: number;
+  includeChildren?: boolean;
 }): Promise<{ results: Content[]; count: number; next: string | null; previous: string | null }> => {
-  const response = await apiClient.get<{ results: Content[]; count: number; next: string | null; previous: string | null }>('/contents/contents/', { params });
+  const apiParams: Record<string, string | number | boolean | undefined> = { ...params };
+  if (params?.includeChildren) {
+    apiParams.include_children = 'true';
+    delete apiParams.includeChildren;
+  }
+  const response = await apiClient.get<{ results: Content[]; count: number; next: string | null; previous: string | null }>('/contents/contents/', { params: apiParams });
   return response.data;
 };
 

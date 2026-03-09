@@ -37,7 +37,8 @@ function ContentsPageContent() {
     search,
     category: category === 'all' ? '' : category,
     difficulty: difficulty === 'all' ? '' : difficulty,
-    page
+    page,
+    includeChildren: true,  // 전체보기 시 하위 카테고리 콘텐츠도 포함
   });
   const { data: categories } = useCategories();
   const toggleFavoriteMutation = useToggleFavorite();

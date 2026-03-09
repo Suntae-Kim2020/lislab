@@ -10,6 +10,7 @@ export function useContents(params?: {
   tag?: string;
   difficulty?: string;
   page?: number;
+  includeChildren?: boolean;
 }) {
   return useQuery({
     queryKey: ['contents', params],
