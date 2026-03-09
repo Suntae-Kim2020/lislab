@@ -26,11 +26,13 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         # 네비게이션 전용(url 설정됨) 카테고리 제외
-        # 루트 카테고리만 반환 (하위 카테고리는 children 필드로 포함됨)
+        # 루트 카테고리 또는 부모가 네비게이션 전용인 카테고리만 반환
+        # (하위 카테고리는 children 필드로 포함됨)
+        from django.db.models import Q
         return Category.objects.filter(
+            Q(parent__isnull=True) | Q(parent__url__gt=''),  # 루트이거나 부모가 네비게이션 전용
             is_active=True,
             url='',
-            parent__isnull=True,
         ).prefetch_related('children')
 
 
