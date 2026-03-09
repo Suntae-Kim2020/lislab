@@ -35,43 +35,11 @@ export function ContentSidebar() {
       <div className="p-4">
         <div className="space-y-4">
           {sortedCategories.map((category) => (
-            <div key={category.id}>
-              {/* 카테고리 제목 - 클릭 가능 */}
-              <Link
-                href={`/contents?category=${category.slug}`}
-                className="block px-3 py-2 text-sm font-semibold text-foreground border-b hover:bg-accent transition-colors cursor-pointer"
-              >
-                {category.name}
-              </Link>
-
-              {/* 카테고리의 콘텐츠 */}
-              <CategoryContents
-                category={category}
-                currentPath={pathname}
-              />
-
-              {/* 하위 카테고리 */}
-              {category.children && category.children.length > 0 && (
-                <div className="ml-3">
-                  {category.children
-                    .sort((a, b) => a.order - b.order)
-                    .map((sub) => (
-                      <div key={sub.id}>
-                        <Link
-                          href={`/contents?category=${sub.slug}`}
-                          className="block px-3 py-1.5 text-xs font-medium text-muted-foreground border-l-2 border-muted hover:bg-accent hover:text-foreground transition-colors cursor-pointer"
-                        >
-                          {sub.name}
-                        </Link>
-                        <SubCategoryContents
-                          subCategory={sub}
-                          currentPath={pathname}
-                        />
-                      </div>
-                    ))}
-                </div>
-              )}
-            </div>
+            <CategorySection
+              key={category.id}
+              category={category}
+              currentPath={pathname}
+            />
           ))}
         </div>
       </div>
@@ -79,24 +47,112 @@ export function ContentSidebar() {
   );
 }
 
-function ContentList({ categorySlug, currentPath, isSubCategory = false }: {
-  categorySlug: string;
+// 카테고리 섹션 - 콘텐츠나 하위 카테고리가 있는 경우에만 렌더링
+function CategorySection({ category, currentPath }: {
+  category: Category;
   currentPath: string;
-  isSubCategory?: boolean;
 }) {
-  const { data, isLoading } = useContents({ category: categorySlug });
-  const mlClass = isSubCategory ? 'ml-4' : 'ml-3';
+  const { data, isLoading } = useContents({ category: category.slug, includeChildren: true });
 
+  // 로딩 중이면 스켈레톤 표시
   if (isLoading) {
     return (
-      <div className={`${mlClass} space-y-1 mt-2`}>
-        <Skeleton className="h-6 w-full" />
-        <Skeleton className="h-6 w-full" />
+      <div>
+        <Skeleton className="h-8 w-full mb-2" />
+        <Skeleton className="h-6 w-3/4 ml-3" />
       </div>
     );
   }
 
+  const totalContents = data?.results?.length || 0;
+  const hasChildren = category.children && category.children.length > 0;
+
+  // 콘텐츠도 없고 하위 카테고리도 없으면 렌더링하지 않음
+  if (totalContents === 0 && !hasChildren) {
+    return null;
+  }
+
+  return (
+    <div>
+      {/* 카테고리 제목 - 클릭 가능 */}
+      <Link
+        href={`/contents?category=${category.slug}`}
+        className="block px-3 py-2 text-sm font-semibold text-foreground border-b hover:bg-accent transition-colors cursor-pointer"
+      >
+        {category.name}
+      </Link>
+
+      {/* 카테고리의 직접 콘텐츠 */}
+      <CategoryContents
+        category={category}
+        currentPath={currentPath}
+      />
+
+      {/* 하위 카테고리 */}
+      {hasChildren && (
+        <div className="ml-3">
+          {category.children
+            .sort((a, b) => a.order - b.order)
+            .map((sub) => (
+              <SubCategorySection
+                key={sub.id}
+                subCategory={sub}
+                currentPath={currentPath}
+              />
+            ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// 하위 카테고리 섹션 - 콘텐츠가 있는 경우에만 렌더링
+function SubCategorySection({ subCategory, currentPath }: {
+  subCategory: SubCategory;
+  currentPath: string;
+}) {
+  const { data, isLoading } = useContents({ category: subCategory.slug });
+
+  if (isLoading) {
+    return null; // 하위 카테고리는 로딩 중 스켈레톤 생략
+  }
+
   const contents = data?.results || [];
+
+  // 콘텐츠가 없으면 렌더링하지 않음
+  if (contents.length === 0) {
+    return null;
+  }
+
+  return (
+    <div>
+      <Link
+        href={`/contents?category=${subCategory.slug}`}
+        className="block px-3 py-1.5 text-xs font-medium text-muted-foreground border-l-2 border-muted hover:bg-accent hover:text-foreground transition-colors cursor-pointer"
+      >
+        {subCategory.name}
+      </Link>
+      <ContentList
+        contents={contents}
+        currentPath={currentPath}
+        isSubCategory
+      />
+    </div>
+  );
+}
+
+function ContentList({ contents, currentPath, isSubCategory = false }: {
+  contents: Array<{
+    id: number;
+    title: string;
+    slug: string;
+    difficulty: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
+    estimated_time: number;
+  }>;
+  currentPath: string;
+  isSubCategory?: boolean;
+}) {
+  const mlClass = isSubCategory ? 'ml-4' : 'ml-3';
 
   if (contents.length === 0) {
     return null;
@@ -134,12 +190,18 @@ function CategoryContents({ category, currentPath }: {
   category: Category;
   currentPath: string;
 }) {
-  return <ContentList categorySlug={category.slug} currentPath={currentPath} />;
-}
+  const { data, isLoading } = useContents({ category: category.slug });
 
-function SubCategoryContents({ subCategory, currentPath }: {
-  subCategory: SubCategory;
-  currentPath: string;
-}) {
-  return <ContentList categorySlug={subCategory.slug} currentPath={currentPath} isSubCategory />;
+  if (isLoading) {
+    return null;
+  }
+
+  const contents = data?.results || [];
+
+  return (
+    <ContentList
+      contents={contents}
+      currentPath={currentPath}
+    />
+  );
 }
