@@ -25,10 +25,12 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = None
 
     def get_queryset(self):
-        # 네비게이션 전용(url 설정됨) 카테고리 제외, 모든 콘텐츠 카테고리 포함
+        # 네비게이션 전용(url 설정됨) 카테고리 제외
+        # 루트 카테고리만 반환 (하위 카테고리는 children 필드로 포함됨)
         return Category.objects.filter(
             is_active=True,
             url='',
+            parent__isnull=True,
         ).prefetch_related('children')
 
 
