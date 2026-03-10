@@ -139,6 +139,11 @@ function SubCategorySection({ subCategory, currentPath }: {
   );
 }
 
+// Unicode 정규화 함수 - 한글 slug 비교를 위해 NFC로 정규화
+function normalizeSlug(str: string): string {
+  return str.normalize('NFC');
+}
+
 function ContentList({ contents, currentPath, isSubCategory = false }: {
   contents: Array<{
     id: number;
@@ -156,10 +161,14 @@ function ContentList({ contents, currentPath, isSubCategory = false }: {
     return null;
   }
 
+  // currentPath를 NFC로 정규화
+  const normalizedCurrentPath = normalizeSlug(currentPath);
+
   return (
     <div className="mt-1 space-y-1">
       {contents.map((content) => {
-        const isActive = currentPath === `/contents/${content.slug}`;
+        // 양쪽 모두 NFC로 정규화하여 비교
+        const isActive = normalizedCurrentPath === normalizeSlug(`/contents/${content.slug}`);
         return (
           <Link
             key={content.id}
