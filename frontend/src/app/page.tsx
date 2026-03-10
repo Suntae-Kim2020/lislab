@@ -146,20 +146,6 @@ export default function HomePage() {
           </div>
         </form>
 
-        {/* 빠른 링크 */}
-        <div className="flex flex-wrap justify-center gap-2 mt-6">
-          <span className="text-sm text-muted-foreground">인기 검색어:</span>
-          {['RDF', 'MARC', '메타데이터', 'XML', 'SPARQL'].map((tag) => (
-            <Button
-              key={tag}
-              variant="outline"
-              size="sm"
-              onClick={() => router.push(`/contents?search=${encodeURIComponent(tag)}`)}
-            >
-              {tag}
-            </Button>
-          ))}
-        </div>
       </section>
 
       {loading ? (
