@@ -10,25 +10,41 @@ class Command(BaseCommand):
     help = '디지털도서관 카테고리 구조 및 순서 수정'
 
     def handle(self, *args, **options):
-        # 1. 디지털도서관 카테고리 생성 (없으면)
-        digital_lib, created = Category.objects.get_or_create(
-            slug='digital-library',
-            defaults={
-                'name': '디지털도서관',
-                'description': '디지털도서관 관련 교육 콘텐츠',
-                'order': 1,
-                'show_in_menu': True,
-                'menu_order': 1,
-            }
-        )
-        if created:
+        # 1. 디지털도서관 카테고리 찾기 또는 생성
+        # 먼저 이름으로 검색
+        digital_lib = Category.objects.filter(name='디지털도서관').first()
+        if digital_lib:
             self.stdout.write(self.style.SUCCESS(
-                f"디지털도서관 카테고리 생성됨 (id: {digital_lib.id})"
+                f"디지털도서관 카테고리 이미 존재 (id: {digital_lib.id}, slug: {digital_lib.slug})"
             ))
         else:
-            self.stdout.write(self.style.SUCCESS(
-                f"디지털도서관 카테고리 이미 존재 (id: {digital_lib.id})"
-            ))
+            # slug로 검색
+            digital_lib = Category.objects.filter(slug='digital-library').first()
+            if digital_lib:
+                self.stdout.write(self.style.SUCCESS(
+                    f"디지털도서관 카테고리 이미 존재 (id: {digital_lib.id}, slug: {digital_lib.slug})"
+                ))
+            else:
+                # 새로 생성
+                digital_lib = Category.objects.create(
+                    name='디지털도서관',
+                    slug='digital-library',
+                    description='디지털도서관 관련 교육 콘텐츠',
+                    order=1,
+                    show_in_menu=True,
+                    menu_order=1,
+                )
+                self.stdout.write(self.style.SUCCESS(
+                    f"디지털도서관 카테고리 생성됨 (id: {digital_lib.id})"
+                ))
+
+        # 디지털도서관 카테고리 설정 업데이트
+        digital_lib.order = 1
+        digital_lib.parent = None
+        digital_lib.show_in_menu = True
+        digital_lib.menu_order = 1
+        digital_lib.save()
+        self.stdout.write(self.style.SUCCESS("디지털도서관 설정 업데이트 완료"))
 
         # 2. 하위 카테고리 목록 (메뉴 순서대로)
         child_categories = [
