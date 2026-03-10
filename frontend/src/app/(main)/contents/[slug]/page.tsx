@@ -125,7 +125,8 @@ export default function ContentDetailPage() {
             .replace(/:root\s*\{/g, ':host {')
             .replace(/\bbody\s*\{/g, '.content-body {');
 
-          // Add base styles for typography - reset prose styles and preserve inline styles
+          // Add base styles for typography - minimal reset to avoid overriding content styles
+          // Use :where() to give these resets 0 specificity, allowing content styles to override
           const baseStyles = `
             :host {
               display: block;
@@ -136,37 +137,31 @@ export default function ContentDetailPage() {
               color: inherit;
               background: transparent;
             }
-            /* Reset common element styles to allow inline styles to take precedence */
-            .content-body h1, .content-body h2, .content-body h3, .content-body h4, .content-body h5, .content-body h6 {
+            /* Use :where() for 0 specificity - content styles will always win */
+            :where(.content-body h1, .content-body h2, .content-body h3, .content-body h4, .content-body h5, .content-body h6) {
               margin: 0;
-              font-size: inherit;
-              font-weight: inherit;
-              line-height: inherit;
-              color: inherit;
             }
-            .content-body p {
+            :where(.content-body p) {
               margin: 0;
-              color: inherit;
             }
-            .content-body ul, .content-body ol {
+            :where(.content-body ul, .content-body ol) {
               margin: 0;
               padding: 0;
-              list-style: none;
             }
-            .content-body li {
+            :where(.content-body li) {
               margin: 0;
             }
-            .content-body a {
+            :where(.content-body a) {
               color: inherit;
               text-decoration: inherit;
             }
-            .content-body table {
+            :where(.content-body table) {
               border-collapse: collapse;
             }
-            .content-body th, .content-body td {
+            :where(.content-body th, .content-body td) {
               padding: 0;
             }
-            .content-body button {
+            :where(.content-body button) {
               font-family: inherit;
             }
           `;
