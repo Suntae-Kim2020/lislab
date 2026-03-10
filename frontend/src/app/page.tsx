@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { TrendingUp, Clock, Search, BookOpen } from 'lucide-react';
+import { TrendingUp, Clock, Search } from 'lucide-react';
 
 interface Content {
   id: number;
@@ -116,50 +116,39 @@ export default function HomePage() {
   );
 
   return (
-    <div className="container mx-auto py-6 px-4">
-      {/* 히어로 섹션 - 검색 인터페이스 */}
-      <section className="py-12 text-center">
-        <div className="flex items-center justify-center gap-3 mb-4">
-          <BookOpen className="h-10 w-10 text-primary" />
-          <h1 className="text-4xl font-bold">LIS Lab</h1>
-        </div>
-        <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-          문헌정보학 교육 콘텐츠를 검색하고 학습하세요
-        </p>
-
-        {/* 검색 폼 */}
-        <form onSubmit={handleSearch} className="max-w-2xl mx-auto">
+    <div className="h-full overflow-y-auto">
+      <div className="container mx-auto py-4 px-4">
+        {/* 검색 바 - 컴팩트 */}
+        <form onSubmit={handleSearch} className="max-w-xl mx-auto mb-6">
           <div className="flex gap-2">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 type="text"
                 placeholder="콘텐츠 검색... (예: RDF, 메타데이터, MARC)"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 h-12 text-lg"
+                className="pl-9 h-10"
               />
             </div>
-            <Button type="submit" size="lg" className="h-12 px-8">
+            <Button type="submit" className="h-10 px-6">
               검색
             </Button>
           </div>
         </form>
 
-      </section>
-
-      {loading ? (
-        <div className="text-center text-muted-foreground py-12">로딩 중...</div>
-      ) : (
+        {loading ? (
+          <div className="text-center text-muted-foreground py-8">로딩 중...</div>
+        ) : (
         <>
           {/* 인기 콘텐츠 */}
-          <section className="py-8">
-            <div className="flex items-center gap-2 mb-6">
-              <TrendingUp className="h-6 w-6 text-orange-500" />
-              <h2 className="text-2xl font-bold">인기 콘텐츠</h2>
+          <section className="py-4">
+            <div className="flex items-center gap-2 mb-4">
+              <TrendingUp className="h-5 w-5 text-orange-500" />
+              <h2 className="text-xl font-bold">인기 콘텐츠</h2>
             </div>
             {popularContents.length > 0 ? (
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {popularContents.map((content) => (
                   <ContentCard key={content.id} content={content} />
                 ))}
@@ -170,13 +159,13 @@ export default function HomePage() {
           </section>
 
           {/* 최신 콘텐츠 */}
-          <section className="py-8">
-            <div className="flex items-center gap-2 mb-6">
-              <Clock className="h-6 w-6 text-blue-500" />
-              <h2 className="text-2xl font-bold">최신 콘텐츠</h2>
+          <section className="py-4">
+            <div className="flex items-center gap-2 mb-4">
+              <Clock className="h-5 w-5 text-blue-500" />
+              <h2 className="text-xl font-bold">최신 콘텐츠</h2>
             </div>
             {recentContents.length > 0 ? (
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {recentContents.map((content) => (
                   <ContentCard key={content.id} content={content} />
                 ))}
@@ -192,16 +181,17 @@ export default function HomePage() {
         </>
       )}
 
-      {/* CTA Section */}
-      <section className="flex flex-col items-center justify-center space-y-4 py-12 text-center">
-        <h2 className="text-3xl font-bold">지금 시작하세요</h2>
-        <p className="max-w-[600px] text-muted-foreground">
-          회원가입하고 다양한 교육 콘텐츠를 경험해보세요.
-        </p>
-        <Button asChild size="lg">
-          <Link href="/register">무료 회원가입</Link>
-        </Button>
-      </section>
+        {/* CTA Section */}
+        <section className="flex flex-col items-center justify-center space-y-3 py-8 text-center">
+          <h2 className="text-2xl font-bold">지금 시작하세요</h2>
+          <p className="max-w-[600px] text-muted-foreground text-sm">
+            회원가입하고 다양한 교육 콘텐츠를 경험해보세요.
+          </p>
+          <Button asChild>
+            <Link href="/register">무료 회원가입</Link>
+          </Button>
+        </section>
+      </div>
     </div>
   );
 }
