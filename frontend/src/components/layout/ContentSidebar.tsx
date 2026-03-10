@@ -139,9 +139,17 @@ function SubCategorySection({ subCategory, currentPath }: {
   );
 }
 
-// Unicode 정규화 함수 - 한글 slug 비교를 위해 NFC로 정규화
+// URL 디코딩 + Unicode 정규화 함수 - 한글 slug 비교를 위해
 function normalizeSlug(str: string): string {
-  return str.normalize('NFC');
+  try {
+    // URL 인코딩된 경우 디코딩 (%ED%95%9C%EA%B8%80 -> 한글)
+    const decoded = decodeURIComponent(str);
+    // Unicode NFC 정규화 (NFD -> NFC 변환)
+    return decoded.normalize('NFC');
+  } catch {
+    // 이미 디코딩되었거나 유효하지 않은 경우 정규화만 수행
+    return str.normalize('NFC');
+  }
 }
 
 function ContentList({ contents, currentPath, isSubCategory = false }: {
