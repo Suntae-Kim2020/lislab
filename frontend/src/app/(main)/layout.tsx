@@ -6,7 +6,7 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="h-[calc(100vh-64px-48px)] overflow-hidden">
+    <div style={{ height: 'calc(100vh - 64px - 48px)' }} className="overflow-hidden">
       <SidebarLayout>{children}</SidebarLayout>
     </div>
   );
