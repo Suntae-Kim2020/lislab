@@ -43,8 +43,12 @@ class Command(BaseCommand):
         digital_lib.parent = None
         digital_lib.show_in_menu = True
         digital_lib.menu_order = 1
+        digital_lib.url = ''  # 네비게이션 전용이 아닌 일반 카테고리로 설정
+        digital_lib.is_active = True
         digital_lib.save()
-        self.stdout.write(self.style.SUCCESS("디지털도서관 설정 업데이트 완료"))
+        self.stdout.write(self.style.SUCCESS(
+            f"디지털도서관 설정 업데이트 완료 (url: '{digital_lib.url}', is_active: {digital_lib.is_active})"
+        ))
 
         # 2. 하위 카테고리 목록 (메뉴 순서대로)
         child_categories = [
