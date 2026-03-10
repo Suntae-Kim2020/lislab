@@ -82,7 +82,7 @@ class Command(BaseCommand):
         # 4. 다른 최상위 카테고리 순서 설정 (메뉴 순서대로)
         top_level_categories = [
             ('바이브코딩', 0),
-            ('digital-library', 1),  # 디지털도서관
+            # 디지털도서관은 위에서 order=1로 설정됨
             ('statistics', 2),  # 알기쉬운 통계
             ('special-lecture-a', 3),  # 데이터베이스설계론
             ('special-lecture-b', 4),  # 도서관경영론
@@ -104,6 +104,23 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.ERROR(
                     f"{slug_or_name} 업데이트 실패: {e}"
                 ))
+
+        # 5. 불필요한 최상위 카테고리 처리 (경영관리 기능 영역 등)
+        # 도서관경영론의 하위로 이동하거나 비활성화
+        try:
+            misc_cat = Category.objects.filter(name='경영관리 기능 영역').first()
+            if misc_cat:
+                # 도서관경영론의 하위 카테고리로 설정
+                lib_mgmt = Category.objects.filter(slug='special-lecture-b').first()
+                if lib_mgmt:
+                    misc_cat.parent = lib_mgmt
+                    misc_cat.order = 0
+                    misc_cat.save()
+                    self.stdout.write(self.style.SUCCESS(
+                        f"경영관리 기능 영역 → 도서관경영론 하위로 이동"
+                    ))
+        except Exception as e:
+            self.stdout.write(self.style.WARNING(f"경영관리 기능 영역 처리 중 오류: {e}"))
 
         # 5. 결과 출력
         self.stdout.write("\n=== 카테고리 구조 ===")
