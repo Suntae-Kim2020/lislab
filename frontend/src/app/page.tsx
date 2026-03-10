@@ -1,10 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { TrendingUp, Clock } from 'lucide-react';
+import { TrendingUp, Clock, Search, BookOpen } from 'lucide-react';
 
 interface Content {
   id: number;
@@ -24,9 +26,18 @@ interface Content {
 }
 
 export default function HomePage() {
+  const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState('');
   const [popularContents, setPopularContents] = useState<Content[]>([]);
   const [recentContents, setRecentContents] = useState<Content[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/contents?search=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
 
   useEffect(() => {
     const fetchContents = async () => {
@@ -106,6 +117,51 @@ export default function HomePage() {
 
   return (
     <div className="container mx-auto py-6 px-4">
+      {/* 히어로 섹션 - 검색 인터페이스 */}
+      <section className="py-12 text-center">
+        <div className="flex items-center justify-center gap-3 mb-4">
+          <BookOpen className="h-10 w-10 text-primary" />
+          <h1 className="text-4xl font-bold">LIS Lab</h1>
+        </div>
+        <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+          문헌정보학 교육 콘텐츠를 검색하고 학습하세요
+        </p>
+
+        {/* 검색 폼 */}
+        <form onSubmit={handleSearch} className="max-w-2xl mx-auto">
+          <div className="flex gap-2">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Input
+                type="text"
+                placeholder="콘텐츠 검색... (예: RDF, 메타데이터, MARC)"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 h-12 text-lg"
+              />
+            </div>
+            <Button type="submit" size="lg" className="h-12 px-8">
+              검색
+            </Button>
+          </div>
+        </form>
+
+        {/* 빠른 링크 */}
+        <div className="flex flex-wrap justify-center gap-2 mt-6">
+          <span className="text-sm text-muted-foreground">인기 검색어:</span>
+          {['RDF', 'MARC', '메타데이터', 'XML', 'SPARQL'].map((tag) => (
+            <Button
+              key={tag}
+              variant="outline"
+              size="sm"
+              onClick={() => router.push(`/contents?search=${encodeURIComponent(tag)}`)}
+            >
+              {tag}
+            </Button>
+          ))}
+        </div>
+      </section>
+
       {loading ? (
         <div className="text-center text-muted-foreground py-12">로딩 중...</div>
       ) : (
