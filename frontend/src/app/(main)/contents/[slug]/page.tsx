@@ -186,6 +186,38 @@ export default function ContentDetailPage() {
             <div class="content-body">${tempDiv.innerHTML}</div>
           `;
 
+          // Handle anchor link clicks inside Shadow DOM
+          shadow.addEventListener('click', (e) => {
+            const target = e.target as HTMLElement;
+            const anchor = target.closest('a');
+            if (anchor) {
+              const href = anchor.getAttribute('href');
+              if (href && href.startsWith('#')) {
+                e.preventDefault();
+                const targetId = href.substring(1);
+                const targetElement = shadow.getElementById(targetId);
+                if (targetElement) {
+                  targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  // Update URL hash without page reload
+                  window.history.pushState(null, '', href);
+                }
+              }
+            }
+          });
+
+          // Handle initial page load with hash in URL
+          const initialHash = window.location.hash;
+          if (initialHash) {
+            const targetId = initialHash.substring(1);
+            // Small delay to ensure content is fully rendered
+            setTimeout(() => {
+              const targetElement = shadow.getElementById(targetId);
+              if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
+            }, 100);
+          }
+
           // Execute scripts in the context of shadow DOM
           scriptContents.forEach((scriptInfo) => {
             try {
