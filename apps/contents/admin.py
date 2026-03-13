@@ -138,7 +138,7 @@ class ContentVersionInline(admin.TabularInline):
 @admin.register(Content)
 class ContentAdmin(admin.ModelAdmin):
     form = ContentAdminForm
-    list_display = ['title', 'category', 'order', 'author', 'status_badge', 'difficulty_badge', 'version', 'view_count', 'created_at']
+    list_display = ['title', 'category_name', 'order', 'author', 'status_badge', 'difficulty_badge', 'version', 'view_count', 'created_at']
     list_editable = ['order']
     list_filter = ['status', 'category', 'difficulty', 'created_at']
     search_fields = ['title', 'summary', 'author__username']
@@ -168,6 +168,11 @@ class ContentAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
     )
+
+    @admin.display(description='카테고리', ordering='category__name')
+    def category_name(self, obj):
+        """카테고리 이름 표시 (이름으로 정렬 가능)"""
+        return obj.category.name if obj.category else '-'
 
     def status_badge(self, obj):
         """상태를 색상 배지로 표시"""
