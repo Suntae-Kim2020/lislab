@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multi Stopwatch</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    min-height: 100vh;
+    color: #fff;
+    padding: 40px 20px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .header h1 {
+    font-size: 2.4rem;
+    font-weight: 300;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #f093fb, #f5576c, #4facfe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 30px;
+  }
+
+  .setup {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .setup label {
+    font-size: 1rem;
+    color: #aaa;
+  }
+
+  .setup input {
+    width: 80px;
+    padding: 10px 14px;
+    border: 2px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.06);
+    color: #fff;
+    font-size: 1.1rem;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+
+  .setup input:focus {
+    border-color: #f5576c;
+  }
+
+  .btn-create {
+    padding: 10px 28px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #f093fb, #f5576c);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .btn-create:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(245,87,108,0.4);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .watch {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 28px 24px;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .watch:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  }
+
+  .watch-number {
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 12px;
+  }
+
+  .watch-name-input {
+    width: 100%;
+    padding: 8px 0;
+    border: none;
+    border-bottom: 2px solid rgba(255,255,255,0.1);
+    background: transparent;
+    color: #fff;
+    font-size: 1.1rem;
+    text-align: center;
+    outline: none;
+    margin-bottom: 20px;
+    transition: border-color 0.3s;
+  }
+
+  .watch-name-input::placeholder {
+    color: rgba(255,255,255,0.25);
+  }
+
+  .watch-name-input:focus {
+    border-color: #4facfe;
+  }
+
+  .time-display {
+    font-size: 3rem;
+    font-weight: 200;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    color: #eee;
+  }
+
+  .time-display .ms {
+    font-size: 1.6rem;
+    color: #888;
+  }
+
+  .lap-count {
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 24px;
+    min-height: 18px;
+  }
+
+  .buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    padding: 10px 22px;
+    border: none;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s;
+    min-width: 90px;
+  }
+
+  .btn:active { transform: scale(0.95); }
+
+  .btn-start {
+    background: linear-gradient(135deg, #43e97b, #38f9d7);
+    color: #1a1a2e;
+  }
+  .btn-start:hover {
+    box-shadow: 0 4px 18px rgba(67,233,123,0.4);
+  }
+
+  .btn-stop {
+    background: linear-gradient(135deg, #f5576c, #ff6b6b);
+    color: #fff;
+  }
+  .btn-stop:hover {
+    box-shadow: 0 4px 18px rgba(245,87,108,0.4);
+  }
+
+  .btn-resume {
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    color: #1a1a2e;
+  }
+  .btn-resume:hover {
+    box-shadow: 0 4px 18px rgba(79,172,254,0.4);
+  }
+
+  .btn-reset {
+    background: rgba(255,255,255,0.08);
+    color: #aaa;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .btn-reset:hover {
+    background: rgba(255,255,255,0.14);
+    color: #fff;
+  }
+
+  .btn-lap {
+    background: rgba(240,147,251,0.15);
+    color: #f093fb;
+    border: 1px solid rgba(240,147,251,0.3);
+  }
+  .btn-lap:hover {
+    background: rgba(240,147,251,0.25);
+  }
+
+  .btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  .laps {
+    margin-top: 16px;
+    max-height: 160px;
+    overflow-y: auto;
+    text-align: left;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.1) transparent;
+  }
+
+  .laps::-webkit-scrollbar { width: 4px; }
+  .laps::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+  .lap-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 12px;
+    font-size: 0.82rem;
+    color: #888;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .lap-item:first-child {
+    color: #4facfe;
+  }
+
+  .controls-bar {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+
+  .btn-global {
+    padding: 8px 20px;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 50px;
+    background: rgba(255,255,255,0.04);
+    color: #999;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .btn-global:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+  }
+
+  @media (max-width: 600px) {
+    .header h1 { font-size: 1.6rem; letter-spacing: 3px; }
+    .time-display { font-size: 2.2rem; }
+    .time-display .ms { font-size: 1.2rem; }
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Multi Stopwatch</h1>
+  <div class="setup">
+    <label for="count">스톱워치 개수</label>
+    <input type="number" id="count" value="3" min="1" max="20">
+    <button class="btn-create" onclick="createWatches()">만들기</button>
+  </div>
+</div>
+
+<div class="controls-bar" id="globalControls" style="display:none;">
+  <button class="btn-global" onclick="allAction('start')">전체 시작</button>
+  <button class="btn-global" onclick="allAction('stop')">전체 멈춤</button>
+  <button class="btn-global" onclick="allAction('reset')">전체 초기화</button>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<script>
+const watches = {};
+
+function createWatches() {
+  const n = Math.max(1, Math.min(20, parseInt(document.getElementById('count').value) || 3));
+  document.getElementById('grid').innerHTML = '';
+  document.getElementById('globalControls').style.display = n > 1 ? 'flex' : 'none';
+
+  Object.values(watches).forEach(w => clearInterval(w.interval));
+  for (const k in watches) delete watches[k];
+
+  for (let i = 1; i <= n; i++) {
+    const id = 'w' + i;
+    watches[id] = { elapsed: 0, running: false, interval: null, lastTick: 0, laps: [] };
+
+    const card = document.createElement('div');
+    card.className = 'watch';
+    card.id = id;
+    card.innerHTML = `
+      <div class="watch-number">Stopwatch ${String(i).padStart(2,'0')}</div>
+      <input class="watch-name-input" placeholder="이름을 입력하세요" spellcheck="false">
+      <div class="time-display"><span class="hms">00:00:00</span><span class="ms">.00</span></div>
+      <div class="lap-count"></div>
+      <div class="buttons">
+        <button class="btn btn-start" onclick="startWatch('${id}')">시작</button>
+        <button class="btn btn-stop" onclick="stopWatch('${id}')" disabled>멈춤</button>
+        <button class="btn btn-resume" onclick="resumeWatch('${id}')" disabled>재시작</button>
+        <button class="btn btn-lap" onclick="lapWatch('${id}')" disabled>랩</button>
+        <button class="btn btn-reset" onclick="resetWatch('${id}')">초기화</button>
+      </div>
+      <div class="laps"></div>`;
+    document.getElementById('grid').appendChild(card);
+  }
+}
+
+function fmt(ms) {
+  const h = Math.floor(ms / 3600000);
+  const m = Math.floor((ms % 3600000) / 60000);
+  const s = Math.floor((ms % 60000) / 1000);
+  const cs = Math.floor((ms % 1000) / 10);
+  const hms = [h, m, s].map(v => String(v).padStart(2, '0')).join(':');
+  return { hms, cs: '.' + String(cs).padStart(2, '0') };
+}
+
+function updateDisplay(id) {
+  const w = watches[id];
+  const el = document.getElementById(id);
+  const t = fmt(w.elapsed);
+  el.querySelector('.hms').textContent = t.hms;
+  el.querySelector('.ms').textContent = t.cs;
+}
+
+function startWatch(id) {
+  const w = watches[id];
+  if (w.running) return;
+  w.running = true;
+  w.lastTick = performance.now();
+  w.interval = setInterval(() => {
+    const now = performance.now();
+    w.elapsed += now - w.lastTick;
+    w.lastTick = now;
+    updateDisplay(id);
+  }, 31);
+  setBtns(id, false, true, false, true);
+}
+
+function stopWatch(id) {
+  const w = watches[id];
+  if (!w.running) return;
+  clearInterval(w.interval);
+  w.running = false;
+  // capture final tick
+  w.elapsed += performance.now() - w.lastTick;
+  updateDisplay(id);
+  setBtns(id, false, false, true, false);
+}
+
+function resumeWatch(id) {
+  startWatch(id);
+}
+
+function resetWatch(id) {
+  const w = watches[id];
+  clearInterval(w.interval);
+  w.running = false;
+  w.elapsed = 0;
+  w.laps = [];
+  updateDisplay(id);
+  const el = document.getElementById(id);
+  el.querySelector('.laps').innerHTML = '';
+  el.querySelector('.lap-count').textContent = '';
+  setBtns(id, true, false, false, false);
+}
+
+function lapWatch(id) {
+  const w = watches[id];
+  if (!w.running) return;
+  w.laps.unshift(w.elapsed);
+  const el = document.getElementById(id);
+  el.querySelector('.lap-count').textContent = `Laps: ${w.laps.length}`;
+  const lapsDiv = el.querySelector('.laps');
+  const t = fmt(w.elapsed);
+  const diff = w.laps.length > 1 ? fmt(w.laps[0] - w.laps[1]) : t;
+  const item = document.createElement('div');
+  item.className = 'lap-item';
+  item.innerHTML = `<span>#${w.laps.length}</span><span>+${diff.hms}${diff.cs}</span><span>${t.hms}${t.cs}</span>`;
+  lapsDiv.prepend(item);
+}
+
+function setBtns(id, start, stop, resume, lap) {
+  const el = document.getElementById(id);
+  el.querySelector('.btn-start').disabled = !start;
+  el.querySelector('.btn-stop').disabled = !stop;
+  el.querySelector('.btn-resume').disabled = !resume;
+  el.querySelector('.btn-lap').disabled = !lap;
+}
+
+function allAction(action) {
+  Object.keys(watches).forEach(id => {
+    if (action === 'start') startWatch(id);
+    else if (action === 'stop') stopWatch(id);
+    else if (action === 'reset') resetWatch(id);
+  });
+}
+
+createWatches();
+</script>
+</body>
+</html>
