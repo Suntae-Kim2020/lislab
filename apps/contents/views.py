@@ -48,15 +48,21 @@ class ContentViewSet(viewsets.ModelViewSet):
     """
     콘텐츠 ViewSet
 
-    - list: 콘텐츠 목록 조회 (로그인 회원만)
+    - list: 콘텐츠 목록 조회 (비회원 가능)
     - retrieve: 콘텐츠 상세 조회 (로그인 회원만, 조회수 증가)
     - create: 콘텐츠 생성 (관리자만)
     - update: 콘텐츠 수정 (관리자만)
     - destroy: 콘텐츠 삭제 (관리자만, Soft Delete)
     """
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     lookup_field = 'slug'
+
+    def get_permissions(self):
+        # 상세 조회는 로그인 필수
+        if self.action == 'retrieve':
+            return [IsAuthenticated()]
+        return super().get_permissions()
 
     def get_queryset(self):
         queryset = Content.objects.filter(is_deleted=False)
