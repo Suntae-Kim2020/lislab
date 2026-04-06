@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -20,16 +20,14 @@ interface LoginRequiredProps {
  */
 export function LoginRequired({ children, message }: LoginRequiredProps) {
   const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
   const { isAuthenticated, isLoading } = useAuthStore();
 
-  const nextPath = (() => {
-    const qs = searchParams.toString();
-    return qs ? `${pathname}?${qs}` : pathname;
-  })();
-
+  // 클릭 시점에 현재 URL을 계산 (useSearchParams는 정적 프리렌더와 충돌하므로 사용하지 않음)
   const rememberAndGo = (target: '/login' | '/register') => {
+    const nextPath =
+      typeof window !== 'undefined'
+        ? window.location.pathname + window.location.search
+        : '/';
     if (typeof window !== 'undefined') {
       sessionStorage.setItem('post_login_redirect', nextPath);
     }
