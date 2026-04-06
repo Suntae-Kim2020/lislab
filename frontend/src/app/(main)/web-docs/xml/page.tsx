@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Code, Eye, BookOpen, GitCompare } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { LoginRequired } from '@/components/features/LoginRequired';
 
 const DEFAULT_XML = `<?xml version="1.0" encoding="UTF-8"?>
 <bookstore>
@@ -106,6 +107,14 @@ const XML_EXAMPLES = [
 ];
 
 export default function XMLLearningPage() {
+  return (
+    <LoginRequired>
+      <XMLLearningPageInner />
+    </LoginRequired>
+  );
+}
+
+function XMLLearningPageInner() {
   const [xmlCode, setXmlCode] = useState(DEFAULT_XML);
 
   const handleValidate = () => {

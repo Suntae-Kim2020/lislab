@@ -22,6 +22,12 @@ local_settings.py
 .env.production
 *.env
 
+# Secrets / credentials
+client_secret_*.json
+*-env.yaml
+cloud-run-env.yaml
+frontend-env.yaml
+
 # Git
 .git
 .gitignore

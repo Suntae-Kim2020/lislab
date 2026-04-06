@@ -48,14 +48,14 @@ class ContentViewSet(viewsets.ModelViewSet):
     """
     콘텐츠 ViewSet
 
-    - list: 콘텐츠 목록 조회 (비회원 가능)
-    - retrieve: 콘텐츠 상세 조회 (비회원 가능, 조회수 증가)
+    - list: 콘텐츠 목록 조회 (로그인 회원만)
+    - retrieve: 콘텐츠 상세 조회 (로그인 회원만, 조회수 증가)
     - create: 콘텐츠 생성 (관리자만)
     - update: 콘텐츠 수정 (관리자만)
     - destroy: 콘텐츠 삭제 (관리자만, Soft Delete)
     """
 
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
     lookup_field = 'slug'
 
     def get_queryset(self):
@@ -71,7 +71,7 @@ class ContentViewSet(viewsets.ModelViewSet):
                 Q(status=Content.Status.PUBLISHED) | Q(author=user)
             )
         else:
-            # 일반 사용자/비회원은 공개 콘텐츠만
+            # 일반 회원은 공개 콘텐츠만
             queryset = queryset.filter(status=Content.Status.PUBLISHED)
 
         # 검색

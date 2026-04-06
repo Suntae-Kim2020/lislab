@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Database, Search, Download, Network, BookOpen, ExternalLink } from 'lucide-react';
+import { LoginRequired } from '@/components/features/LoginRequired';
 
 const OAI_VERBS = [
   {
@@ -85,6 +86,14 @@ const METADATA_FORMATS = [
 ];
 
 export default function OAIPMHPage() {
+  return (
+    <LoginRequired>
+      <OAIPMHPageInner />
+    </LoginRequired>
+  );
+}
+
+function OAIPMHPageInner() {
   const [baseUrl, setBaseUrl] = useState('http://export.arxiv.org/oai2');
   const [selectedVerb, setSelectedVerb] = useState('Identify');
   const [identifier, setIdentifier] = useState('');

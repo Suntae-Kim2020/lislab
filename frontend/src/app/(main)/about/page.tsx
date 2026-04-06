@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { BookOpen, Heart, GraduationCap, Users, Cloud, DollarSign, FileText, Mail } from 'lucide-react';
+import { BookOpen, GraduationCap, Users, Cloud, FileText, Mail, Bot, PenLine, CheckCircle, Lightbulb, Lock } from 'lucide-react';
 
 export default function AboutPage() {
   return (
@@ -53,6 +53,39 @@ export default function AboutPage() {
               전통적인 도서관학부터 최신 정보기술까지, 문헌정보학의 모든 분야를 아우르는
               양질의 교육 자료를 제공합니다.
             </p>
+
+            <div className="bg-primary/5 border border-primary/20 p-5 rounded-lg space-y-4">
+              <h4 className="font-semibold flex items-center gap-2">
+                <Bot className="h-5 w-5 text-primary" />
+                AI 활용 콘텐츠 제작 프로세스
+              </h4>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                LIS Lab의 교육 콘텐츠는 다음과 같은 과정을 거쳐 제작됩니다.
+              </p>
+              <div className="grid gap-3 sm:grid-cols-3">
+                <div className="flex items-start gap-3 bg-background p-3 rounded-lg border">
+                  <Lightbulb className="h-5 w-5 text-amber-500 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-semibold">1. 기획</p>
+                    <p className="text-xs text-muted-foreground mt-1">학생들에게 실질적으로 도움이 되는 주제를 선정하고 학습 목표를 설계합니다.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 bg-background p-3 rounded-lg border">
+                  <Bot className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-semibold">2. AI 생성</p>
+                    <p className="text-xs text-muted-foreground mt-1">AI를 활용하여 기획된 구조에 맞는 기본 콘텐츠를 생성합니다.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 bg-background p-3 rounded-lg border">
+                  <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-semibold">3. 검수 및 보강</p>
+                    <p className="text-xs text-muted-foreground mt-1">전문가가 내용의 정확성을 검증하고, 부족한 부분을 보강하여 완성합니다.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <div className="bg-muted p-4 rounded-lg space-y-3">
               <h4 className="font-semibold flex items-center gap-2">
@@ -136,6 +169,23 @@ export default function AboutPage() {
               <Separator />
 
               <div className="flex items-start gap-3">
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 flex-shrink-0 mt-1">
+                  <Lock className="h-4 w-4" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-blue-700 dark:text-blue-300 mb-1">
+                    회원 전용 콘텐츠 열람
+                  </h4>
+                  <p className="text-sm text-muted-foreground">
+                    LIS Lab의 모든 교육 콘텐츠는 <strong className="text-foreground">회원가입 후 로그인한 회원에게 무료로 공개</strong>됩니다.
+                    간단한 회원가입만으로 누구나 제한 없이 전체 콘텐츠를 이용하실 수 있습니다.
+                  </p>
+                </div>
+              </div>
+
+              <Separator />
+
+              <div className="flex items-start gap-3">
                 <div className="flex items-center justify-center w-8 h-8 rounded-full bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300 flex-shrink-0 mt-1">
                   ✕
                 </div>
@@ -199,85 +249,6 @@ export default function AboutPage() {
                   창출하고자 합니다.
                 </p>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* 후원 안내 */}
-        <Card className="mb-8">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Heart className="h-6 w-6 text-primary" />
-              <CardTitle className="text-2xl">후원 안내</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="leading-relaxed">
-              LIS Lab은 문헌정보학 교육 발전을 위해 기업 및 개인의 후원을 받고 있습니다.
-              여러분의 소중한 후원은 더 나은 교육 환경을 만드는 데 큰 힘이 됩니다.
-            </p>
-
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950 p-6 rounded-lg space-y-4">
-              <h4 className="font-semibold text-lg flex items-center gap-2">
-                <DollarSign className="h-5 w-5" />
-                후원금 사용 내역
-              </h4>
-
-              <div className="space-y-3">
-                <div className="flex items-start gap-3">
-                  <span className="text-2xl">1️⃣</span>
-                  <div>
-                    <h5 className="font-semibold">서비스 운영비</h5>
-                    <p className="text-sm text-muted-foreground">
-                      클라우드 인프라, 도메인, SSL 인증서 등 서비스 운영에 필요한 기술적 비용
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <span className="text-2xl">2️⃣</span>
-                  <div>
-                    <h5 className="font-semibold">콘텐츠 제작비</h5>
-                    <p className="text-sm text-muted-foreground">
-                      양질의 교육 콘텐츠 제작, 실습 환경 구축, 자료 수집 및 정리
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <span className="text-2xl">3️⃣</span>
-                  <div>
-                    <h5 className="font-semibold">교육 활동 지원</h5>
-                    <p className="text-sm text-muted-foreground">
-                      오프라인 워크샵, 세미나, 특강 등 문헌정보학 분야 교육 행사 개최 및 지원
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <span className="text-2xl">4️⃣</span>
-                  <div>
-                    <h5 className="font-semibold">학습자 지원</h5>
-                    <p className="text-sm text-muted-foreground">
-                      학습 자료 제공, 실습 도구 지원, 학습 커뮤니티 운영
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <Separator />
-
-            <div className="bg-green-50 dark:bg-green-950 p-4 rounded-lg">
-              <h4 className="font-semibold mb-2 flex items-center gap-2">
-                <FileText className="h-4 w-4" />
-                투명한 재정 운영
-              </h4>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                LIS Lab은 <strong className="text-foreground">모든 후원금과 지출 내역을 투명하게 공개</strong>합니다.
-                후원금 수령 현황과 사용 내역을 정기적으로 업데이트하여 후원자 여러분께
-                신뢰할 수 있는 운영 실태를 보고드릴 예정입니다.
-              </p>
             </div>
           </CardContent>
         </Card>

@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ContentCard } from '@/components/features/ContentCard';
+import { LoginRequired } from '@/components/features/LoginRequired';
 import { useContents, useCategories, useToggleFavorite } from '@/lib/hooks/useContents';
 import { useAuthStore } from '@/store/authStore';
 import { Search, FolderOpen } from 'lucide-react';
@@ -241,6 +242,7 @@ function ContentsPageContent() {
 
 export default function ContentsPage() {
   return (
+    <LoginRequired>
     <Suspense fallback={
       <div className="container mx-auto py-8 px-4">
         <div className="flex flex-col gap-8">
@@ -262,5 +264,6 @@ export default function ContentsPage() {
     }>
       <ContentsPageContent />
     </Suspense>
+    </LoginRequired>
   );
 }

@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Code, BookOpen, Network, Lightbulb, CheckCircle2, ArrowRight, PlayCircle, Sparkles } from 'lucide-react';
+import { LoginRequired } from '@/components/features/LoginRequired';
 
 const LEARNING_STEPS = [
   {
@@ -362,6 +363,14 @@ ex:book1 dc:title "RDF 입문서" ;
 ];
 
 export default function RDFLearningPage() {
+  return (
+    <LoginRequired>
+      <RDFLearningPageInner />
+    </LoginRequired>
+  );
+}
+
+function RDFLearningPageInner() {
   const [currentStep, setCurrentStep] = useState(0);
   const [userCode, setUserCode] = useState('');
   const [showHint, setShowHint] = useState(false);

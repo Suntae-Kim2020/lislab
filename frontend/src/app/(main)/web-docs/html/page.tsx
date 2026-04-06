@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { LoginRequired } from '@/components/features/LoginRequired';
 import { Code, Eye, BookOpen } from 'lucide-react';
 
 const DEFAULT_HTML = `<!DOCTYPE html>
@@ -170,6 +171,14 @@ const HTML_EXAMPLES = [
 ];
 
 export default function HTMLLearningPage() {
+  return (
+    <LoginRequired>
+      <HTMLLearningPageInner />
+    </LoginRequired>
+  );
+}
+
+function HTMLLearningPageInner() {
   const [htmlCode, setHtmlCode] = useState(DEFAULT_HTML);
 
   const handlePreview = () => {

@@ -41,6 +41,12 @@ db.sqlite3-journal
 .env.production
 *.env
 
+# Secrets / credentials
+client_secret_*.json
+*-env.yaml
+cloud-run-env.yaml
+frontend-env.yaml
+
 # Database
 *.sql
 *.dump
