@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -16,10 +16,25 @@ interface LoginRequiredProps {
 /**
  * 로그인한 회원에게만 children을 렌더링한다.
  * 비회원에게는 로그인/회원가입 안내 화면을 보여준다.
+ * 로그인 후 원래 보려던 페이지로 되돌아가도록 next 경로를 보존한다.
  */
 export function LoginRequired({ children, message }: LoginRequiredProps) {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { isAuthenticated, isLoading } = useAuthStore();
+
+  const nextPath = (() => {
+    const qs = searchParams.toString();
+    return qs ? `${pathname}?${qs}` : pathname;
+  })();
+
+  const rememberAndGo = (target: '/login' | '/register') => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('post_login_redirect', nextPath);
+    }
+    router.push(`${target}?next=${encodeURIComponent(nextPath)}`);
+  };
 
   if (isLoading) {
     return (
@@ -50,10 +65,10 @@ export function LoginRequired({ children, message }: LoginRequiredProps) {
                   'LIS Lab의 모든 교육 콘텐츠는 회원가입 후 로그인하신 회원에게 무료로 공개됩니다.'}
               </p>
               <div className="flex flex-col sm:flex-row gap-2 justify-center pt-2">
-                <Button onClick={() => router.push('/login')}>
+                <Button onClick={() => rememberAndGo('/login')}>
                   로그인하기
                 </Button>
-                <Button variant="outline" onClick={() => router.push('/register')}>
+                <Button variant="outline" onClick={() => rememberAndGo('/register')}>
                   회원가입
                 </Button>
               </div>

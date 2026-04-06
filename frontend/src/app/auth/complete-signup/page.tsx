@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { completeSocialSignup } from '@/lib/api/social-auth';
 import { useAuthStore } from '@/store/authStore';
+import { consumePostLoginRedirect } from '@/lib/hooks/useAuth';
 
 function CompleteSocialSignupForm() {
   const router = useRouter();
@@ -83,8 +84,8 @@ function CompleteSocialSignupForm() {
         });
       }
 
-      // 완료 후 메인 페이지로 이동
-      router.push('/');
+      // 완료 후 원래 가려던 페이지 또는 메인으로 이동
+      router.push(consumePostLoginRedirect());
     } catch (err: any) {
       console.error('Complete signup error:', err);
       setError(err.response?.data?.error || '정보 저장에 실패했습니다.');

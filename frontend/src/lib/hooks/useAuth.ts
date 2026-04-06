@@ -6,6 +6,20 @@ import { useAuthStore } from '@/store/authStore';
 import * as authApi from '@/lib/api/auth';
 import { useEffect } from 'react';
 
+// 로그인 후 돌아갈 경로 계산 (sessionStorage 우선, 그 다음 ?next=)
+export function consumePostLoginRedirect(): string {
+  if (typeof window === 'undefined') return '/';
+  const stored = sessionStorage.getItem('post_login_redirect');
+  if (stored) {
+    sessionStorage.removeItem('post_login_redirect');
+    return stored;
+  }
+  const params = new URLSearchParams(window.location.search);
+  const next = params.get('next');
+  if (next && next.startsWith('/')) return next;
+  return '/';
+}
+
 // 로그인 훅
 export function useLogin() {
   const router = useRouter();
@@ -26,7 +40,7 @@ export function useLogin() {
       authApi.getCurrentUser().then((user) => {
         setUser(user);
         queryClient.invalidateQueries({ queryKey: ['currentUser'] });
-        router.push('/');
+        router.push(consumePostLoginRedirect());
       });
     },
   });

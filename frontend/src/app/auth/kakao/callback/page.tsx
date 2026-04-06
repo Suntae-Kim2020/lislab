@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { kakaoLogin } from '@/lib/api/social-auth';
 import { useAuthStore } from '@/store/authStore';
+import { consumePostLoginRedirect } from '@/lib/hooks/useAuth';
 import { Loader2 } from 'lucide-react';
 
 function KakaoCallbackContent() {
@@ -50,8 +51,8 @@ function KakaoCallbackContent() {
         if (response.is_new_user) {
           router.push(`/auth/complete-signup?user_id=${response.user.id}`);
         } else {
-          // 기존 사용자는 메인 페이지로 이동
-          router.push('/');
+          // 기존 사용자는 원래 가려던 페이지 또는 메인으로 이동
+          router.push(consumePostLoginRedirect());
         }
       } catch (err: any) {
         console.error('Kakao login error:', err);
