@@ -181,6 +181,7 @@ function ContentList({ contents, currentPath, isSubCategory = false }: {
           <Link
             key={content.id}
             href={`/contents/${content.slug}`}
+            data-active={isActive ? 'true' : undefined}
             className={`flex items-start ${mlClass} px-2 py-1.5 text-xs rounded-md transition-colors ${
               isActive
                 ? 'bg-primary text-primary-foreground'

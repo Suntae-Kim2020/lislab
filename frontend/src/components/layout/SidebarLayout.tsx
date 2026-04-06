@@ -34,36 +34,58 @@ export function SidebarLayout({ children }: { children: React.ReactNode }) {
     return () => container.removeEventListener('scroll', handleScroll);
   }, [isOpen]);
 
-  // 스크롤 위치 복원 - DOM 변경 감지 후 복원
+  // 스크롤 위치 복원 / 활성 항목으로 포커싱
+  // - 콘텐츠 상세 경로(/contents/xxx)일 때는 활성 항목이 나타나면 해당 위치로 스크롤
+  // - 그 외에는 기존 저장된 스크롤 위치를 복원
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container || !isOpen) return;
 
+    const isContentDetail = /^\/contents\/[^/]+/.test(pathname);
+
+    if (isContentDetail) {
+      // 활성 항목이 렌더링되는 즉시 중앙으로 스크롤
+      let scrolled = false;
+      const scrollToActive = () => {
+        if (scrolled) return;
+        const active = container.querySelector<HTMLElement>('[data-active="true"]');
+        if (active) {
+          scrolled = true;
+          active.scrollIntoView({ block: 'center', behavior: 'auto' });
+          // 저장된 스크롤 위치를 활성 항목 기준으로 업데이트
+          sessionStorage.setItem(SCROLL_POSITION_KEY, String(container.scrollTop));
+        }
+      };
+
+      // 초기 시도
+      scrollToActive();
+
+      const observer = new MutationObserver(scrollToActive);
+      observer.observe(container, { childList: true, subtree: true });
+
+      const timeout = setTimeout(() => observer.disconnect(), 3000);
+      return () => {
+        observer.disconnect();
+        clearTimeout(timeout);
+      };
+    }
+
+    // 콘텐츠 상세가 아닐 때는 저장된 스크롤 위치 복원
     const savedPosition = sessionStorage.getItem(SCROLL_POSITION_KEY);
     if (!savedPosition) return;
 
     const position = parseInt(savedPosition, 10);
 
-    // MutationObserver로 DOM 변경 감지 후 스크롤 복원
     const observer = new MutationObserver(() => {
-      // DOM이 변경될 때마다 스크롤 위치 복원 시도
       if (container.scrollHeight > position) {
         container.scrollTop = position;
       }
     });
 
-    observer.observe(container, {
-      childList: true,
-      subtree: true,
-    });
-
-    // 초기 복원 시도
+    observer.observe(container, { childList: true, subtree: true });
     container.scrollTop = position;
 
-    // 3초 후 observer 해제
-    const timeout = setTimeout(() => {
-      observer.disconnect();
-    }, 3000);
+    const timeout = setTimeout(() => observer.disconnect(), 3000);
 
     return () => {
       observer.disconnect();
