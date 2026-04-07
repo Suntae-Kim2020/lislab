@@ -92,14 +92,6 @@ function LoginForm() {
               />
             </div>
 
-            <div className="flex items-center justify-between text-sm">
-              <Link
-                href="/forgot-password"
-                className="text-primary hover:underline"
-              >
-                비밀번호를 잊으셨나요?
-              </Link>
-            </div>
           </CardContent>
 
           <CardFooter className="flex flex-col space-y-4">
