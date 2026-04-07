@@ -11,27 +11,15 @@ export const apiClient = axios.create({
   timeout: 10000,
 });
 
-// 요청 인터셉터 - 토큰 추가
+// 요청 인터셉터 - 토큰이 있으면 항상 첨부
+// (공개 엔드포인트도 토큰이 있으면 그대로 사용; 백엔드가 무시하거나
+//  인증된 사용자 정보를 활용)
 apiClient.interceptors.request.use(
   (config) => {
-    // 공개 엔드포인트 판별 (인증 불필요한 엔드포인트)
-    const isPublicEndpoint =
-      (config.url?.includes('/contents/contents/') && !config.url?.includes('/favorite/')) ||
-      config.url?.includes('/contents/categories/') ||
-      config.url?.includes('/contents/tags/') ||
-      config.url?.includes('/contents/menus/') ||
-      config.url?.includes('/accounts/team-members/');
-
-    // 공개 엔드포인트가 아니거나 favorite 엔드포인트인 경우 토큰 추가
-    if (!isPublicEndpoint) {
-      // 로컬 스토리지에서 토큰 가져오기
-      const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
-
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
+    const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
-
     return config;
   },
   (error) => {
