@@ -180,7 +180,7 @@ ${resizeScript}
         ref={iframeRef}
         srcDoc={fullHtml}
         style={{ width: '100%', border: 'none', minHeight: '200px', overflow: 'hidden' }}
-        sandbox="allow-scripts allow-same-origin"
+        sandbox="allow-scripts allow-popups"
         scrolling="no"
         title="content"
       />
