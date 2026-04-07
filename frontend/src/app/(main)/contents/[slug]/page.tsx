@@ -180,7 +180,8 @@ ${resizeScript}
         ref={iframeRef}
         srcDoc={fullHtml}
         style={{ width: '100%', border: 'none', minHeight: '200px', overflow: 'hidden' }}
-        sandbox="allow-scripts allow-popups"
+        // 신뢰 가능한 자체 콘텐츠라 allow-same-origin 유지 (Chrome의 sandbox 경고는 의도된 트레이드오프)
+        sandbox="allow-scripts allow-same-origin allow-popups"
         scrolling="no"
         title="content"
       />
