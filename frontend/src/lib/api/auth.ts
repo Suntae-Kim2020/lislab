@@ -60,6 +60,28 @@ export const getCurrentUser = async (): Promise<User> => {
   return response.data;
 };
 
+// 비밀번호 재설정 요청 (이메일 발송)
+export const requestPasswordReset = async (email: string): Promise<{ detail: string }> => {
+  const response = await apiClient.post<{ detail: string }>(
+    '/accounts/auth/password-reset/request/',
+    { email }
+  );
+  return response.data;
+};
+
+// 비밀번호 재설정 확인 (토큰 + 새 비밀번호)
+export const confirmPasswordReset = async (data: {
+  token: string;
+  new_password: string;
+  new_password_confirm: string;
+}): Promise<{ detail: string }> => {
+  const response = await apiClient.post<{ detail: string }>(
+    '/accounts/auth/password-reset/confirm/',
+    data
+  );
+  return response.data;
+};
+
 // 비밀번호 변경
 export const changePassword = async (data: {
   old_password: string;

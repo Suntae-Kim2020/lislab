@@ -1,12 +1,19 @@
+import secrets
+from datetime import timedelta
 from rest_framework import viewsets, status
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import update_session_auth_hash, login
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
+from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden
+from django.utils import timezone
 from django.views import View
 from rest_framework_simplejwt.tokens import AccessToken
-from .models import User, MailingPreference, TeamMember
+from .models import User, MailingPreference, TeamMember, PasswordResetToken
 from .serializers import (
     UserSerializer,
     UserRegistrationSerializer,
@@ -172,6 +179,115 @@ class MailingPreferenceViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def password_reset_request(request):
+    """비밀번호 재설정 요청 - 이메일로 재설정 링크 발송
+
+    보안: 이메일이 존재하지 않더라도 동일한 응답을 반환하여 사용자 열거 방지.
+    """
+    email = (request.data.get('email') or '').strip().lower()
+    if not email:
+        return Response(
+            {"email": "이메일을 입력해주세요."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    user = User.objects.filter(email__iexact=email, is_active=True).first()
+    if user:
+        # 기존 미사용 토큰 무효화
+        PasswordResetToken.objects.filter(user=user, is_used=False).update(is_used=True)
+
+        token_str = secrets.token_urlsafe(48)
+        PasswordResetToken.objects.create(
+            user=user,
+            token=token_str,
+            expires_at=timezone.now() + timedelta(hours=1),
+        )
+
+        site_url = getattr(settings, 'SITE_URL', 'http://localhost:3000').rstrip('/')
+        reset_url = f"{site_url}/reset-password/{token_str}"
+
+        subject = '[LIS Lab] 비밀번호 재설정 안내'
+        message = (
+            f"안녕하세요, {user.first_name or user.username}님.\n\n"
+            f"LIS Lab 비밀번호 재설정을 요청하셨습니다.\n"
+            f"아래 링크를 클릭하여 새 비밀번호를 설정해주세요. (1시간 동안 유효)\n\n"
+            f"{reset_url}\n\n"
+            f"본인이 요청하지 않으셨다면 이 메일을 무시하셔도 됩니다.\n"
+            f"계정 보안을 위해 비밀번호를 정기적으로 변경해주세요.\n\n"
+            f"— LIS Lab"
+        )
+        try:
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[user.email],
+                fail_silently=False,
+            )
+        except Exception as exc:
+            # 이메일 발송 실패 시 토큰 정리하고 500 반환
+            PasswordResetToken.objects.filter(user=user, token=token_str).delete()
+            return Response(
+                {"detail": "이메일 발송에 실패했습니다. 잠시 후 다시 시도해주세요."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+    return Response(
+        {"detail": "입력하신 이메일이 등록되어 있다면 재설정 링크를 발송했습니다."},
+        status=status.HTTP_200_OK,
+    )
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def password_reset_confirm(request):
+    """비밀번호 재설정 확인 - 토큰 검증 후 새 비밀번호로 변경"""
+    token_str = (request.data.get('token') or '').strip()
+    new_password = request.data.get('new_password') or ''
+    new_password_confirm = request.data.get('new_password_confirm') or ''
+
+    if not token_str or not new_password or not new_password_confirm:
+        return Response(
+            {"detail": "필수 값이 누락되었습니다."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    if new_password != new_password_confirm:
+        return Response(
+            {"new_password": "비밀번호가 일치하지 않습니다."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    token = PasswordResetToken.objects.filter(token=token_str).first()
+    if not token or token.is_used or token.expires_at < timezone.now():
+        return Response(
+            {"detail": "유효하지 않거나 만료된 토큰입니다."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    try:
+        validate_password(new_password, user=token.user)
+    except ValidationError as exc:
+        return Response(
+            {"new_password": list(exc.messages)},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    user = token.user
+    user.set_password(new_password)
+    user.save()
+
+    token.is_used = True
+    token.save()
+
+    return Response(
+        {"detail": "비밀번호가 재설정되었습니다. 새 비밀번호로 로그인해주세요."},
+        status=status.HTTP_200_OK,
+    )
 
 
 class AdminLoginView(View):

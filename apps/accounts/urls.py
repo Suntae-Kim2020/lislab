@@ -1,6 +1,12 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import UserViewSet, MailingPreferenceViewSet, TeamMemberViewSet
+from .views import (
+    UserViewSet,
+    MailingPreferenceViewSet,
+    TeamMemberViewSet,
+    password_reset_request,
+    password_reset_confirm,
+)
 from .statistics import admin_statistics
 from .social_auth import kakao_login, complete_social_signup, kakao_message_connect, naver_login, google_login
 
@@ -17,4 +23,6 @@ urlpatterns = [
     path('auth/kakao/message/connect/', kakao_message_connect, name='kakao-message-connect'),
     path('auth/naver/callback/', naver_login, name='naver-login'),
     path('auth/google/callback/', google_login, name='google-login'),
+    path('auth/password-reset/request/', password_reset_request, name='password-reset-request'),
+    path('auth/password-reset/confirm/', password_reset_confirm, name='password-reset-confirm'),
 ]
