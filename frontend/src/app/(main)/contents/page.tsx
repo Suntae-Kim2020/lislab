@@ -16,17 +16,23 @@ function ContentsPageContent() {
   const { isAuthenticated } = useAuthStore();
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get('category');
+  const searchParam = searchParams.get('search');
 
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState(searchParam || '');
   const [category, setCategory] = useState<string>(categoryParam || 'all');
   const [difficulty, setDifficulty] = useState<string>('all');
   const [page, setPage] = useState(1);
 
-  // URL 파라미터가 변경될 때 카테고리 업데이트
+  // URL 파라미터가 변경될 때 상태 업데이트
   useEffect(() => {
     setCategory(categoryParam || 'all');
-    setPage(1); // 카테고리 변경 시 첫 페이지로
+    setPage(1);
   }, [categoryParam]);
+
+  useEffect(() => {
+    setSearch(searchParam || '');
+    setPage(1);
+  }, [searchParam]);
 
   // 필터 변경 시 첫 페이지로 리셋
   useEffect(() => {
