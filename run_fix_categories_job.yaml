@@ -1,21 +1,46 @@
 apiVersion: run.googleapis.com/v1
 kind: Job
 metadata:
-  name: fix-categories
+  name: fix-categories-v2
 spec:
   template:
+    metadata:
+      annotations:
+        run.googleapis.com/cloudsql-instances: hybrid-flame-323510:asia-northeast3:lislab-db
+        run.googleapis.com/execution-environment: gen2
     spec:
+      taskCount: 1
       template:
         spec:
           containers:
           - image: gcr.io/hybrid-flame-323510/lislab-backend:latest
-            args:
+            command:
             - python
+            args:
             - manage.py
             - fix_categories
             env:
-            - name: DATABASE_URL
+            - name: CLOUD_SQL_CONNECTION_NAME
+              value: hybrid-flame-323510:asia-northeast3:lislab-db
+            - name: DB_NAME
+              value: lis_db
+            - name: DB_USER
+              value: postgres
+            - name: DEBUG
+              value: 'False'
+            - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: latest
-                  name: DATABASE_URL
+                  name: db-password
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: latest
+                  name: django-secret-key
+            resources:
+              limits:
+                cpu: 1000m
+                memory: 512Mi
+          maxRetries: 0
+          timeoutSeconds: '600'
