@@ -24,6 +24,59 @@ const difficultyLabels = {
   ADVANCED: '고급',
 };
 
+// 웹폰트/이미지 지연 로딩 및 vh 단위 콘텐츠에 대응하기 위한 강화된 높이 측정 스크립트.
+// 원본 HTML이 이미 iframe-resize postMessage를 쓰고 있으면 주입을 생략한다.
+//
+// 주의: ResizeObserver(document.body)와 window.resize 리스너는 의도적으로 쓰지 않는다.
+// 콘텐츠에 min-height:100vh 같은 vh 단위가 있으면 iframe 리사이즈 → body 크기 변화 →
+// 재측정 → 더 큰 높이 전송의 피드백 루프가 발생해 iframe이 무한히 커진다.
+// 대신 MutationObserver(실제 DOM 변경), document.fonts.ready(웹폰트),
+// 이미지/iframe/video 요소의 load 이벤트(위임), 스케줄된 setTimeout 재측정으로 대응한다.
+const HEIGHT_MEASURE_SCRIPT = `<script>
+(function(){
+  if(window.parent===window) return;
+  var lastHeight=0;
+  var lastViewport=window.innerHeight;
+  var lastViewportChangeAt=0;
+  function sendHeight(){
+    var vp=window.innerHeight;
+    if(vp!==lastViewport){lastViewport=vp;lastViewportChangeAt=Date.now();}
+    var h=Math.max(
+      document.body.scrollHeight,
+      document.documentElement.scrollHeight,
+      document.body.offsetHeight,
+      document.documentElement.offsetHeight
+    );
+    if(h===lastHeight||h<=0) return;
+    // 뷰포트가 방금 바뀐 직후의 성장은 vh 단위 피드백 루프일 가능성이 높아 스킵
+    if(h>lastHeight&&lastHeight>0&&(Date.now()-lastViewportChangeAt)<400) return;
+    lastHeight=h;
+    window.parent.postMessage({type:'iframe-resize',height:h},'*');
+  }
+  if(document.readyState==='complete'){sendHeight();}
+  else{window.addEventListener('load',sendHeight);}
+  var mo=new MutationObserver(sendHeight);
+  mo.observe(document.body,{childList:true,subtree:true,characterData:true});
+  if(document.fonts&&document.fonts.ready){document.fonts.ready.then(sendHeight);}
+  document.addEventListener('load',function(e){
+    var t=e.target;
+    if(t&&(t.tagName==='IMG'||t.tagName==='IFRAME'||t.tagName==='VIDEO')) sendHeight();
+  },true);
+  [100,300,800,2000].forEach(function(d){setTimeout(sendHeight,d);});
+})();
+<\/script>`;
+
+const CLICK_HANDLER_SCRIPT = `<script>
+document.addEventListener('click',function(e){
+  var a=e.target.closest&&e.target.closest('a');
+  if(a){
+    var href=a.getAttribute('href');
+    if(href&&href.startsWith('#')){e.preventDefault();var t=document.getElementById(href.substring(1));if(t)t.scrollIntoView({behavior:'smooth',block:'start'});}
+    else if(href&&!href.startsWith('#')&&!href.startsWith('javascript')){e.preventDefault();window.open(href,'_blank');}
+  }
+});
+<\/script>`;
+
 // 텍스트를 줄바꿈과 블릿포인트로 렌더링
 function FormattedText({ text }: { text: string }) {
   const lines = text.split('\n').filter(line => line.trim());
@@ -91,29 +144,19 @@ function ContentDetailPageInner() {
   const IsolatedContent = ({ html }: { html: string }) => {
     const iframeRef = useRef<HTMLIFrameElement>(null);
 
-    const resizeScript = `<script>
-function notifyHeight(){window.parent.postMessage({type:'iframe-resize',height:document.documentElement.scrollHeight},'*')}
-new ResizeObserver(notifyHeight).observe(document.body);
-window.addEventListener('load',notifyHeight);
-notifyHeight();
-document.addEventListener('click',function(e){
-  var a=e.target.closest('a');
-  if(a){
-    var href=a.getAttribute('href');
-    if(href&&href.startsWith('#')){e.preventDefault();var t=document.getElementById(href.substring(1));if(t)t.scrollIntoView({behavior:'smooth',block:'start'});}
-    else if(href&&!href.startsWith('#')&&!href.startsWith('javascript')){e.preventDefault();window.open(href,'_blank');}
-  }
-});
-<\/script>`;
-
     // Build a proper HTML document from the content
     const fullHtml = useMemo(() => {
-      // If content already has full document structure, inject resize script
+      // 업로더가 자체 iframe-resize 코드를 넣었으면 높이 측정 스크립트는 생략해 충돌 방지.
+      const injectedScripts =
+        (html.includes('iframe-resize') ? '' : HEIGHT_MEASURE_SCRIPT) +
+        CLICK_HANDLER_SCRIPT;
+
+      // If content already has full document structure, inject scripts before </body>
       if (html.includes('<!DOCTYPE') || html.includes('<html')) {
         if (html.includes('</body>')) {
-          return html.replace(/<\/body>/i, resizeScript + '</body>');
+          return html.replace(/<\/body>/i, injectedScripts + '</body>');
         }
-        return html + resizeScript;
+        return html + injectedScripts;
       }
 
       // Parse head-level elements (meta, link, style, title) vs body content
@@ -160,7 +203,7 @@ ${headTags.join('\n')}
 </head>
 <body>
 ${bodyContent}
-${resizeScript}
+${injectedScripts}
 </body>
 </html>`;
     }, [html]);
