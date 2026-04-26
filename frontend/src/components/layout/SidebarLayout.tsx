@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ContentSidebar } from './ContentSidebar';
+import { useIsMobile } from '@/lib/hooks/useIsMobile';
 
 const SCROLL_POSITION_KEY = 'sidebar-scroll-position';
 
@@ -12,14 +13,26 @@ export function SidebarLayout({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(true);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+  const isMobile = useIsMobile();
 
-  // localStorage에서 사이드바 상태 로드
+  // 모바일은 기본 닫힘, 데스크톱은 localStorage 우선 (없으면 기본 열림)
   useEffect(() => {
+    if (isMobile) {
+      setIsOpen(false);
+      return;
+    }
     const saved = localStorage.getItem('sidebar-open');
     if (saved !== null) {
       setIsOpen(saved === 'true');
+    } else {
+      setIsOpen(true);
     }
-  }, []);
+  }, [isMobile]);
+
+  // 모바일에서 라우트가 바뀌면 사이드바 자동 닫기
+  useEffect(() => {
+    if (isMobile) setIsOpen(false);
+  }, [pathname, isMobile]);
 
   // 스크롤 위치 저장
   useEffect(() => {
@@ -93,11 +106,13 @@ export function SidebarLayout({ children }: { children: React.ReactNode }) {
     };
   }, [pathname, isOpen]);
 
-  // 사이드바 상태 변경 시 localStorage에 저장
+  // 사이드바 상태 변경 시 localStorage에 저장 (데스크톱 환경설정만 영속화)
   const toggleSidebar = () => {
     const newState = !isOpen;
     setIsOpen(newState);
-    localStorage.setItem('sidebar-open', String(newState));
+    if (!isMobile) {
+      localStorage.setItem('sidebar-open', String(newState));
+    }
   };
 
   return (
