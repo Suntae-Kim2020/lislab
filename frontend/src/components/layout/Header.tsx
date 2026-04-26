@@ -1,6 +1,8 @@
 'use client';
 
 import Link from 'next/link';
+import { useState } from 'react';
+import { Menu, X, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -15,6 +17,60 @@ import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
 import { useMenus } from '@/lib/hooks/useContents';
 import type { MenuItem, MenuChild } from '@/lib/api/contents';
+
+function MobileNavItem({ item, onClose }: { item: MenuItem; onClose: () => void }) {
+  const [expanded, setExpanded] = useState(false);
+  const hasChildren = item.children && item.children.length > 0;
+
+  if (!hasChildren) {
+    return (
+      <Link
+        href={item.url}
+        onClick={onClose}
+        className="block px-3 py-3 text-sm font-medium rounded hover:bg-muted"
+        {...(item.open_in_new_tab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+      >
+        {item.name}
+      </Link>
+    );
+  }
+
+  return (
+    <div>
+      <button
+        onClick={() => setExpanded((v) => !v)}
+        className="flex items-center justify-between w-full px-3 py-3 text-sm font-medium rounded hover:bg-muted"
+      >
+        <span>{item.name}</span>
+        <ChevronDown className={`h-4 w-4 transition-transform ${expanded ? 'rotate-180' : ''}`} />
+      </button>
+      {expanded && (
+        <div className="pl-3 mt-1 space-y-1 border-l ml-3">
+          {item.url && item.url !== '#' && (
+            <Link
+              href={item.url}
+              onClick={onClose}
+              className="block px-3 py-2 text-sm text-muted-foreground rounded hover:bg-muted"
+            >
+              전체 보기
+            </Link>
+          )}
+          {item.children.map((child: MenuChild) => (
+            <Link
+              key={child.id}
+              href={child.url}
+              onClick={onClose}
+              className="block px-3 py-2 text-sm text-muted-foreground rounded hover:bg-muted"
+              {...(child.open_in_new_tab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            >
+              {child.name}
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function NavMenuItem({ item }: { item: MenuItem }) {
   const hasChildren = item.children && item.children.length > 0;
@@ -64,6 +120,7 @@ export function Header() {
   const { user, isAuthenticated, logout } = useAuthStore();
   const router = useRouter();
   const { data: menus } = useMenus();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -73,15 +130,15 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center">
-        <div className="flex flex-1 items-center justify-between">
+        <div className="flex flex-1 items-center justify-between gap-2">
           {/* Logo */}
-          <Link href="/" className="flex flex-col">
-            <span className="text-2xl font-bold">LIS Lab</span>
-            <span className="text-xs text-muted-foreground">Library & Information Science Learning Platform</span>
+          <Link href="/" className="flex flex-col min-w-0">
+            <span className="text-xl md:text-2xl font-bold whitespace-nowrap">LIS Lab</span>
+            <span className="hidden md:block text-xs text-muted-foreground">Library & Information Science Learning Platform</span>
           </Link>
 
-          {/* Navigation */}
-          <nav className="flex items-center">
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center">
             {menus?.map((item, index) => (
               <div key={item.id} className="flex items-center">
                 <NavMenuItem item={item} />
@@ -92,8 +149,19 @@ export function Header() {
             ))}
           </nav>
 
-          {/* User Menu */}
-          <div className="flex items-center space-x-4">
+          {/* Right side */}
+          <div className="flex items-center space-x-2 md:space-x-4">
+            {/* Mobile hamburger */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden"
+              onClick={() => setMobileMenuOpen(true)}
+              aria-label="메뉴 열기"
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+
             {isAuthenticated && user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -152,7 +220,7 @@ export function Header() {
                 <Button variant="ghost" asChild>
                   <Link href="/login">로그인</Link>
                 </Button>
-                <Button asChild>
+                <Button asChild className="hidden sm:inline-flex">
                   <Link href="/register">회원가입</Link>
                 </Button>
               </div>
@@ -160,6 +228,43 @@ export function Header() {
           </div>
         </div>
       </div>
+
+      {/* Mobile drawer */}
+      {mobileMenuOpen && (
+        <>
+          <div
+            className="fixed inset-0 z-40 bg-black/50 md:hidden"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+          <aside className="fixed top-0 right-0 z-50 h-full w-72 max-w-[85vw] bg-background border-l shadow-lg md:hidden overflow-y-auto">
+            <div className="flex items-center justify-between p-4 border-b">
+              <span className="font-semibold">메뉴</span>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setMobileMenuOpen(false)}
+                aria-label="메뉴 닫기"
+              >
+                <X className="h-5 w-5" />
+              </Button>
+            </div>
+            <nav className="p-2">
+              {menus?.map((item) => (
+                <MobileNavItem key={item.id} item={item} onClose={() => setMobileMenuOpen(false)} />
+              ))}
+              {!isAuthenticated && (
+                <Link
+                  href="/register"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-3 py-3 mt-2 text-sm font-medium rounded bg-primary text-primary-foreground text-center sm:hidden"
+                >
+                  회원가입
+                </Link>
+              )}
+            </nav>
+          </aside>
+        </>
+      )}
     </header>
   );
 }
