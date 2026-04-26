@@ -14,9 +14,10 @@ import { TagSearchModal } from '@/components/content/TagSearchModal';
 import { QRCodeButton } from '@/components/content/QRCodeButton';
 import { PDFSaveButton } from '@/components/content/PDFSaveButton';
 import { ShareButton } from '@/components/content/ShareButton';
-import { Heart, Clock, Eye, Calendar, User, GraduationCap, Download } from 'lucide-react';
+import { Heart, Clock, Eye, Calendar, User, GraduationCap, Download, ArrowLeft } from 'lucide-react';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import { useIsMobile } from '@/lib/hooks/useIsMobile';
 
 const difficultyLabels = {
   BEGINNER: '초급',
@@ -77,6 +78,17 @@ document.addEventListener('click',function(e){
 });
 <\/script>`;
 
+// 모바일에서 iframe 없이 직접 렌더할 때 사용. <!DOCTYPE>, <html>, <head>, <body>
+// 래퍼만 벗겨내고 <style>, <link>, <meta> 등 head 자식 태그는 그대로 둔다.
+// (브라우저는 div 내부의 <style>도 전역 적용하므로 LIS UI에 약간의 스타일 누출 가능)
+function unwrapHtmlDocument(html: string): string {
+  let r = html.replace(/<!DOCTYPE[^>]*>/gi, '');
+  r = r.replace(/<\/?html[^>]*>/gi, '');
+  r = r.replace(/<head[^>]*>([\s\S]*?)<\/head>/gi, '$1');
+  r = r.replace(/<\/?body[^>]*>/gi, '');
+  return r;
+}
+
 // 텍스트를 줄바꿈과 블릿포인트로 렌더링
 function FormattedText({ text }: { text: string }) {
   const lines = text.split('\n').filter(line => line.trim());
@@ -125,6 +137,7 @@ function ContentDetailPageInner() {
   const { isAuthenticated } = useAuthStore();
   const contentRef = useRef<HTMLDivElement>(null);
   const pdfContentRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
 
   const [tagModalOpen, setTagModalOpen] = useState(false);
   const [selectedTag, setSelectedTag] = useState('');
@@ -307,6 +320,147 @@ ${injectedScripts}
   }
 
   const isIsolated = needsIsolation(content.content_html || '');
+
+  if (isMobile) {
+    return (
+      <>
+        {/* 모바일 풀스크린 오버레이 — 헤더/사이드바/푸터 위로 덮음 */}
+        <div className="fixed inset-0 z-50 bg-background overflow-y-auto">
+          {/* Floating 뒤로 버튼 */}
+          <button
+            onClick={() => router.back()}
+            className="fixed top-3 left-3 z-10 inline-flex items-center justify-center h-10 w-10 rounded-full bg-background/85 backdrop-blur shadow-md border hover:bg-background"
+            aria-label="뒤로"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </button>
+
+          {/* 제목/요약/메타 */}
+          <div ref={pdfContentRef} className="px-4 pt-16 pb-6">
+            <h1 className="text-2xl font-bold mb-2 leading-tight">{content.title}</h1>
+            {content.summary && (
+              <p className="text-base text-muted-foreground mb-4 leading-relaxed">{content.summary}</p>
+            )}
+
+            <div className="flex flex-wrap gap-2 mb-4">
+              <Badge>{difficultyLabels[content.difficulty]}</Badge>
+              <Badge variant="outline">{content.category_name}</Badge>
+              {[...content.tags].sort((a, b) => a.name.localeCompare(b.name)).map((tag) => (
+                <Badge
+                  key={tag.id}
+                  variant="secondary"
+                  className="cursor-pointer hover:bg-secondary/80 transition-colors"
+                  onClick={() => handleTagClick(tag.name)}
+                >
+                  {tag.name}
+                </Badge>
+              ))}
+            </div>
+
+            <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground mb-4">
+              <span className="flex items-center gap-1"><User className="h-3.5 w-3.5" />{content.author_name}</span>
+              <span className="flex items-center gap-1"><Calendar className="h-3.5 w-3.5" />{format(new Date(content.created_at), 'yyyy.MM.dd', { locale: ko })}</span>
+              <span className="flex items-center gap-1"><Eye className="h-3.5 w-3.5" />{content.view_count.toLocaleString()}회</span>
+              {content.estimated_time > 0 && (
+                <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" />약 {content.estimated_time}분</span>
+              )}
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              <ShareButton
+                title={content.title}
+                url={typeof window !== 'undefined' ? window.location.href : ''}
+              />
+              <QRCodeButton title={content.title} />
+              <PDFSaveButton title={content.title} contentRef={pdfContentRef} rawHtml={isIsolated ? content.content_html : undefined} />
+              {isIsolated && (
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => {
+                    const html = content.content_html || '';
+                    const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${content.slug}.html`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                  }}
+                  title="HTML 소스 다운로드"
+                >
+                  <Download className="h-4 w-4" />
+                </Button>
+              )}
+              {isAuthenticated && (
+                <Button
+                  variant={content.is_favorited ? 'default' : 'outline'}
+                  size="icon"
+                  onClick={handleToggleFavorite}
+                  disabled={toggleFavoriteMutation.isPending}
+                >
+                  <Heart className={content.is_favorited ? 'fill-current' : ''} />
+                </Button>
+              )}
+            </div>
+
+            {(content.learning_objectives || content.prerequisites) && (
+              <div className="grid gap-3 mt-6">
+                {content.learning_objectives && (
+                  <Card>
+                    <CardHeader className="pb-2"><CardTitle className="text-base">학습 목표</CardTitle></CardHeader>
+                    <CardContent><FormattedText text={content.learning_objectives} /></CardContent>
+                  </Card>
+                )}
+                {content.prerequisites && (
+                  <Card>
+                    <CardHeader className="pb-2"><CardTitle className="text-base">선수 학습</CardTitle></CardHeader>
+                    <CardContent><FormattedText text={content.prerequisites} /></CardContent>
+                  </Card>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* 콘텐츠 본문 — 모바일은 iframe 없이 직접 렌더 (vh 자연스럽게 동작) */}
+          <div
+            ref={contentRef}
+            className={isIsolated ? 'content-mobile-isolated' : 'prose prose-slate max-w-none dark:prose-invert px-4'}
+            dangerouslySetInnerHTML={{
+              __html: isIsolated
+                ? unwrapHtmlDocument(content.content_html || '')
+                : content.content_html || '',
+            }}
+          />
+
+          {/* 본문 아래 액션·메타·댓글 */}
+          <div className="px-4 py-6 space-y-6">
+            {(slug === 'rdf' || slug === 'rdf-interactive') && (
+              <div className="flex justify-center">
+                <Button size="lg" onClick={handleAdvancedLearning} className="gap-2">
+                  <GraduationCap className="h-5 w-5" />
+                  RDF 심화학습 시작하기
+                </Button>
+              </div>
+            )}
+
+            <div className="p-3 bg-muted rounded-lg text-xs text-muted-foreground flex items-center justify-between">
+              <span>버전 {content.version}</span>
+              <span>최종 수정: {format(new Date(content.updated_at), 'yyyy.MM.dd HH:mm', { locale: ko })}</span>
+            </div>
+
+            <CommentList contentId={content.id} />
+          </div>
+        </div>
+
+        <TagSearchModal
+          open={tagModalOpen}
+          onOpenChange={setTagModalOpen}
+          tagName={selectedTag}
+        />
+      </>
+    );
+  }
 
   return (
     <>
