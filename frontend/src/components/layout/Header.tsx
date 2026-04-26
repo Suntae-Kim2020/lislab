@@ -128,6 +128,7 @@ export function Header() {
   };
 
   return (
+    <>
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center">
         <div className="flex flex-1 items-center justify-between gap-2">
@@ -228,43 +229,44 @@ export function Header() {
           </div>
         </div>
       </div>
-
-      {/* Mobile drawer */}
-      {mobileMenuOpen && (
-        <>
-          <div
-            className="fixed inset-0 z-40 bg-black/50 md:hidden"
-            onClick={() => setMobileMenuOpen(false)}
-          />
-          <aside className="fixed top-0 right-0 z-50 h-full w-72 max-w-[85vw] bg-background border-l shadow-lg md:hidden overflow-y-auto">
-            <div className="flex items-center justify-between p-4 border-b">
-              <span className="font-semibold">메뉴</span>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setMobileMenuOpen(false)}
-                aria-label="메뉴 닫기"
-              >
-                <X className="h-5 w-5" />
-              </Button>
-            </div>
-            <nav className="p-2">
-              {menus?.map((item) => (
-                <MobileNavItem key={item.id} item={item} onClose={() => setMobileMenuOpen(false)} />
-              ))}
-              {!isAuthenticated && (
-                <Link
-                  href="/register"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block px-3 py-3 mt-2 text-sm font-medium rounded bg-primary text-primary-foreground text-center sm:hidden"
-                >
-                  회원가입
-                </Link>
-              )}
-            </nav>
-          </aside>
-        </>
-      )}
     </header>
+
+    {/* Mobile drawer — header 바깥에 두어야 backdrop-filter containing block에 갇히지 않음 */}
+    {mobileMenuOpen && (
+      <>
+        <div
+          className="fixed inset-0 z-[60] bg-black/50 md:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+        <aside className="fixed top-0 right-0 z-[70] h-full w-72 max-w-[85vw] bg-background border-l shadow-lg md:hidden overflow-y-auto">
+          <div className="flex items-center justify-between p-4 border-b">
+            <span className="font-semibold">메뉴</span>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setMobileMenuOpen(false)}
+              aria-label="메뉴 닫기"
+            >
+              <X className="h-5 w-5" />
+            </Button>
+          </div>
+          <nav className="p-2">
+            {menus?.map((item) => (
+              <MobileNavItem key={item.id} item={item} onClose={() => setMobileMenuOpen(false)} />
+            ))}
+            {!isAuthenticated && (
+              <Link
+                href="/register"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-3 py-3 mt-2 text-sm font-medium rounded bg-primary text-primary-foreground text-center sm:hidden"
+              >
+                회원가입
+              </Link>
+            )}
+          </nav>
+        </aside>
+      </>
+    )}
+    </>
   );
 }
