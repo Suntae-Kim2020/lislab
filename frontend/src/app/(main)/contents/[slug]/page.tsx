@@ -146,11 +146,19 @@ function ContentDetailPageInner() {
   const toggleFavoriteMutation = useToggleFavorite();
 
   // Check if content needs full isolation (has its own styles/layout)
+  // 대소문자 무시 + head-level 태그(head/body/link/meta)도 신호로 인정.
+  // 업로드된 HTML 파일이 소문자 <!doctype html>로 시작하거나 외부 CSS만 link한
+  // 형태여도 iframe 격리 분기를 타도록 한다.
   const needsIsolation = (html: string) => {
-    const hasStyleTag = html.includes('<style');
-    const hasFullDocument = html.includes('<!DOCTYPE html>') || html.includes('<html');
+    if (!html) return false;
+    if (/<!doctype\s+html/i.test(html)) return true;
+    if (/<html[\s>]/i.test(html)) return true;
+    if (/<head[\s>]/i.test(html)) return true;
+    if (/<body[\s>]/i.test(html)) return true;
+    if (/<style[\s>]/i.test(html)) return true;
+    if (/<link[^>]+rel=["']?stylesheet/i.test(html)) return true;
     const hasInlineStyles = (html.match(/style\s*=\s*["'][^"']{20,}/g) || []).length >= 3;
-    return hasStyleTag || hasFullDocument || hasInlineStyles;
+    return hasInlineStyles;
   };
 
   // Iframe-based isolation - renders original HTML exactly as-is
