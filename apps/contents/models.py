@@ -208,6 +208,14 @@ class Content(models.Model):
         verbose_name='콘텐츠 HTML'
     )
 
+    html_source_file = models.FileField(
+        upload_to='contents/html/%Y/%m/',
+        blank=True,
+        null=True,
+        verbose_name='HTML 소스 파일',
+        help_text='HTML 파일을 업로드하면 파일 내용이 콘텐츠 HTML에 자동 반영됩니다. 직접 작성하려면 비워두세요.'
+    )
+
     category = models.ForeignKey(
         Category,
         on_delete=models.PROTECT,

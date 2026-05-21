@@ -148,7 +148,8 @@ class ContentAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ('기본 정보', {
-            'fields': ('title', 'summary', 'content_html')
+            'fields': ('title', 'summary', 'html_source_file', 'content_html'),
+            'description': 'HTML 파일을 업로드하면 저장 시 파일 내용이 콘텐츠 HTML에 자동 반영됩니다. 파일을 비워두면 아래 에디터 내용이 그대로 유지됩니다.'
         }),
         ('분류', {
             'fields': ('category', 'tags', 'difficulty', 'order')
@@ -289,11 +290,29 @@ class ContentAdmin(admin.ModelAdmin):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def save_model(self, request, obj, form, change):
-        """콘텐츠 저장 시 작성자 및 발행일 자동 설정"""
+        """콘텐츠 저장 시 작성자 및 발행일 자동 설정, HTML 파일 업로드 시 본문 자동 반영"""
         from django.utils import timezone
 
         if not change:  # 새로 생성하는 경우
             obj.author = request.user
+
+        # 새 HTML 파일이 업로드된 경우 파일 내용을 읽어 content_html에 반영
+        if 'html_source_file' in form.changed_data:
+            uploaded = form.cleaned_data.get('html_source_file')
+            if uploaded:
+                try:
+                    uploaded.seek(0)
+                except Exception:
+                    pass
+                raw = uploaded.read()
+                try:
+                    obj.content_html = raw.decode('utf-8')
+                except UnicodeDecodeError:
+                    obj.content_html = raw.decode('cp949', errors='replace')
+                try:
+                    uploaded.seek(0)
+                except Exception:
+                    pass
 
         # PUBLISHED 상태인데 published_at이 없으면 현재 시간으로 설정
         if obj.status == 'PUBLISHED' and not obj.published_at:
