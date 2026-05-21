@@ -167,23 +167,45 @@ function ContentDetailPageInner() {
 
     // Build a proper HTML document from the content
     const fullHtml = useMemo(() => {
+      // vh 단위를 부모 viewport 기준 px로 사전 치환.
+      // iframe scrolling="no" + 외부에서 iframe height를 늘리는 구조라
+      // 콘텐츠 내부 min-height:100vh가 iframe height만큼 커져 피드백 루프가 생기고,
+      // 결과적으로 표지가 화면 전체를 점유하며 본문이 잘려 보인다.
+      // vw/vmin/vmax는 폰트 clamp 등에 흔히 쓰이므로 건드리지 않는다.
+      const vpHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
+      const replaceVh = (css: string) =>
+        css.replace(/(-?\d+(?:\.\d+)?)vh\b/g, (_m, n) =>
+          `${(parseFloat(n) * vpHeight / 100).toFixed(2)}px`
+        );
+      let normalized = html.replace(
+        /(<style[^>]*>)([\s\S]*?)(<\/style>)/gi,
+        (_m, open, css, close) => open + replaceVh(css) + close
+      );
+      normalized = normalized.replace(
+        /style\s*=\s*"([^"]*)"/gi,
+        (_m, css) => `style="${replaceVh(css)}"`
+      );
+      normalized = normalized.replace(
+        /style\s*=\s*'([^']*)'/gi,
+        (_m, css) => `style='${replaceVh(css)}'`
+      );
+
       // 업로더가 자체 iframe-resize 코드를 넣었으면 높이 측정 스크립트는 생략해 충돌 방지.
       const injectedScripts =
-        (html.includes('iframe-resize') ? '' : HEIGHT_MEASURE_SCRIPT) +
+        (normalized.includes('iframe-resize') ? '' : HEIGHT_MEASURE_SCRIPT) +
         CLICK_HANDLER_SCRIPT;
 
       // If content already has full document structure, inject scripts before </body>
-      if (html.includes('<!DOCTYPE') || html.includes('<html')) {
-        if (html.includes('</body>')) {
-          return html.replace(/<\/body>/i, injectedScripts + '</body>');
+      if (normalized.includes('<!DOCTYPE') || normalized.includes('<html')) {
+        if (normalized.includes('</body>')) {
+          return normalized.replace(/<\/body>/i, injectedScripts + '</body>');
         }
-        return html + injectedScripts;
+        return normalized + injectedScripts;
       }
-
       // Parse head-level elements (meta, link, style, title) vs body content
       // These tags should go in <head> for proper rendering (fonts, CSS, etc.)
       const headTags: string[] = [];
-      let bodyContent = html;
+      let bodyContent = normalized;
 
       // Extract <meta>, <title>, <link>, <style> tags that appear before body content
       const headTagRegex = /^(\s*(<(meta|title|link|style)[^>]*(?:\/>|>(?:[\s\S]*?)<\/\3>))\s*)+/i;
