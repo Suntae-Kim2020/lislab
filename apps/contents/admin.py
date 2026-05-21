@@ -10,7 +10,10 @@ from .models import Category, Tag, Content, ContentVersion, Favorite
 
 # Content Form with CKEditor
 class ContentAdminForm(forms.ModelForm):
-    content_html = forms.CharField(widget=CKEditorWidget(config_name='content'))
+    content_html = forms.CharField(
+        widget=CKEditorWidget(config_name='content'),
+        required=False,
+    )
 
     class Meta:
         model = Content
@@ -24,6 +27,14 @@ class ContentAdminForm(forms.ModelForm):
                 },
             ),
         }
+
+    def clean(self):
+        cleaned = super().clean()
+        if not cleaned.get('html_source_file') and not cleaned.get('content_html'):
+            raise forms.ValidationError(
+                'HTML 파일을 업로드하거나 콘텐츠 HTML을 직접 입력해야 합니다.'
+            )
+        return cleaned
 
 
 @admin.register(Category)
