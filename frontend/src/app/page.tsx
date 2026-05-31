@@ -141,23 +141,6 @@ export default function HomePage() {
           <div className="text-center text-muted-foreground py-8">로딩 중...</div>
         ) : (
         <>
-          {/* 인기 콘텐츠 */}
-          <section className="py-4">
-            <div className="flex items-center gap-2 mb-4">
-              <TrendingUp className="h-5 w-5 text-orange-500" />
-              <h2 className="text-xl font-bold">인기 콘텐츠</h2>
-            </div>
-            {popularContents.length > 0 ? (
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {popularContents.map((content) => (
-                  <ContentCard key={content.id} content={content} />
-                ))}
-              </div>
-            ) : (
-              <p className="text-muted-foreground text-center py-8">콘텐츠가 없습니다.</p>
-            )}
-          </section>
-
           {/* 최신 콘텐츠 */}
           <section className="py-4">
             <div className="flex items-center gap-2 mb-4">
@@ -167,6 +150,23 @@ export default function HomePage() {
             {recentContents.length > 0 ? (
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {recentContents.map((content) => (
+                  <ContentCard key={content.id} content={content} />
+                ))}
+              </div>
+            ) : (
+              <p className="text-muted-foreground text-center py-8">콘텐츠가 없습니다.</p>
+            )}
+          </section>
+
+          {/* 인기 콘텐츠 */}
+          <section className="py-4">
+            <div className="flex items-center gap-2 mb-4">
+              <TrendingUp className="h-5 w-5 text-orange-500" />
+              <h2 className="text-xl font-bold">인기 콘텐츠</h2>
+            </div>
+            {popularContents.length > 0 ? (
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {popularContents.map((content) => (
                   <ContentCard key={content.id} content={content} />
                 ))}
               </div>
