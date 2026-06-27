@@ -439,18 +439,41 @@
 </script>
 <script>
 // 화면 터치 시 "pass" 음성 발화. 단, 버튼/입력 등 인터랙티브 요소 클릭은 제외.
+// SpeechSynthesis는 iOS Safari에서 audio session에 따라 무성으로 끝나는 경우가 있어
+// 사전 녹음한 wav를 Web Audio API로 재생한다(째깍 소리와 동일 경로 → 무음 모드 무시).
 (function(){
-  if (!('speechSynthesis' in window)) return;
   var INTERACTIVE = 'button, input, select, textarea, a[href], [role="button"]';
+  var AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC) return;
+  var ctx = null;
+  var buffer = null;
+  var currentSource = null;
+  function ensureCtx(){
+    if (!ctx) ctx = new AC();
+    if (ctx.state === 'suspended' && typeof ctx.resume === 'function') ctx.resume();
+    return ctx;
+  }
+  function loadBuffer(){
+    if (buffer) return Promise.resolve(buffer);
+    return fetch('/tools/audio/pass.wav')
+      .then(function(r){ return r.arrayBuffer(); })
+      .then(function(ab){
+        return new Promise(function(resolve, reject){
+          ensureCtx().decodeAudioData(ab, function(buf){ buffer = buf; resolve(buf); }, reject);
+        });
+      });
+  }
   function sayPass(e){
     if (e.target && e.target.closest && e.target.closest(INTERACTIVE)) return;
-    try {
-      window.speechSynthesis.cancel();
-      var u = new SpeechSynthesisUtterance('pass');
-      u.lang = 'en-US';
-      u.rate = 1.0;
-      window.speechSynthesis.speak(u);
-    } catch (err) {}
+    ensureCtx();
+    loadBuffer().then(function(buf){
+      try { if (currentSource) currentSource.stop(); } catch (err) {}
+      var src = ctx.createBufferSource();
+      src.buffer = buf;
+      src.connect(ctx.destination);
+      src.start(0);
+      currentSource = src;
+    }).catch(function(){});
   }
   document.addEventListener('pointerdown', sayPass, { passive: true });
 })();
