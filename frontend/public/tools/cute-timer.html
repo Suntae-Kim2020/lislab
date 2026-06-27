@@ -464,7 +464,10 @@
       });
   }
   function sayPass(e){
-    if (e.target && e.target.closest && e.target.closest(INTERACTIVE)) return;
+    if (!e.target || !e.target.closest) return;
+    // 카운트다운(running) 화면 안에서만 발화. 설정 화면·완료 화면은 제외.
+    if (!e.target.closest('#running')) return;
+    if (e.target.closest(INTERACTIVE)) return;
     ensureCtx();
     loadBuffer().then(function(buf){
       try { if (currentSource) currentSource.stop(); } catch (err) {}
