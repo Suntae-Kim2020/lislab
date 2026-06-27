@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>깜찍 타이머</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Jua&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#FFF5EE; --bg2:#FFE7E2; --bg3:#F3ECFF;
+    --peach:#FF8E7A; --coral:#FF6F87; --mint:#79E0C4; --lav:#C9B6FF;
+    --ink:#6A5560; --ink-soft:#A6909B;
+    --card:#FFFFFFEE; --track:#FFE2D8;
+    --hot:#FF3D6E; --hot-deep:#E11D55;
+    --shadow:0 18px 40px -16px rgba(255,111,135,.45);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{
+    margin:0; font-family:'Jua',system-ui,sans-serif; color:var(--ink);
+    background:
+      radial-gradient(120% 80% at 15% 0%, var(--bg3) 0%, transparent 45%),
+      radial-gradient(120% 90% at 100% 10%, #FFEFE2 0%, transparent 50%),
+      linear-gradient(160deg, var(--bg1), var(--bg2));
+    min-height:100dvh;
+    display:flex; align-items:center; justify-content:center;
+    padding:18px; overflow:hidden;
+    user-select:none; -webkit-user-select:none;
+  }
+  .num{font-family:'Fredoka',sans-serif; font-variant-numeric:tabular-nums;}
+
+  .app{
+    width:100%; max-width:420px; background:var(--card);
+    border-radius:34px; padding:26px 22px 24px;
+    box-shadow:var(--shadow); backdrop-filter:blur(8px);
+    position:relative; overflow:hidden;
+  }
+  .app::before{content:""; position:absolute; inset:0; border-radius:34px;
+    border:2px solid #FFFFFF; opacity:.6; pointer-events:none;}
+
+  .title{display:flex; align-items:center; justify-content:center; gap:8px;
+    font-size:22px; margin-bottom:4px; letter-spacing:.5px;}
+  .title .face{font-size:24px; display:inline-block; animation:bob 2.4s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-5px) rotate(4deg)}}
+  .sub{text-align:center; color:var(--ink-soft); font-size:13px; margin-bottom:20px;}
+
+  /* ---------- SETUP ---------- */
+  .setter{display:flex; align-items:center; justify-content:center; gap:6px; margin-bottom:16px;}
+  .unit{display:flex; flex-direction:column; align-items:center; gap:8px; flex:1;}
+  .step{
+    width:48px; height:34px; border:none; border-radius:14px; cursor:pointer;
+    background:linear-gradient(180deg,#FFFFFF,#FFEDE6); color:var(--peach);
+    font-size:18px; box-shadow:0 4px 0 #FFD9CC; transition:transform .08s;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .step:active{transform:translateY(3px); box-shadow:0 1px 0 #FFD9CC;}
+  .digit{
+    width:100%; text-align:center; border:none; background:transparent;
+    font-family:'Fredoka',sans-serif; font-weight:600; font-variant-numeric:tabular-nums;
+    font-size:46px; color:var(--ink); padding:2px 0; outline:none; line-height:1;
+  }
+  .ulabel{font-size:13px; color:var(--ink-soft);}
+  .colon{font-family:'Fredoka'; font-size:40px; color:#FFC2B5; padding-bottom:30px; align-self:center;}
+
+  .chips{display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:22px;}
+  .chip{border:none; cursor:pointer; padding:9px 14px; border-radius:999px; font-family:'Jua';
+    font-size:13px; color:#7A5C6B; background:#FFFFFF; box-shadow:0 4px 12px -6px rgba(255,111,135,.5);
+    transition:transform .08s, background .15s;}
+  .chip:active{transform:scale(.94);}
+  .chip.zero{background:#F3ECFF; color:#7C6AAE;}
+
+  .btn{
+    width:100%; border:none; cursor:pointer; border-radius:22px; padding:18px;
+    font-family:'Jua'; font-size:19px; color:#fff; letter-spacing:.5px;
+    background:linear-gradient(135deg,var(--peach),var(--coral));
+    box-shadow:0 12px 24px -10px var(--coral); transition:transform .1s;
+  }
+  .btn:active{transform:translateY(2px) scale(.99);}
+  .btn:disabled{opacity:.5;}
+  .btn.ghost{background:#fff; color:var(--peach); box-shadow:0 6px 16px -8px rgba(255,111,135,.6); margin-top:10px;
+    font-size:15px; padding:13px;}
+  .btn.mint{background:linear-gradient(135deg,#86E6CD,#5EC7C8); box-shadow:0 12px 24px -10px #5EC7C8;}
+
+  /* ---------- RUNNING ---------- */
+  .run{display:none; flex-direction:column; align-items:center;}
+  .ringwrap{position:relative; width:262px; height:262px; margin:6px 0 14px;}
+  svg{width:100%; height:100%; transform:rotate(-90deg);}
+  .track-c{fill:none; stroke:var(--track); stroke-width:16;}
+  .prog-c{fill:none; stroke:url(#g); stroke-width:16; stroke-linecap:round; transition:stroke .3s;}
+  .center{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;}
+  .big{font-family:'Fredoka'; font-weight:600; font-variant-numeric:tabular-nums;
+    font-size:50px; color:var(--ink); line-height:1;}
+  .center .lab{font-size:13px; color:var(--ink-soft); margin-top:4px;}
+  .center .heart{font-size:22px; margin-bottom:2px; opacity:.85;}
+
+  .run-btns{display:flex; gap:12px; width:100%;}
+  .run-btns .btn{flex:1; font-size:17px; padding:16px;}
+  .btn.outline{background:#fff; color:#B58AA8; box-shadow:0 6px 16px -8px rgba(180,140,170,.6);}
+  .taphint{margin:14px 0 0; font-size:12.5px; color:var(--ink-soft); text-align:center; opacity:.9;}
+  .run{cursor:pointer;}
+
+  /* ---------- URGENT (last 10s) ---------- */
+  .urgent .prog-c{stroke:var(--hot)!important;}
+  .urgent .big{color:var(--hot); animation:thump .9s ease-in-out infinite;}
+  .urgent .ringwrap{animation:shake .9s ease-in-out infinite;}
+  .urgent .heart{animation:beat .9s ease-in-out infinite;}
+  @keyframes thump{0%,100%{transform:scale(1)}50%{transform:scale(1.14)}}
+  @keyframes beat{0%,100%{transform:scale(1)}25%{transform:scale(1.3)}40%{transform:scale(1)}}
+  @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-3px)}60%{transform:translateX(3px)}}
+
+  /* ---------- DONE ---------- */
+  .done{display:none; flex-direction:column; align-items:center; text-align:center; padding:14px 0;}
+  .done .pop{font-size:74px; animation:pop .6s ease-in-out infinite alternate;}
+  @keyframes pop{from{transform:scale(1) rotate(-6deg)}to{transform:scale(1.12) rotate(6deg)}}
+  .done h2{font-size:30px; margin:8px 0 2px; color:var(--coral);}
+  .done p{color:var(--ink-soft); margin:0 0 22px; font-size:14px;}
+
+  .toast{position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(20px);
+    background:#5A4A52; color:#fff; padding:11px 18px; border-radius:999px; font-size:13px;
+    font-family:'Jua'; opacity:0; transition:.3s; pointer-events:none; z-index:9;}
+  .toast.show{opacity:.95; transform:translateX(-50%) translateY(0);}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none!important;}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- SETUP -->
+  <section id="setup">
+    <div class="title"><span class="face">🍑</span> 깜찍 타이머</div>
+    <div class="sub">시 · 분 · 초를 맞추고 시작해요</div>
+
+    <div class="setter">
+      <div class="unit">
+        <button class="step" data-u="h" data-d="1">▲</button>
+        <input class="digit" id="h" inputmode="numeric" value="00" maxlength="2">
+        <button class="step" data-u="h" data-d="-1">▼</button>
+        <span class="ulabel">시</span>
+      </div>
+      <span class="colon">:</span>
+      <div class="unit">
+        <button class="step" data-u="m" data-d="1">▲</button>
+        <input class="digit" id="m" inputmode="numeric" value="00" maxlength="2">
+        <button class="step" data-u="m" data-d="-1">▼</button>
+        <span class="ulabel">분</span>
+      </div>
+      <span class="colon">:</span>
+      <div class="unit">
+        <button class="step" data-u="s" data-d="1">▲</button>
+        <input class="digit" id="s" inputmode="numeric" value="50" maxlength="2">
+        <button class="step" data-u="s" data-d="-1">▼</button>
+        <span class="ulabel">초</span>
+      </div>
+    </div>
+
+    <div class="chips">
+      <button class="chip" data-add="60">+1분</button>
+      <button class="chip" data-add="300">+5분</button>
+      <button class="chip" data-add="600">+10분</button>
+      <button class="chip" data-add="30">+30초</button>
+      <button class="chip zero" data-add="reset">초기화</button>
+    </div>
+
+    <button class="btn" id="startBtn">시작하기 ✨</button>
+    <button class="btn ghost" id="testBtn">🔊 소리 미리듣기 (무음모드 확인)</button>
+  </section>
+
+  <!-- RUNNING -->
+  <section class="run" id="running">
+    <div class="ringwrap">
+      <svg viewBox="0 0 200 200">
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#FF9E86"/>
+            <stop offset="100%" stop-color="#FF6F87"/>
+          </linearGradient>
+        </defs>
+        <circle class="track-c" cx="100" cy="100" r="86"/>
+        <circle class="prog-c" id="prog" cx="100" cy="100" r="86"/>
+      </svg>
+      <div class="center">
+        <span class="heart">💗</span>
+        <span class="big num" id="display">00:00</span>
+        <span class="lab" id="phase">남은 시간</span>
+      </div>
+    </div>
+    <div class="run-btns">
+      <button class="btn outline" id="pauseBtn">일시정지</button>
+      <button class="btn mint" id="resetBtn">초기화</button>
+    </div>
+    <p class="taphint">👆 화면을 톡 누르면 처음부터 다시 시작해요</p>
+  </section>
+
+  <!-- DONE -->
+  <section class="done" id="finished">
+    <div class="pop">🎉</div>
+    <h2>끝!</h2>
+    <p>시간이 모두 지났어요</p>
+    <button class="btn" id="againBtn">다시 맞추기</button>
+  </section>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const setup=$('setup'), running=$('running'), finished=$('finished');
+  const hEl=$('h'), mEl=$('m'), sEl=$('s');
+  const prog=$('prog'), display=$('display'), phase=$('phase');
+  const app=document.querySelector('.app');
+  const C = 2*Math.PI*86;
+  prog.style.strokeDasharray = C;
+
+  /* ---------- AUDIO ---------- */
+  let ctx;
+  function unlockAudio(){
+    try{
+      const AC = window.AudioContext||window.webkitAudioContext;
+      if(!AC) return;                 // 오디오 미지원 환경이면 조용히 통과
+      if(!ctx) ctx = new AC();
+      if(ctx.state==='suspended') ctx.resume();
+      // iOS 16.4+ : 무음 스위치가 켜져 있어도 소리가 나도록 재생 세션 설정
+      try{ if(navigator.audioSession) navigator.audioSession.type='playback'; }catch(e){}
+    }catch(e){ ctx=null; }
+  }
+  function tone(freq, dur, type='square', delay=0, vol=0.3){
+    if(!ctx) return;
+    const t=ctx.currentTime+delay;
+    const o=ctx.createOscillator(), g=ctx.createGain();
+    o.type=type; o.frequency.setValueAtTime(freq,t);
+    o.frequency.exponentialRampToValueAtTime(freq*0.92, t+dur);
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(vol,t+0.008);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(t); o.stop(t+dur+0.03);
+  }
+  function thump(freq, delay=0, vol=0.5){ // 심장 박동 같은 저음 압박감
+    if(!ctx) return;
+    const t=ctx.currentTime+delay;
+    const o=ctx.createOscillator(), g=ctx.createGain();
+    o.type='sine'; o.frequency.setValueAtTime(freq,t);
+    o.frequency.exponentialRampToValueAtTime(freq*0.6, t+0.18);
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(vol,t+0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+0.22);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(t); o.stop(t+0.25);
+  }
+  function vibrate(p){ try{ navigator.vibrate && navigator.vibrate(p); }catch(e){} }
+
+  // 시계 초침 같은 "째깍" 클릭음 (짧은 노이즈 버스트)
+  function tick(high, delay){
+    if(!ctx) return;
+    const t=ctx.currentTime+(delay||0), dur=0.035;
+    const buf=ctx.createBuffer(1, Math.max(1,(ctx.sampleRate*dur)|0), ctx.sampleRate);
+    const d=buf.getChannelData(0);
+    for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+    const src=ctx.createBufferSource(); src.buffer=buf;
+    const bp=ctx.createBiquadFilter(); bp.type='bandpass';
+    bp.frequency.value = high ? 2500 : 1650;   // 째(높게) / 깍(낮게)
+    bp.Q.value=9;
+    const g=ctx.createGain();
+    g.gain.setValueAtTime(high?0.7:0.6, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+    src.connect(bp); bp.connect(g); g.connect(ctx.destination);
+    src.start(t); src.stop(t+dur+0.01);
+  }
+  function ring(freq, delay, dur, vol){       // 알람 벨 음
+    if(!ctx) return;
+    const t=ctx.currentTime+delay;
+    const o=ctx.createOscillator(), g=ctx.createGain();
+    o.type='triangle'; o.frequency.value=freq;
+    g.gain.setValueAtTime(vol,t);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(t); o.stop(t+dur+0.02);
+  }
+
+  // 마지막 10초: 초침처럼 빠르게 째깍째깍 (1초에 4번)
+  function pressureBeep(sec){
+    if(!ctx) return;
+    for(let i=0;i<4;i++) tick(i%2===0, i*0.25);   // 0.25초 간격으로 째깍째깍
+    vibrate(20);
+  }
+  function finalAlarm(){             // 0초: 알람 벨 따르릉
+    if(!ctx) return;
+    let t=0;
+    for(let i=0;i<14;i++){ ring(i%2 ? 1450 : 1780, t, 0.09, 0.3); t+=0.075; }
+    vibrate([120,80,120,80,120,80,300]);
+  }
+  function previewSound(){           // 소리 미리듣기
+    unlockAudio();
+    [5,4,3,2].forEach((s,i)=> setTimeout(()=>pressureBeep(s), i*650)); // 째깍째깍
+    setTimeout(()=>finalAlarm(), 4*650);
+    toast('소리가 들리면 무음모드에서도 잘 동작해요!');
+  }
+
+  /* ---------- TOAST ---------- */
+  let tT;
+  function toast(msg){
+    const el=$('toast'); el.textContent=msg; el.classList.add('show');
+    clearTimeout(tT); tT=setTimeout(()=>el.classList.remove('show'),2400);
+  }
+
+  /* ---------- SETTER ---------- */
+  const pad = n => String(n).padStart(2,'0');
+  const clamp = (v,max)=> Math.max(0, Math.min(max, v));
+  function getVals(){
+    return { h:clamp(parseInt(hEl.value)||0,99), m:clamp(parseInt(mEl.value)||0,59), s:clamp(parseInt(sEl.value)||0,59) };
+  }
+  function setVals(h,m,s){ hEl.value=pad(clamp(h,99)); mEl.value=pad(clamp(m,59)); sEl.value=pad(clamp(s,59)); }
+  function totalSec(){ const v=getVals(); return v.h*3600+v.m*60+v.s; }
+  function fromTotal(t){ t=clamp(t,99*3600+59*60+59); setVals(Math.floor(t/3600), Math.floor(t/60)%60, t%60); }
+
+  // 스텝 버튼 (꾹 누르면 빨라짐)
+  let holdT, holdI;
+  function bump(u,d){ const v=getVals(); v[u]=v[u]+d; const max=u==='h'?99:59;
+    if(v[u]>max)v[u]=0; if(v[u]<0)v[u]=max; setVals(v.h,v.m,v.s); }
+  document.querySelectorAll('.step').forEach(b=>{
+    const act=()=>bump(b.dataset.u, parseInt(b.dataset.d));
+    const start=e=>{ e.preventDefault(); act(); holdT=setTimeout(()=>{holdI=setInterval(act,90);},420); };
+    const stop=()=>{ clearTimeout(holdT); clearInterval(holdI); };
+    b.addEventListener('touchstart',start,{passive:false});
+    b.addEventListener('mousedown',start);
+    ['touchend','touchcancel','mouseup','mouseleave'].forEach(ev=>b.addEventListener(ev,stop));
+  });
+  // 칩
+  document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
+    if(c.dataset.add==='reset'){ setVals(0,0,0); return; }
+    fromTotal(totalSec()+parseInt(c.dataset.add));
+  }));
+  // 직접 입력시 정리
+  [hEl,mEl,sEl].forEach((el,i)=>{
+    el.addEventListener('focus',()=>el.select());
+    el.addEventListener('blur',()=>{ const v=getVals(); setVals(v.h,v.m,v.s); });
+    el.addEventListener('input',()=>{ el.value=el.value.replace(/\D/g,'').slice(0,2); });
+  });
+
+  /* ---------- TIMER ENGINE ---------- */
+  let total=0, endAt=0, leftMs=0, running_=false, raf=null, lastSec=-1, urgent=false, wake=null;
+
+  function show(name){
+    setup.style.display = name==='setup' ? 'block':'none';
+    running.style.display = name==='run' ? 'flex':'none';
+    finished.style.display = name==='done' ? 'flex':'none';
+  }
+  async function keepAwake(on){
+    try{
+      if(on && 'wakeLock' in navigator){ wake = await navigator.wakeLock.request('screen'); }
+      else if(wake){ await wake.release(); wake=null; }
+    }catch(e){}
+  }
+
+  function fmt(ms){
+    const t=Math.ceil(ms/1000);
+    const h=Math.floor(t/3600), m=Math.floor(t/60)%60, s=t%60;
+    return h>0 ? `${pad(h)}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`;
+  }
+  function render(){
+    const ms = running_ ? Math.max(0, endAt-Date.now()) : leftMs;
+    display.textContent = fmt(ms);
+    const frac = total>0 ? ms/total : 0;
+    prog.style.strokeDashoffset = C*(1-frac);
+
+    const sec = Math.ceil(ms/1000);
+    const u = ms>0 && ms<=10000;
+    if(u!==urgent){ urgent=u; app.classList.toggle('urgent',u); phase.textContent = u?'마지막 스퍼트!':'남은 시간'; }
+
+    if(running_ && sec!==lastSec){
+      if(sec>=1 && sec<=10) pressureBeep(sec);
+      lastSec=sec;
+    }
+    if(ms<=0 && running_){ done(); return; }
+    if(running_) raf=requestAnimationFrame(render);
+  }
+  function start(){
+    total = totalSec()*1000;
+    if(total<=0){ toast('시간을 1초 이상 맞춰주세요 🙂'); return; }
+    leftMs=total; lastSec=-1; urgent=false; app.classList.remove('urgent');
+    show('run'); resume();            // 화면 전환·카운트다운을 먼저 보장
+    try{ unlockAudio(); }catch(e){}    // 오디오는 실패해도 무시
+    try{ keepAwake(true); }catch(e){}
+  }
+  function resume(){
+    if(running_) return;
+    running_=true; endAt=Date.now()+leftMs;
+    $('pauseBtn').textContent='일시정지';
+    cancelAnimationFrame(raf); raf=requestAnimationFrame(render);
+  }
+  function pause(){
+    if(!running_) return;
+    running_=false; leftMs=Math.max(0,endAt-Date.now());
+    cancelAnimationFrame(raf); $('pauseBtn').textContent='계속하기'; render();
+  }
+  function done(){
+    running_=false; cancelAnimationFrame(raf);
+    app.classList.remove('urgent'); urgent=false;
+    finalAlarm(); keepAwake(false);
+    show('done');
+  }
+  function reset(){
+    running_=false; cancelAnimationFrame(raf);
+    app.classList.remove('urgent'); urgent=false; leftMs=0;
+    keepAwake(false); show('setup');
+  }
+
+  function restart(){               // 화면 탭: 설정 시간으로 초기화 후 자동 시작
+    if(total<=0) return;
+    unlockAudio();
+    running_=false; cancelAnimationFrame(raf);
+    leftMs=total; lastSec=-1; urgent=false; app.classList.remove('urgent');
+    resume();
+    toast('처음부터 다시 시작! ⏱️');
+  }
+
+  /* ---------- BUTTONS ---------- */
+  $('startBtn').addEventListener('click', start);
+  $('testBtn').addEventListener('click', previewSound);
+  $('pauseBtn').addEventListener('click', ()=> running_ ? pause() : resume());
+  $('resetBtn').addEventListener('click', reset);
+  $('againBtn').addEventListener('click', reset);
+
+  // 실행 화면을 톡 누르면 재시작 (일시정지/계속하기/초기화 버튼은 제외)
+  running.addEventListener('click', (e)=>{
+    if(e.target.closest('.run-btns')) return;
+    restart();
+  });
+
+  // 탭이 백그라운드 갔다 와도 시간 보정
+  document.addEventListener('visibilitychange',()=>{ if(!document.hidden && running_) render(); });
+})();
+</script>
+</body>
+</html>
