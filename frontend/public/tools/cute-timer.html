@@ -438,17 +438,19 @@
 })();
 </script>
 <script>
-// 화면 어디든 터치/클릭 시 "pass" 음성 발화.
+// 화면 터치 시 "pass" 음성 발화. 단, 버튼/입력 등 인터랙티브 요소 클릭은 제외.
 (function(){
   if (!('speechSynthesis' in window)) return;
-  function sayPass(){
+  var INTERACTIVE = 'button, input, select, textarea, a[href], [role="button"]';
+  function sayPass(e){
+    if (e.target && e.target.closest && e.target.closest(INTERACTIVE)) return;
     try {
       window.speechSynthesis.cancel();
       var u = new SpeechSynthesisUtterance('pass');
       u.lang = 'en-US';
       u.rate = 1.0;
       window.speechSynthesis.speak(u);
-    } catch (e) {}
+    } catch (err) {}
   }
   document.addEventListener('pointerdown', sayPass, { passive: true });
 })();
