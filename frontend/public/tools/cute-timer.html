@@ -437,5 +437,21 @@
   document.addEventListener('visibilitychange',()=>{ if(!document.hidden && running_) render(); });
 })();
 </script>
+<script>
+// 화면 어디든 터치/클릭 시 "pass" 음성 발화.
+(function(){
+  if (!('speechSynthesis' in window)) return;
+  function sayPass(){
+    try {
+      window.speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance('pass');
+      u.lang = 'en-US';
+      u.rate = 1.0;
+      window.speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+  document.addEventListener('pointerdown', sayPass, { passive: true });
+})();
+</script>
 </body>
 </html>
