@@ -3,7 +3,23 @@
 import { useEffect, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { teamApi, TeamMember } from '@/lib/api/team';
-import { Users } from 'lucide-react';
+import {
+  Building2,
+  ExternalLink,
+  HeartHandshake,
+  Mail,
+  Sparkles,
+  Users,
+} from 'lucide-react';
+
+const SPONSOR_CONTACT_EMAIL = 'kim.suntae@jbnu.ac.kr';
+
+// 후원 기업이 채워질 예비 자리 (홍보 슬롯)
+const OPEN_SPONSOR_SLOTS = [
+  '연구정보 · 학술출판',
+  'AI · 데이터 플랫폼',
+  '도서관 · 아카이브',
+];
 
 export default function PeoplePage() {
   const [members, setMembers] = useState<TeamMember[]>([]);
@@ -20,6 +36,118 @@ export default function PeoplePage() {
   return (
     <div className="container mx-auto py-12 px-4">
       <div className="max-w-5xl mx-auto">
+        {/* 후원 기업 섹션 */}
+        <section className="mb-16">
+          <div className="text-center mb-8">
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <HeartHandshake className="h-7 w-7 text-primary" />
+              <h2 className="text-2xl md:text-3xl font-bold">
+                LIS Lab 운영에 도움을 주는 기업들
+              </h2>
+            </div>
+            <p className="text-muted-foreground">
+              LIS Lab의 교육·연구 활동은 아래 기업들의 후원으로 운영됩니다.
+            </p>
+          </div>
+
+          {/* (주)아르고넷 */}
+          <Card className="overflow-hidden border-primary/20 mb-6">
+            <CardContent className="p-6 md:p-8">
+              <div className="flex flex-col md:flex-row gap-6 md:gap-8">
+                {/* 로고 */}
+                <a
+                  href="https://argonet.co.kr/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-shrink-0 self-start"
+                >
+                  <div className="w-56 h-24 rounded-lg bg-white border flex items-center justify-center p-4 transition-shadow hover:shadow-md">
+                    <img
+                      src="/sponsors/argonet.png"
+                      alt="(주)아르고넷 로고"
+                      className="max-w-full max-h-full object-contain"
+                    />
+                  </div>
+                </a>
+
+                {/* 소개 */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-wrap items-center gap-2 mb-2">
+                    <h3 className="text-xl font-semibold">(주)아르고넷</h3>
+                    <span className="inline-flex items-center rounded-full bg-primary/10 text-primary text-xs font-medium px-2.5 py-0.5">
+                      AI 기반 연구성과 · 연구데이터 관리 전문 기업
+                    </span>
+                  </div>
+
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    (주)아르고넷은 &ldquo;정보, 자원, 시스템, 사람이 서로
+                    소통하는 더 나은 지식세상&rdquo;을 지향하며 AI 기반
+                    연구성과·연구데이터 관리 분야를 선도해 온 전문
+                    기업입니다. 대학과 정부출연연구기관, 학회를 대상으로
+                    연구자의 논문·특허·저서 등 다양한 성과정보를 통합
+                    수집하고 객관적 지표로 분석하는 연구성과관리시스템
+                    (R2RIMS/S2RIMS), 기관의 학술 자산을 개방형으로 축적·공개
+                    하는 기관 리포지터리 ScholarWorks, 데이터관리계획(DMP)
+                    수립부터 R&amp;D 연구데이터의 보존·공유·재사용까지
+                    지원하는 연구데이터 리포지터리 DataWorks를 공급하고
+                    있습니다. 또한 학술지 논문 투고·심사 관리 서비스, AI 검색
+                    솔루션 ARi Search, 콘텐츠 통합관리 시스템 Contentree 등을
+                    통해 메타데이터 표준과 시맨틱·AI 기술을 실제 서비스로
+                    구현해 왔습니다. 오픈 사이언스 생태계에 필요한 실무 역량과
+                    현장 경험을 바탕으로 LIS Lab의 교육·연구 활동을 후원하고
+                    있습니다.
+                  </p>
+
+                  <a
+                    href="https://argonet.co.kr/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 mt-4 text-sm font-medium text-primary hover:underline"
+                  >
+                    argonet.co.kr 바로가기
+                    <ExternalLink className="h-3.5 w-3.5" />
+                  </a>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* 예비 후원 기업 자리 */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {OPEN_SPONSOR_SLOTS.map((slot) => (
+              <div
+                key={slot}
+                className="group rounded-xl border-2 border-dashed border-primary/30 bg-primary/[0.03] hover:bg-primary/[0.06] hover:border-primary/50 transition-colors p-6 flex flex-col items-center justify-center text-center min-h-[180px]"
+              >
+                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-3">
+                  <Building2 className="h-6 w-6 text-primary/70" />
+                </div>
+                <p className="font-semibold text-sm">예비 후원 기업</p>
+                <p className="text-xs text-muted-foreground mt-1">{slot}</p>
+                <p className="inline-flex items-center gap-1 text-[11px] text-primary/80 mt-3">
+                  <Sparkles className="h-3 w-3" />이 자리에 귀사의 로고가
+                  소개됩니다
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* 후원 문의 */}
+          <div className="mt-6 rounded-xl border bg-muted/40 p-5 flex flex-col sm:flex-row sm:items-center justify-center gap-3 text-center sm:text-left">
+            <Mail className="h-5 w-5 text-primary mx-auto sm:mx-0 flex-shrink-0" />
+            <p className="text-sm text-muted-foreground">
+              LIS Lab에 도움을 주고 싶은 기업은{' '}
+              <a
+                href={`mailto:${SPONSOR_CONTACT_EMAIL}?subject=LIS%20Lab%20후원%20문의`}
+                className="font-medium text-primary hover:underline"
+              >
+                {SPONSOR_CONTACT_EMAIL}
+              </a>
+              {' '}로 연락을 주시면 됩니다.
+            </p>
+          </div>
+        </section>
+
         {/* 헤더 */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-2 mb-4">
