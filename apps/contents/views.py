@@ -68,16 +68,22 @@ class ContentViewSet(viewsets.ModelViewSet):
         queryset = Content.objects.filter(is_deleted=False)
 
         user = self.request.user
-        if user.is_authenticated and user.is_admin:
-            # 관리자는 모든 콘텐츠 조회
-            pass
-        elif user.is_authenticated and user.is_writer:
-            # 작성자는 공개 콘텐츠 + 본인 콘텐츠 조회
-            queryset = queryset.filter(
-                Q(status=Content.Status.PUBLISHED) | Q(author=user)
-            )
+
+        if self.action in ('update', 'partial_update', 'destroy'):
+            # 수정/삭제는 비공개 콘텐츠도 대상이 되어야 한다.
+            if user.is_authenticated and user.is_admin:
+                pass
+            elif user.is_authenticated and user.is_writer:
+                # 작성자는 공개 콘텐츠 + 본인 콘텐츠
+                queryset = queryset.filter(
+                    Q(status=Content.Status.PUBLISHED) | Q(author=user)
+                )
+            else:
+                queryset = queryset.filter(status=Content.Status.PUBLISHED)
         else:
-            # 일반 회원은 공개 콘텐츠만
+            # 일반 사용자 화면(목록/검색/상세)에서는 역할과 무관하게 공개 콘텐츠만 노출한다.
+            # 임시저장/비공개/보관 콘텐츠는 관리자·작성자에게도 보이지 않으며,
+            # 확인과 관리는 Django 관리자 화면(/admin)에서 한다.
             queryset = queryset.filter(status=Content.Status.PUBLISHED)
 
         # 검색
@@ -231,8 +237,11 @@ class FavoriteViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        # 즐겨찾기한 뒤 비공개로 바뀐 콘텐츠는 목록에서 제외한다.
         return Favorite.objects.filter(
-            user=self.request.user
+            user=self.request.user,
+            content__is_deleted=False,
+            content__status=Content.Status.PUBLISHED,
         ).select_related(
             'content__category',
             'content__author'
