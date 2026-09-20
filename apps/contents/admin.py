@@ -1,11 +1,29 @@
 from django.contrib import admin
+from django.contrib.admin.widgets import AdminFileWidget
 from django.utils.html import format_html
 from django.urls import reverse
 from django.utils.safestring import mark_safe
+from django.forms.widgets import FILE_INPUT_CONTRADICTION
 from ckeditor.widgets import CKEditorWidget
 from dal import autocomplete
 from django import forms
 from .models import Category, Tag, Content, ContentVersion, Favorite
+
+
+class ReplaceableFileWidget(AdminFileWidget):
+    """'취소' 체크와 새 파일 선택을 동시에 허용하는 파일 위젯.
+
+    Django 기본 위젯은 둘을 함께 제출하면 모순으로 보고
+    '파일 업로드 또는 삭제 체크박스를 선택하세요' 오류를 낸다.
+    하지만 콘텐츠 교체 작업에서는 '기존 파일을 지우고 새 파일로 바꾼다'는
+    뜻이 분명하므로, 새로 선택한 파일을 사용한다.
+    """
+
+    def value_from_datadict(self, data, files, name):
+        value = super().value_from_datadict(data, files, name)
+        if value is FILE_INPUT_CONTRADICTION:
+            return files.get(name)
+        return value
 
 
 # Content Form with CKEditor
@@ -19,6 +37,7 @@ class ContentAdminForm(forms.ModelForm):
         model = Content
         fields = '__all__'
         widgets = {
+            'html_source_file': ReplaceableFileWidget,
             'tags': autocomplete.ModelSelect2Multiple(
                 url='tag-autocomplete',
                 attrs={

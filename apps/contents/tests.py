@@ -1,5 +1,9 @@
-from django.test import TestCase
+import shutil
+import tempfile
+
+from django.test import TestCase, override_settings
 from django.contrib.auth import get_user_model
+from django.core.files.uploadedfile import SimpleUploadedFile
 from .models import Category, Tag, Content, Favorite
 
 User = get_user_model()
@@ -157,3 +161,104 @@ class ContentSearchVisibilityTest(TestCase):
         self.assertEqual(response.status_code, 200)
         slugs = [item['content']['slug'] for item in response.json()['results']]
         self.assertEqual(slugs, ['public-doc'])
+
+
+class ContentAdminFileReplaceTest(TestCase):
+    """관리자 화면에서 HTML 소스 파일 교체 테스트"""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        # 업로드 파일이 실제 media/ 에 쌓이지 않도록 임시 디렉터리를 쓴다.
+        media_root = tempfile.mkdtemp()
+        cls.addClassCleanup(shutil.rmtree, media_root, ignore_errors=True)
+        cls._media_override = override_settings(MEDIA_ROOT=media_root)
+        cls._media_override.enable()
+        cls.addClassCleanup(cls._media_override.disable)
+
+    def setUp(self):
+        self.superuser = User.objects.create_superuser(
+            username='admin_file_user',
+            email='admin-file@example.com',
+            password='testpass123'
+        )
+        self.category = Category.objects.create(
+            name='파일 교체 테스트',
+            slug='file-replace-test'
+        )
+        self.content = Content.objects.create(
+            title='교체 대상',
+            slug='replace-target',
+            content_html='<p>old</p>',
+            html_source_file=SimpleUploadedFile('old.html', b'<p>old</p>'),
+            category=self.category,
+            author=self.superuser,
+            status=Content.Status.DRAFT
+        )
+        self.client.force_login(self.superuser)
+
+    def _post_data(self, **overrides):
+        data = {
+            'title': self.content.title,
+            'summary': '',
+            'content_html': self.content.content_html,
+            'category': self.category.id,
+            'tags': [],
+            'difficulty': self.content.difficulty,
+            'order': self.content.order,
+            'author': self.superuser.id,
+            'status': Content.Status.DRAFT,
+            'version': self.content.version,
+            'estimated_time': 0,
+            'prerequisites': '',
+            'learning_objectives': '',
+            'meta_description': '',
+            'meta_keywords': '',
+            # ContentVersion 인라인 관리 폼
+            'versions-TOTAL_FORMS': '0',
+            'versions-INITIAL_FORMS': '0',
+            'versions-MIN_NUM_FORMS': '0',
+            'versions-MAX_NUM_FORMS': '1000',
+        }
+        data.update(overrides)
+        return data
+
+    def test_clear_checkbox_with_new_file_replaces_content(self):
+        """'취소' 체크와 새 파일 선택을 동시에 해도 새 파일로 교체된다"""
+        new_file = SimpleUploadedFile('new.html', '<p>새 본문</p>'.encode('utf-8'))
+        response = self.client.post(
+            f'/admin/contents/content/{self.content.id}/change/',
+            self._post_data(
+                html_source_file=new_file,
+                **{'html_source_file-clear': 'on'}
+            )
+        )
+        self.assertEqual(response.status_code, 302)
+
+        self.content.refresh_from_db()
+        self.assertIn('new', self.content.html_source_file.name)
+        self.assertEqual(self.content.content_html, '<p>새 본문</p>')
+
+    def test_clear_checkbox_alone_removes_file(self):
+        """'취소'만 체크하면 기존 파일이 제거된다"""
+        response = self.client.post(
+            f'/admin/contents/content/{self.content.id}/change/',
+            self._post_data(**{'html_source_file-clear': 'on'})
+        )
+        self.assertEqual(response.status_code, 302)
+
+        self.content.refresh_from_db()
+        self.assertFalse(self.content.html_source_file)
+
+    def test_new_file_alone_replaces_content(self):
+        """파일만 선택해도 기존처럼 교체된다"""
+        new_file = SimpleUploadedFile('only.html', '<p>파일만</p>'.encode('utf-8'))
+        response = self.client.post(
+            f'/admin/contents/content/{self.content.id}/change/',
+            self._post_data(html_source_file=new_file)
+        )
+        self.assertEqual(response.status_code, 302)
+
+        self.content.refresh_from_db()
+        self.assertIn('only', self.content.html_source_file.name)
+        self.assertEqual(self.content.content_html, '<p>파일만</p>')
